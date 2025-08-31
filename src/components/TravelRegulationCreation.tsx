@@ -52,6 +52,7 @@ function TravelRegulationCreation({ onNavigate }: TravelRegulationCreationProps)
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
   const [showPreview, setShowPreview] = useState(false);
+  const [allowanceTab, setAllowanceTab] = useState<'domestic' | 'overseas'>('domestic');
   
   const [data, setData] = useState<RegulationData>({
     companyInfo: {
@@ -389,145 +390,208 @@ function TravelRegulationCreation({ onNavigate }: TravelRegulationCreationProps)
         </button>
       </div>
 
-      <div className="bg-white/30 rounded-lg p-6">
-        <h3 className="text-lg font-semibold text-slate-800 mb-4">役職別旅費設定</h3>
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b border-white/30">
-                <th className="text-left py-3 px-2 font-medium text-slate-700">役職</th>
-                <th className="text-center py-3 px-2 font-medium text-slate-700" colSpan={3}>国内出張</th>
-                <th className="text-center py-3 px-2 font-medium text-slate-700" colSpan={4}>海外出張</th>
-                <th className="text-center py-3 px-2 font-medium text-slate-700">操作</th>
-              </tr>
-              <tr className="border-b border-white/20">
-                <th className="py-2 px-2"></th>
-                <th className="text-center py-2 px-2 text-xs text-slate-600">出張日当</th>
-                <th className="text-center py-2 px-2 text-xs text-slate-600">
-                  {data.isAccommodationRealExpense ? '宿泊料(実費)' : '宿泊料'}
-                </th>
-                <th className="text-center py-2 px-2 text-xs text-slate-600">
-                  {data.isTransportationRealExpense ? '交通費(実費)' : '交通費'}
-                </th>
-                <th className="text-center py-2 px-2 text-xs text-slate-600">出張日当</th>
-                <th className="text-center py-2 px-2 text-xs text-slate-600">
-                  {data.isAccommodationRealExpense ? '宿泊料(実費)' : '宿泊料'}
-                </th>
-                <th className="text-center py-2 px-2 text-xs text-slate-600">支度料</th>
-                <th className="text-center py-2 px-2 text-xs text-slate-600">
-                  {data.isTransportationRealExpense ? '交通費(実費)' : '交通費'}
-                </th>
-                <th className="py-2 px-2"></th>
-              </tr>
-            </thead>
-            <tbody>
-              {data.positions.map((position) => (
-                <tr key={position.id} className="border-b border-white/20">
-                  <td className="py-3 px-2">
-                    <input
-                      type="text"
-                      value={position.name}
-                      onChange={(e) => updatePosition(position.id, 'name', e.target.value)}
-                      className="w-full px-2 py-1 bg-white/50 border border-white/40 rounded text-slate-700 focus:outline-none focus:ring-1 focus:ring-navy-400 text-sm"
-                    />
-                  </td>
-                  <td className="py-3 px-2">
-                    <input
-                      type="number"
-                      value={position.domesticDailyAllowance}
-                      onChange={(e) => updatePosition(position.id, 'domesticDailyAllowance', parseInt(e.target.value) || 0)}
-                      className="w-full px-2 py-1 bg-white/50 border border-white/40 rounded text-slate-700 focus:outline-none focus:ring-1 focus:ring-navy-400 text-sm text-center"
-                    />
-                  </td>
-                  <td className="py-3 px-2">
-                    <input
-                      type="number"
-                      value={position.domesticAccommodation}
-                      onChange={(e) => updatePosition(position.id, 'domesticAccommodation', parseInt(e.target.value) || 0)}
-                      className={`w-full px-2 py-1 border rounded text-sm text-center focus:outline-none focus:ring-1 focus:ring-navy-400 ${
-                        data.isAccommodationRealExpense 
-                          ? 'bg-slate-200 border-slate-300 text-slate-400 cursor-not-allowed' 
-                          : 'bg-white/50 border-white/40 text-slate-700'
-                      }`}
-                      disabled={data.isAccommodationRealExpense}
-                      placeholder={data.isAccommodationRealExpense ? '実費' : '0'}
-                    />
-                  </td>
-                  <td className="py-3 px-2">
-                    <input
-                      type="number"
-                      value={position.domesticTransportation}
-                      onChange={(e) => updatePosition(position.id, 'domesticTransportation', parseInt(e.target.value) || 0)}
-                      className={`w-full px-2 py-1 border rounded text-sm text-center focus:outline-none focus:ring-1 focus:ring-navy-400 ${
-                        data.isTransportationRealExpense 
-                          ? 'bg-slate-200 border-slate-300 text-slate-400 cursor-not-allowed' 
-                          : 'bg-white/50 border-white/40 text-slate-700'
-                      }`}
-                      disabled={data.isTransportationRealExpense}
-                      placeholder={data.isTransportationRealExpense ? '実費' : '0'}
-                    />
-                  </td>
-                  <td className="py-3 px-2">
-                    <input
-                      type="number"
-                      value={position.overseasDailyAllowance}
-                      onChange={(e) => updatePosition(position.id, 'overseasDailyAllowance', parseInt(e.target.value) || 0)}
-                      className="w-full px-2 py-1 bg-white/50 border border-white/40 rounded text-slate-700 focus:outline-none focus:ring-1 focus:ring-navy-400 text-sm text-center"
-                    />
-                  </td>
-                  <td className="py-3 px-2">
-                    <input
-                      type="number"
-                      value={position.overseasAccommodation}
-                      onChange={(e) => updatePosition(position.id, 'overseasAccommodation', parseInt(e.target.value) || 0)}
-                      className={`w-full px-2 py-1 border rounded text-sm text-center focus:outline-none focus:ring-1 focus:ring-navy-400 ${
-                        data.isAccommodationRealExpense 
-                          ? 'bg-slate-200 border-slate-300 text-slate-400 cursor-not-allowed' 
-                          : 'bg-white/50 border-white/40 text-slate-700'
-                      }`}
-                      disabled={data.isAccommodationRealExpense}
-                      placeholder={data.isAccommodationRealExpense ? '実費' : '0'}
-                    />
-                  </td>
-                  <td className="py-3 px-2">
-                    <input
-                      type="number"
-                      value={position.overseasPreparationFee}
-                      onChange={(e) => updatePosition(position.id, 'overseasPreparationFee', parseInt(e.target.value) || 0)}
-                      className="w-full px-2 py-1 bg-white/50 border border-white/40 rounded text-slate-700 focus:outline-none focus:ring-1 focus:ring-navy-400 text-sm text-center"
-                    />
-                  </td>
-                  <td className="py-3 px-2">
-                    <input
-                      type="number"
-                      value={position.overseasTransportation}
-                      onChange={(e) => updatePosition(position.id, 'overseasTransportation', parseInt(e.target.value) || 0)}
-                      className={`w-full px-2 py-1 border rounded text-sm text-center focus:outline-none focus:ring-1 focus:ring-navy-400 ${
-                        data.isTransportationRealExpense 
-                          ? 'bg-slate-200 border-slate-300 text-slate-400 cursor-not-allowed' 
-                          : 'bg-white/50 border-white/40 text-slate-700'
-                      }`}
-                      disabled={data.isTransportationRealExpense}
-                      placeholder={data.isTransportationRealExpense ? '実費' : '0'}
-                    />
-                  </td>
-                  <td className="py-3 px-2 text-center">
-                    {data.positions.length > 1 && (
-                      <button
-                        type="button"
-                        onClick={() => removePosition(position.id)}
-                        className="p-1 text-red-600 hover:text-red-800 hover:bg-red-50/30 rounded transition-colors"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                    )}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+      {/* タブナビゲーション */}
+      <div className="flex space-x-1 bg-white/30 rounded-lg p-1 mb-6">
+        <button
+          onClick={() => setAllowanceTab('domestic')}
+          className={`flex-1 px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
+            allowanceTab === 'domestic'
+              ? 'bg-navy-600 text-white shadow-lg'
+              : 'text-slate-600 hover:text-slate-800 hover:bg-white/30'
+          }`}
+        >
+          国内出張
+        </button>
+        <button
+          onClick={() => setAllowanceTab('overseas')}
+          className={`flex-1 px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
+            allowanceTab === 'overseas'
+              ? 'bg-navy-600 text-white shadow-lg'
+              : 'text-slate-600 hover:text-slate-800 hover:bg-white/30'
+          }`}
+        >
+          海外出張
+        </button>
       </div>
+
+      {/* 国内出張設定 */}
+      {allowanceTab === 'domestic' && (
+        <div className="bg-white/30 rounded-lg p-6">
+          <h3 className="text-lg font-semibold text-slate-800 mb-4">国内出張旅費設定</h3>
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-white/30">
+                  <th className="text-left py-3 px-4 font-medium text-slate-700">役職</th>
+                  <th className="text-center py-3 px-4 font-medium text-slate-700">出張日当</th>
+                  <th className="text-center py-3 px-4 font-medium text-slate-700">
+                    {data.isAccommodationRealExpense ? '宿泊料(実費)' : '宿泊料'}
+                  </th>
+                  <th className="text-center py-3 px-4 font-medium text-slate-700">
+                    {data.isTransportationRealExpense ? '交通費(実費)' : '交通費'}
+                  </th>
+                  <th className="text-center py-3 px-4 font-medium text-slate-700">操作</th>
+                </tr>
+              </thead>
+              <tbody>
+                {data.positions.map((position) => (
+                  <tr key={position.id} className="border-b border-white/20">
+                    <td className="py-3 px-4">
+                      <input
+                        type="text"
+                        value={position.name}
+                        onChange={(e) => updatePosition(position.id, 'name', e.target.value)}
+                        className="w-full px-3 py-2 bg-white/50 border border-white/40 rounded text-slate-700 focus:outline-none focus:ring-2 focus:ring-navy-400"
+                      />
+                    </td>
+                    <td className="py-3 px-4">
+                      <input
+                        type="number"
+                        value={position.domesticDailyAllowance}
+                        onChange={(e) => updatePosition(position.id, 'domesticDailyAllowance', parseInt(e.target.value) || 0)}
+                        className="w-full px-3 py-2 bg-white/50 border border-white/40 rounded text-slate-700 focus:outline-none focus:ring-2 focus:ring-navy-400 text-center"
+                      />
+                    </td>
+                    <td className="py-3 px-4">
+                      <input
+                        type="number"
+                        value={position.domesticAccommodation}
+                        onChange={(e) => updatePosition(position.id, 'domesticAccommodation', parseInt(e.target.value) || 0)}
+                        className={`w-full px-3 py-2 border rounded text-center focus:outline-none focus:ring-2 focus:ring-navy-400 ${
+                          data.isAccommodationRealExpense 
+                            ? 'bg-slate-200 border-slate-300 text-slate-400 cursor-not-allowed' 
+                            : 'bg-white/50 border-white/40 text-slate-700'
+                        }`}
+                        disabled={data.isAccommodationRealExpense}
+                        placeholder={data.isAccommodationRealExpense ? '実費' : '0'}
+                      />
+                    </td>
+                    <td className="py-3 px-4">
+                      <input
+                        type="number"
+                        value={position.domesticTransportation}
+                        onChange={(e) => updatePosition(position.id, 'domesticTransportation', parseInt(e.target.value) || 0)}
+                        className={`w-full px-3 py-2 border rounded text-center focus:outline-none focus:ring-2 focus:ring-navy-400 ${
+                          data.isTransportationRealExpense 
+                            ? 'bg-slate-200 border-slate-300 text-slate-400 cursor-not-allowed' 
+                            : 'bg-white/50 border-white/40 text-slate-700'
+                        }`}
+                        disabled={data.isTransportationRealExpense}
+                        placeholder={data.isTransportationRealExpense ? '実費' : '0'}
+                      />
+                    </td>
+                    <td className="py-3 px-4 text-center">
+                      {data.positions.length > 1 && (
+                        <button
+                          type="button"
+                          onClick={() => removePosition(position.id)}
+                          className="p-2 text-red-600 hover:text-red-800 hover:bg-red-50/30 rounded transition-colors"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+
+      {/* 海外出張設定 */}
+      {allowanceTab === 'overseas' && (
+        <div className="bg-white/30 rounded-lg p-6">
+          <h3 className="text-lg font-semibold text-slate-800 mb-4">海外出張旅費設定</h3>
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-white/30">
+                  <th className="text-left py-3 px-4 font-medium text-slate-700">役職</th>
+                  <th className="text-center py-3 px-4 font-medium text-slate-700">出張日当</th>
+                  <th className="text-center py-3 px-4 font-medium text-slate-700">
+                    {data.isAccommodationRealExpense ? '宿泊料(実費)' : '宿泊料'}
+                  </th>
+                  <th className="text-center py-3 px-4 font-medium text-slate-700">支度料</th>
+                  <th className="text-center py-3 px-4 font-medium text-slate-700">
+                    {data.isTransportationRealExpense ? '交通費(実費)' : '交通費'}
+                  </th>
+                  <th className="text-center py-3 px-4 font-medium text-slate-700">操作</th>
+                </tr>
+              </thead>
+              <tbody>
+                {data.positions.map((position) => (
+                  <tr key={position.id} className="border-b border-white/20">
+                    <td className="py-3 px-4">
+                      <input
+                        type="text"
+                        value={position.name}
+                        onChange={(e) => updatePosition(position.id, 'name', e.target.value)}
+                        className="w-full px-3 py-2 bg-white/50 border border-white/40 rounded text-slate-700 focus:outline-none focus:ring-2 focus:ring-navy-400"
+                      />
+                    </td>
+                    <td className="py-3 px-4">
+                      <input
+                        type="number"
+                        value={position.overseasDailyAllowance}
+                        onChange={(e) => updatePosition(position.id, 'overseasDailyAllowance', parseInt(e.target.value) || 0)}
+                        className="w-full px-3 py-2 bg-white/50 border border-white/40 rounded text-slate-700 focus:outline-none focus:ring-2 focus:ring-navy-400 text-center"
+                      />
+                    </td>
+                    <td className="py-3 px-4">
+                      <input
+                        type="number"
+                        value={position.overseasAccommodation}
+                        onChange={(e) => updatePosition(position.id, 'overseasAccommodation', parseInt(e.target.value) || 0)}
+                        className={`w-full px-3 py-2 border rounded text-center focus:outline-none focus:ring-2 focus:ring-navy-400 ${
+                          data.isAccommodationRealExpense 
+                            ? 'bg-slate-200 border-slate-300 text-slate-400 cursor-not-allowed' 
+                            : 'bg-white/50 border-white/40 text-slate-700'
+                        }`}
+                        disabled={data.isAccommodationRealExpense}
+                        placeholder={data.isAccommodationRealExpense ? '実費' : '0'}
+                      />
+                    </td>
+                    <td className="py-3 px-4">
+                      <input
+                        type="number"
+                        value={position.overseasPreparationFee}
+                        onChange={(e) => updatePosition(position.id, 'overseasPreparationFee', parseInt(e.target.value) || 0)}
+                        className="w-full px-3 py-2 bg-white/50 border border-white/40 rounded text-slate-700 focus:outline-none focus:ring-2 focus:ring-navy-400 text-center"
+                      />
+                    </td>
+                    <td className="py-3 px-4">
+                      <input
+                        type="number"
+                        value={position.overseasTransportation}
+                        onChange={(e) => updatePosition(position.id, 'overseasTransportation', parseInt(e.target.value) || 0)}
+                        className={`w-full px-3 py-2 border rounded text-center focus:outline-none focus:ring-2 focus:ring-navy-400 ${
+                          data.isTransportationRealExpense 
+                            ? 'bg-slate-200 border-slate-300 text-slate-400 cursor-not-allowed' 
+                            : 'bg-white/50 border-white/40 text-slate-700'
+                        }`}
+                        disabled={data.isTransportationRealExpense}
+                        placeholder={data.isTransportationRealExpense ? '実費' : '0'}
+                      />
+                    </td>
+                    <td className="py-3 px-4 text-center">
+                      {data.positions.length > 1 && (
+                        <button
+                          type="button"
+                          onClick={() => removePosition(position.id)}
+                          className="p-2 text-red-600 hover:text-red-800 hover:bg-red-50/30 rounded transition-colors"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
     </div>
   );
 
@@ -626,11 +690,11 @@ function TravelRegulationCreation({ onNavigate }: TravelRegulationCreationProps)
                   <tr className="bg-slate-100">
                     <th className="border border-slate-300 py-1 px-2 text-center">出張日当</th>
                     <th className="border border-slate-300 py-1 px-2 text-center">宿泊料</th>
-                    <th className="border border-slate-300 py-1 px-2 text-center">交通費</th>
-                    <th className="border border-slate-300 py-1 px-2 text-center">出張日当</th>
-                    <th className="border border-slate-300 py-1 px-2 text-center">宿泊料</th>
                     <th className="border border-slate-300 py-1 px-2 text-center">支度料</th>
                     <th className="border border-slate-300 py-1 px-2 text-center">交通費</th>
+                    <th className="text-center py-1 px-2 text-center">出張日当</th>
+                    <th className="text-center py-1 px-2 text-center">宿泊料</th>
+                    <th className="text-center py-1 px-2 text-center">交通費</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -644,9 +708,6 @@ function TravelRegulationCreation({ onNavigate }: TravelRegulationCreationProps)
                         {data.isAccommodationRealExpense ? '実費' : position.domesticAccommodation.toLocaleString()}
                       </td>
                       <td className="border border-slate-300 py-2 px-3 text-center">
-                        {data.isTransportationRealExpense ? '実費' : position.domesticTransportation.toLocaleString()}
-                      </td>
-                      <td className="border border-slate-300 py-2 px-3 text-center">
                         {position.overseasDailyAllowance.toLocaleString()}
                       </td>
                       <td className="border border-slate-300 py-2 px-3 text-center">
@@ -657,6 +718,9 @@ function TravelRegulationCreation({ onNavigate }: TravelRegulationCreationProps)
                       </td>
                       <td className="border border-slate-300 py-2 px-3 text-center">
                         {data.isTransportationRealExpense ? '実費' : position.overseasTransportation.toLocaleString()}
+                      </td>
+                      <td className="border border-slate-300 py-2 px-3 text-center">
+                        {data.isTransportationRealExpense ? '実費' : position.domesticTransportation.toLocaleString()}
                       </td>
                     </tr>
                   ))}
