@@ -1,8 +1,8 @@
 import React from 'react';
-import { Plane, Receipt, Plus } from 'lucide-react';
+import { Plane, Receipt, Plus, FolderOpen } from 'lucide-react';
 
 interface QuickActionsProps {
-  onNavigate: (view: 'dashboard' | 'business-trip' | 'expense' | 'tax-simulation') => void;
+  onNavigate: (view: 'dashboard' | 'business-trip' | 'expense' | 'tax-simulation' | 'document-management') => void;
 }
 
 function QuickActions({ onNavigate }: QuickActionsProps) {
@@ -25,6 +25,13 @@ function QuickActions({ onNavigate }: QuickActionsProps) {
           <Plus className="w-5 h-5" />
           <Receipt className="w-5 h-5" />
           <span>経費申請</span>
+        </button>
+        <button 
+          onClick={() => onNavigate('document-management')}
+          className="flex items-center justify-center space-x-3 px-6 py-3 bg-gradient-to-r from-emerald-600 to-emerald-800 hover:from-emerald-700 hover:to-emerald-900 rounded-lg text-white font-medium shadow-xl hover:shadow-2xl transition-all duration-200 transform hover:scale-105 backdrop-blur-sm"
+        >
+          <FolderOpen className="w-5 h-5" />
+          <span>出張精算</span>
         </button>
       </div>
     </div>
