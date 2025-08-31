@@ -33,6 +33,7 @@ interface RegulationData {
   positions: Position[];
   isTransportationRealExpense: boolean;
   isAccommodationRealExpense: boolean;
+  usePreparationFee: boolean;
   customArticles: {
     article1: string;
     article2: string;
@@ -111,6 +112,7 @@ function TravelRegulationCreation({ onNavigate }: TravelRegulationCreationProps)
     ],
     isTransportationRealExpense: false,
     isAccommodationRealExpense: false,
+    usePreparationFee: true,
     customArticles: {
       article1: 'この規程は、役員または従業員が社命により、出張する場合の、旅費について定めたものである。',
       article2: 'この規程は、役員及び全ての従業員について適用する。',
@@ -122,7 +124,7 @@ function TravelRegulationCreation({ onNavigate }: TravelRegulationCreationProps)
       article8: '利用する交通手段は、原則として、鉄道、船舶、飛行機、バスとする。\n２　前項に関わらず、会社が必要と認めた場合は、タクシーまたは社有の自動車を利用できるものとする。',
       article9: '旅費は、原則として出張終了後に精算により支給する。ただし、必要に応じて概算払いを行うことができる。',
       article10: '本規程の改廃は、取締役会の決議により行う。',
-      article11: '本規程は、令和　　年　　月　　日より実施する。'
+      article11: '本規程は、令和　年　月　日より実施する。'
     }
   });
 
@@ -690,11 +692,11 @@ function TravelRegulationCreation({ onNavigate }: TravelRegulationCreationProps)
                   <tr className="bg-slate-100">
                     <th className="border border-slate-300 py-1 px-2 text-center">出張日当</th>
                     <th className="border border-slate-300 py-1 px-2 text-center">宿泊料</th>
-                    <th className="border border-slate-300 py-1 px-2 text-center">支度料</th>
                     <th className="border border-slate-300 py-1 px-2 text-center">交通費</th>
-                    <th className="text-center py-1 px-2 text-center">出張日当</th>
-                    <th className="text-center py-1 px-2 text-center">宿泊料</th>
-                    <th className="text-center py-1 px-2 text-center">交通費</th>
+                    <th className="border border-slate-300 py-1 px-2 text-center">出張日当</th>
+                    <th className="border border-slate-300 py-1 px-2 text-center">宿泊料</th>
+                    <th className="border border-slate-300 py-1 px-2 text-center">交通費</th>
+                    <th className="border border-slate-300 py-1 px-2 text-center">支度料</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -708,10 +710,7 @@ function TravelRegulationCreation({ onNavigate }: TravelRegulationCreationProps)
                         {data.isAccommodationRealExpense ? '実費' : position.domesticAccommodation.toLocaleString()}
                       </td>
                       <td className="border border-slate-300 py-2 px-3 text-center">
-                        {data.isTransportationRealExpense ? '実費' : position.overseasTransportation.toLocaleString()}
-                      </td>
-                      <td className="border border-slate-300 py-2 px-3 text-center">
-                        {data.usePreparationFee ? position.overseasPreparationFee.toLocaleString() : '0'}
+                        {data.isTransportationRealExpense ? '実費' : position.domesticTransportation.toLocaleString()}
                       </td>
                       <td className="border border-slate-300 py-2 px-3 text-center">
                         {position.overseasDailyAllowance.toLocaleString()}
@@ -720,7 +719,10 @@ function TravelRegulationCreation({ onNavigate }: TravelRegulationCreationProps)
                         {data.isAccommodationRealExpense ? '実費' : position.overseasAccommodation.toLocaleString()}
                       </td>
                       <td className="border border-slate-300 py-2 px-3 text-center">
-                        {data.isTransportationRealExpense ? '実費' : position.domesticTransportation.toLocaleString()}
+                        {data.isTransportationRealExpense ? '実費' : position.overseasTransportation.toLocaleString()}
+                      </td>
+                      <td className="border border-slate-300 py-2 px-3 text-center">
+                        {data.usePreparationFee ? position.overseasPreparationFee.toLocaleString() : '0'}
                       </td>
                     </tr>
                   ))}
@@ -835,6 +837,25 @@ function TravelRegulationCreation({ onNavigate }: TravelRegulationCreationProps)
 
                 <div className="backdrop-blur-xl bg-white/20 rounded-xl p-8 border border-white/30 shadow-xl">
                   {renderPreview()}
+                </div>
+              </div>
+
+              {/* 海外出張設定 */}
+              <div className="bg-white/30 rounded-lg p-6">
+                <h3 className="text-lg font-semibold text-slate-800 mb-4">海外出張設定</h3>
+                <div className="space-y-4">
+                  <label className="flex items-start space-x-3 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={!data.usePreparationFee}
+                      onChange={(e) => setData(prev => ({ ...prev, usePreparationFee: !e.target.checked }))}
+                      className="w-5 h-5 text-navy-600 bg-white/50 border-white/40 rounded focus:ring-navy-400 focus:ring-2 mt-0.5"
+                    />
+                    <div className="text-sm text-slate-700">
+                      <span>支度料を使用しない</span>
+                      <p className="text-xs text-slate-500">チェックすると支度料は0円として設定されます</p>
+                    </div>
+                  </label>
                 </div>
               </div>
             </div>
