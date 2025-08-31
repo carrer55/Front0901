@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ArrowLeft, Download, Filter, Search, Calendar, Users, TrendingUp, BarChart3 } from 'lucide-react';
+import { ArrowLeft, Download, Filter, Search, Calendar, Users, TrendingUp, BarChart3, Clock, CheckCircle, FileText, Receipt } from 'lucide-react';
 import Sidebar from './Sidebar';
 import TopBar from './TopBar';
 
@@ -10,12 +10,13 @@ interface AdminDashboardProps {
 interface AdminApplication {
   id: string;
   type: 'business-trip' | 'expense';
+  category: 'application' | 'settlement';
   title: string;
   applicant: string;
   department: string;
   amount: number;
   submittedDate: string;
-  status: 'pending' | 'approved' | 'rejected' | 'returned';
+  status: 'pending' | 'approved' | 'rejected' | 'on_hold';
   approver: string;
 }
 
@@ -24,24 +25,39 @@ function AdminDashboard({ onNavigate }: AdminDashboardProps) {
   const [searchTerm, setSearchTerm] = useState('');
   const [departmentFilter, setDepartmentFilter] = useState<string>('all');
   const [statusFilter, setStatusFilter] = useState<string>('all');
+  const [selectedCard, setSelectedCard] = useState<'application-pending' | 'application-approved' | 'settlement-pending' | 'settlement-approved'>('application-pending');
   const [dateRange, setDateRange] = useState({ start: '', end: '' });
 
   const [applications] = useState<AdminApplication[]>([
     {
       id: 'BT-2024-001',
       type: 'business-trip',
+      category: 'application',
       title: '東京出張申請',
       applicant: '田中太郎',
       department: '営業部',
       amount: 52500,
       submittedDate: '2024-07-20',
-      status: 'approved',
+      status: 'pending',
       approver: '佐藤部長'
+    },
+    {
+      id: 'BT-2024-002',
+      type: 'business-trip',
+      category: 'application',
+      title: '大阪出張申請',
+      applicant: '鈴木次郎',
+      department: '開発部',
+      amount: 35000,
+      submittedDate: '2024-07-15',
+      status: 'approved',
+      approver: '山田経理'
     },
     {
       id: 'EX-2024-001',
       type: 'expense',
-      title: '交通費・宿泊費精算',
+      category: 'application',
+      title: '交通費申請',
       applicant: '佐藤花子',
       department: '総務部',
       amount: 12800,
@@ -50,36 +66,27 @@ function AdminDashboard({ onNavigate }: AdminDashboardProps) {
       approver: '田中部長'
     },
     {
-      id: 'BT-2024-002',
+      id: 'ST-2024-001',
       type: 'business-trip',
-      title: '大阪出張申請',
-      applicant: '鈴木次郎',
-      department: '開発部',
-      amount: 35000,
-      submittedDate: '2024-07-15',
-      status: 'returned',
-      approver: '山田経理'
-    },
-    {
-      id: 'EX-2024-002',
-      type: 'expense',
-      title: '会議費精算',
+      category: 'settlement',
+      title: '東京出張精算',
       applicant: '高橋美咲',
       department: '企画部',
-      amount: 8500,
+      amount: 48500,
       submittedDate: '2024-07-10',
-      status: 'approved',
+      status: 'pending',
       approver: '鈴木取締役'
     },
     {
-      id: 'BT-2024-003',
-      type: 'business-trip',
-      title: '福岡出張申請',
+      id: 'ST-2024-002',
+      type: 'expense',
+      category: 'settlement',
+      title: '会議費精算',
       applicant: '伊藤健一',
       department: '営業部',
-      amount: 45000,
+      amount: 8500,
       submittedDate: '2024-07-05',
-      status: 'rejected',
+      status: 'approved',
       approver: '佐藤部長'
     }
   ]);
@@ -95,7 +102,7 @@ function AdminDashboard({ onNavigate }: AdminDashboardProps) {
       'pending': '承認待ち',
       'approved': '承認済み',
       'rejected': '否認',
-      'returned': '差戻し'
+      'on_hold': '保留'
     };
     return labels[status as keyof typeof labels] || status;
   };
@@ -105,36 +112,75 @@ function AdminDashboard({ onNavigate }: AdminDashboardProps) {
       'pending': 'text-amber-700 bg-amber-100',
       'approved': 'text-emerald-700 bg-emerald-100',
       'rejected': 'text-red-700 bg-red-100',
-      'returned': 'text-orange-700 bg-orange-100'
+      'on_hold': 'text-orange-700 bg-orange-100'
     };
     return colors[status as keyof typeof colors] || 'text-slate-700 bg-slate-100';
   };
 
   const getTypeLabel = (type: string) => {
-    return type === 'business-trip' ? '出張申請' : '経費申請';
+    return type === 'business-trip' ? '出張' : '経費';
   };
 
-  const filteredApplications = applications.filter(app => {
-    const matchesSearch = app.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         app.applicant.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         app.id.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesDepartment = departmentFilter === 'all' || app.department === departmentFilter;
-    const matchesStatus = statusFilter === 'all' || app.status === statusFilter;
-    
-    let matchesDate = true;
-    if (dateRange.start && dateRange.end) {
-      const appDate = new Date(app.submittedDate);
-      const startDate = new Date(dateRange.start);
-      const endDate = new Date(dateRange.end);
-      matchesDate = appDate >= startDate && appDate <= endDate;
+  const getCardData = () => {
+    const applicationPending = applications.filter(app => app.category === 'application' && app.status === 'pending').length;
+    const applicationApproved = applications.filter(app => app.category === 'application' && app.status === 'approved').length;
+    const settlementPending = applications.filter(app => app.category === 'settlement' && app.status === 'pending').length;
+    const settlementApproved = applications.filter(app => app.category === 'settlement' && app.status === 'approved').length;
+
+    return {
+      applicationPending,
+      applicationApproved,
+      settlementPending,
+      settlementApproved
+    };
+  };
+
+  const getFilteredApplications = () => {
+    let filtered = applications;
+
+    // カード選択によるフィルタリング
+    if (selectedCard === 'application-pending') {
+      filtered = filtered.filter(app => app.category === 'application' && app.status === 'pending');
+    } else if (selectedCard === 'application-approved') {
+      filtered = filtered.filter(app => app.category === 'application' && app.status === 'approved');
+    } else if (selectedCard === 'settlement-pending') {
+      filtered = filtered.filter(app => app.category === 'settlement' && app.status === 'pending');
+    } else if (selectedCard === 'settlement-approved') {
+      filtered = filtered.filter(app => app.category === 'settlement' && app.status === 'approved');
     }
-    
-    return matchesSearch && matchesDepartment && matchesStatus && matchesDate;
-  });
+
+    // 検索・フィルタリング
+    filtered = filtered.filter(app => {
+      const matchesSearch = app.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                           app.applicant.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                           app.id.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesDepartment = departmentFilter === 'all' || app.department === departmentFilter;
+      const matchesStatus = statusFilter === 'all' || app.status === statusFilter;
+      
+      let matchesDate = true;
+      if (dateRange.start && dateRange.end) {
+        const appDate = new Date(app.submittedDate);
+        const startDate = new Date(dateRange.start);
+        const endDate = new Date(dateRange.end);
+        matchesDate = appDate >= startDate && appDate <= endDate;
+      }
+      
+      return matchesSearch && matchesDepartment && matchesStatus && matchesDate;
+    });
+
+    return filtered;
+  };
+
+  const handleApprovalAction = (applicationId: string, action: 'approved' | 'rejected' | 'on_hold') => {
+    // 実際の実装では、ここでAPIを呼び出してステータスを更新
+    alert(`申請 ${applicationId} を${getStatusLabel(action)}に変更しました`);
+  };
 
   const handleCSVExport = () => {
+    const filteredApplications = getFilteredApplications();
     const csvData = filteredApplications.map(app => ({
       '申請ID': app.id,
+      'カテゴリ': app.category === 'application' ? '申請' : '精算',
       '種別': getTypeLabel(app.type),
       'タイトル': app.title,
       '申請者': app.applicant,
@@ -145,17 +191,21 @@ function AdminDashboard({ onNavigate }: AdminDashboardProps) {
       '承認者': app.approver
     }));
     
-    // 実際の実装では、CSVファイルを生成してダウンロード
     console.log('CSV Export:', csvData);
     alert('CSVファイルをダウンロードしました');
   };
 
-  // 統計データの計算
-  const stats = {
-    totalApplications: filteredApplications.length,
-    totalAmount: filteredApplications.reduce((sum, app) => sum + app.amount, 0),
-    pendingCount: filteredApplications.filter(app => app.status === 'pending').length,
-    approvedCount: filteredApplications.filter(app => app.status === 'approved').length
+  const cardData = getCardData();
+  const filteredApplications = getFilteredApplications();
+
+  const getSelectedCardTitle = () => {
+    const titles = {
+      'application-pending': '申請 - 承認待ち',
+      'application-approved': '申請 - 承認済',
+      'settlement-pending': '精算 - 承認待ち',
+      'settlement-approved': '精算 - 承認済'
+    };
+    return titles[selectedCard];
   };
 
   return (
@@ -205,38 +255,94 @@ function AdminDashboard({ onNavigate }: AdminDashboardProps) {
                 </button>
               </div>
 
-              {/* 統計カード */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6 mb-8">
+              {/* 申請・精算カテゴリカード */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                {/* 申請カテゴリ */}
                 <div className="backdrop-blur-xl bg-white/20 rounded-xl p-6 border border-white/30 shadow-xl">
-                  <div className="flex items-center justify-between mb-2">
-                    <h3 className="text-sm font-medium text-slate-600">総申請数</h3>
-                    <BarChart3 className="w-5 h-5 text-slate-500" />
+                  <div className="flex items-center space-x-3 mb-6">
+                    <div className="w-12 h-12 bg-gradient-to-br from-blue-600 to-blue-800 rounded-xl flex items-center justify-center shadow-lg">
+                      <FileText className="w-6 h-6 text-white" />
+                    </div>
+                    <h2 className="text-2xl font-bold text-slate-800">申請</h2>
                   </div>
-                  <p className="text-2xl font-bold text-slate-800">{stats.totalApplications}件</p>
+                  
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div
+                      onClick={() => setSelectedCard('application-pending')}
+                      className={`p-4 rounded-lg border-2 cursor-pointer transition-all duration-300 transform hover:scale-[1.02] ${
+                        selectedCard === 'application-pending'
+                          ? 'border-amber-500 bg-amber-50/50 shadow-lg'
+                          : 'border-white/40 bg-white/30 hover:bg-white/50'
+                      }`}
+                    >
+                      <div className="flex items-center justify-between mb-2">
+                        <Clock className="w-5 h-5 text-amber-600" />
+                        <span className="text-2xl font-bold text-amber-600">{cardData.applicationPending}</span>
+                      </div>
+                      <h3 className="font-semibold text-slate-800">承認待ち</h3>
+                      <p className="text-sm text-slate-600">出張・経費申請</p>
+                    </div>
+
+                    <div
+                      onClick={() => setSelectedCard('application-approved')}
+                      className={`p-4 rounded-lg border-2 cursor-pointer transition-all duration-300 transform hover:scale-[1.02] ${
+                        selectedCard === 'application-approved'
+                          ? 'border-emerald-500 bg-emerald-50/50 shadow-lg'
+                          : 'border-white/40 bg-white/30 hover:bg-white/50'
+                      }`}
+                    >
+                      <div className="flex items-center justify-between mb-2">
+                        <CheckCircle className="w-5 h-5 text-emerald-600" />
+                        <span className="text-2xl font-bold text-emerald-600">{cardData.applicationApproved}</span>
+                      </div>
+                      <h3 className="font-semibold text-slate-800">承認済</h3>
+                      <p className="text-sm text-slate-600">出張・経費申請</p>
+                    </div>
+                  </div>
                 </div>
-                
+
+                {/* 精算カテゴリ */}
                 <div className="backdrop-blur-xl bg-white/20 rounded-xl p-6 border border-white/30 shadow-xl">
-                  <div className="flex items-center justify-between mb-2">
-                    <h3 className="text-sm font-medium text-slate-600">総金額</h3>
-                    <TrendingUp className="w-5 h-5 text-slate-500" />
+                  <div className="flex items-center space-x-3 mb-6">
+                    <div className="w-12 h-12 bg-gradient-to-br from-purple-600 to-purple-800 rounded-xl flex items-center justify-center shadow-lg">
+                      <Receipt className="w-6 h-6 text-white" />
+                    </div>
+                    <h2 className="text-2xl font-bold text-slate-800">精算</h2>
                   </div>
-                  <p className="text-2xl font-bold text-slate-800">¥{stats.totalAmount.toLocaleString()}</p>
-                </div>
-                
-                <div className="backdrop-blur-xl bg-white/20 rounded-xl p-6 border border-white/30 shadow-xl">
-                  <div className="flex items-center justify-between mb-2">
-                    <h3 className="text-sm font-medium text-slate-600">承認待ち</h3>
-                    <Calendar className="w-5 h-5 text-amber-500" />
+                  
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div
+                      onClick={() => setSelectedCard('settlement-pending')}
+                      className={`p-4 rounded-lg border-2 cursor-pointer transition-all duration-300 transform hover:scale-[1.02] ${
+                        selectedCard === 'settlement-pending'
+                          ? 'border-amber-500 bg-amber-50/50 shadow-lg'
+                          : 'border-white/40 bg-white/30 hover:bg-white/50'
+                      }`}
+                    >
+                      <div className="flex items-center justify-between mb-2">
+                        <Clock className="w-5 h-5 text-amber-600" />
+                        <span className="text-2xl font-bold text-amber-600">{cardData.settlementPending}</span>
+                      </div>
+                      <h3 className="font-semibold text-slate-800">承認待ち</h3>
+                      <p className="text-sm text-slate-600">出張・経費精算</p>
+                    </div>
+
+                    <div
+                      onClick={() => setSelectedCard('settlement-approved')}
+                      className={`p-4 rounded-lg border-2 cursor-pointer transition-all duration-300 transform hover:scale-[1.02] ${
+                        selectedCard === 'settlement-approved'
+                          ? 'border-emerald-500 bg-emerald-50/50 shadow-lg'
+                          : 'border-white/40 bg-white/30 hover:bg-white/50'
+                      }`}
+                    >
+                      <div className="flex items-center justify-between mb-2">
+                        <CheckCircle className="w-5 h-5 text-emerald-600" />
+                        <span className="text-2xl font-bold text-emerald-600">{cardData.settlementApproved}</span>
+                      </div>
+                      <h3 className="font-semibold text-slate-800">承認済</h3>
+                      <p className="text-sm text-slate-600">出張・経費精算</p>
+                    </div>
                   </div>
-                  <p className="text-2xl font-bold text-amber-600">{stats.pendingCount}件</p>
-                </div>
-                
-                <div className="backdrop-blur-xl bg-white/20 rounded-xl p-6 border border-white/30 shadow-xl">
-                  <div className="flex items-center justify-between mb-2">
-                    <h3 className="text-sm font-medium text-slate-600">承認済み</h3>
-                    <Users className="w-5 h-5 text-emerald-500" />
-                  </div>
-                  <p className="text-2xl font-bold text-emerald-600">{stats.approvedCount}件</p>
                 </div>
               </div>
 
@@ -274,7 +380,7 @@ function AdminDashboard({ onNavigate }: AdminDashboardProps) {
                     <option value="pending">承認待ち</option>
                     <option value="approved">承認済み</option>
                     <option value="rejected">否認</option>
-                    <option value="returned">差戻し</option>
+                    <option value="on_hold">保留</option>
                   </select>
                   
                   <div className="flex space-x-2">
@@ -294,8 +400,14 @@ function AdminDashboard({ onNavigate }: AdminDashboardProps) {
                 </div>
               </div>
 
-              {/* 申請一覧 */}
+              {/* 選択されたカテゴリの申請一覧 */}
               <div className="backdrop-blur-xl bg-white/20 rounded-xl border border-white/30 shadow-xl overflow-hidden">
+                <div className="p-6 border-b border-white/30">
+                  <h2 className="text-xl font-semibold text-slate-800">
+                    {getSelectedCardTitle()} ({filteredApplications.length}件)
+                  </h2>
+                </div>
+                
                 <div className="overflow-x-auto">
                   <table className="w-full">
                     <thead className="bg-white/30 border-b border-white/30">
@@ -308,13 +420,15 @@ function AdminDashboard({ onNavigate }: AdminDashboardProps) {
                         <th className="text-left py-4 px-6 font-medium text-slate-700">金額</th>
                         <th className="text-left py-4 px-6 font-medium text-slate-700">申請日</th>
                         <th className="text-left py-4 px-6 font-medium text-slate-700">ステータス</th>
-                        <th className="text-left py-4 px-6 font-medium text-slate-700">承認者</th>
+                        {(selectedCard === 'application-pending' || selectedCard === 'settlement-pending') && (
+                          <th className="text-center py-4 px-6 font-medium text-slate-700">承認操作</th>
+                        )}
                       </tr>
                     </thead>
                     <tbody>
                       {filteredApplications.length === 0 ? (
                         <tr>
-                          <td colSpan={9} className="text-center py-12 text-slate-500">
+                          <td colSpan={selectedCard.includes('pending') ? 9 : 8} className="text-center py-12 text-slate-500">
                             条件に一致する申請が見つかりません
                           </td>
                         </tr>
@@ -335,7 +449,33 @@ function AdminDashboard({ onNavigate }: AdminDashboardProps) {
                                 {getStatusLabel(app.status)}
                               </span>
                             </td>
-                            <td className="py-4 px-6 text-slate-700">{app.approver}</td>
+                            {(selectedCard === 'application-pending' || selectedCard === 'settlement-pending') && (
+                              <td className="py-4 px-6">
+                                <div className="flex items-center justify-center space-x-2">
+                                  <button
+                                    onClick={() => handleApprovalAction(app.id, 'approved')}
+                                    className="px-3 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded text-xs font-medium transition-colors"
+                                    title="承認"
+                                  >
+                                    承認
+                                  </button>
+                                  <button
+                                    onClick={() => handleApprovalAction(app.id, 'on_hold')}
+                                    className="px-3 py-1 bg-orange-600 hover:bg-orange-700 text-white rounded text-xs font-medium transition-colors"
+                                    title="保留"
+                                  >
+                                    保留
+                                  </button>
+                                  <button
+                                    onClick={() => handleApprovalAction(app.id, 'rejected')}
+                                    className="px-3 py-1 bg-red-600 hover:bg-red-700 text-white rounded text-xs font-medium transition-colors"
+                                    title="否認"
+                                  >
+                                    否認
+                                  </button>
+                                </div>
+                              </td>
+                            )}
                           </tr>
                         ))
                       )}
