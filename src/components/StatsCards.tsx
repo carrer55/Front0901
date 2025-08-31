@@ -63,8 +63,7 @@ function StatsCards() {
             
             <div className="mb-6">
               <p className={`text-3xl lg:text-4xl font-bold mb-2 ${
-                currentMonthEstimated > 500000 ? 'text-red-600' : 
-                currentMonthEstimated > 300000 ? 'text-amber-600' : 'text-slate-900'
+                'text-slate-900'
               }`}>
                 ¥{currentMonthEstimated.toLocaleString()}
               </p>
@@ -139,8 +138,7 @@ function StatsCards() {
             
             <div className="mb-6">
               <p className={`text-3xl lg:text-4xl font-bold mb-2 ${
-                currentMonthActual > 400000 ? 'text-red-600' : 
-                currentMonthActual > 250000 ? 'text-amber-600' : 'text-slate-900'
+                'text-slate-900'
               }`}>
                 ¥{currentMonthActual.toLocaleString()}
               </p>
