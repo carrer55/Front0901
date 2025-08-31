@@ -970,7 +970,20 @@ function MyPage({ onNavigate }: MyPageProps) {
                 {activeTab === 'allowances' && renderAllowancesTab()}
                 {activeTab === 'notifications' && renderNotificationsTab()}
                 {activeTab === 'accounting' && renderAccountingTab()}
-                {activeTab === 'users' && renderUsersTab()}
+                {activeTab === 'users' && (
+                  <div className="text-center py-8">
+                    <Users className="w-16 h-16 text-slate-400 mx-auto mb-4" />
+                    <h3 className="text-xl font-semibold text-slate-800 mb-4">ユーザー管理</h3>
+                    <p className="text-slate-600 mb-6">チームメンバーの招待と管理を行います</p>
+                    <button
+                      onClick={() => onNavigate('user-management')}
+                      className="flex items-center space-x-2 px-6 py-3 bg-gradient-to-r from-navy-600 to-navy-800 text-white rounded-lg font-medium hover:from-navy-700 hover:to-navy-900 transition-all duration-200 mx-auto"
+                    >
+                      <Users className="w-5 h-5" />
+                      <span>ユーザー管理画面を開く</span>
+                    </button>
+                  </div>
+                )}
                 {activeTab === 'plan' && renderPlanTab()}
               </div>
             </div>
