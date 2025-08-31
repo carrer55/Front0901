@@ -140,7 +140,8 @@ function DocumentEditor({ onNavigate, documentType, businessTripId }: DocumentEd
         alert('行動と成果を入力してください');
         return;
       }
-      // 出張報告書の場合は出張経費精算書作成画面に遷移
+      // 出張報告書保存後、出張経費精算書作成画面に遷移
+      alert('出張報告書が保存されました');
       localStorage.setItem('editingBusinessTripId', businessTripId);
       localStorage.setItem('editingDocumentType', 'expense-report');
       onNavigate('document-editor');
@@ -703,7 +704,7 @@ function DocumentEditor({ onNavigate, documentType, businessTripId }: DocumentEd
                     {documentType === 'business-report' ? (
                       <>
                         <Send className="w-5 h-5" />
-                        <span>続けて出張経費精算書を作成</span>
+                        <span>保存して出張経費精算書作成</span>
                       </>
                     ) : (
                       <>
