@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { TrendingUp, TrendingDown, ChevronDown, ChevronUp, BarChart3 } from 'lucide-react';
 
 function StatsCards() {
+  const [showEstimatedHistory, setShowEstimatedHistory] = useState(false);
   const [showActualHistory, setShowActualHistory] = useState(false);
 
   // 今月の精算見込みデータ
@@ -23,6 +24,14 @@ function StatsCards() {
   const actualDifference = currentMonthActual - previousMonthActual;
   const actualPercentageChange = ((actualDifference / previousMonthActual) * 100).toFixed(1);
   const isActualIncrease = actualDifference > 0;
+
+  const estimatedHistory = [
+    { month: '2024年6月', amount: 285000, applications: 10 },
+    { month: '2024年5月', amount: 310000, applications: 14 },
+    { month: '2024年4月', amount: 260000, applications: 8 },
+    { month: '2024年3月', amount: 290000, applications: 11 },
+    { month: '2024年2月', amount: 250000, applications: 7 }
+  ];
 
   const actualHistory = [
     { month: '2024年6月', amount: 245000, applications: 7 },
@@ -62,9 +71,7 @@ function StatsCards() {
             </div>
             
             <div className="mb-6">
-              <p className={`text-3xl lg:text-4xl font-bold mb-2 ${
-                'text-slate-900'
-              }`}>
+              <p className="text-3xl lg:text-4xl font-bold mb-2 text-slate-900">
                 ¥{currentMonthEstimated.toLocaleString()}
               </p>
               <p className="text-sm text-slate-600">
@@ -137,9 +144,7 @@ function StatsCards() {
             </div>
             
             <div className="mb-6">
-              <p className={`text-3xl lg:text-4xl font-bold mb-2 ${
-                'text-slate-900'
-              }`}>
+              <p className="text-3xl lg:text-4xl font-bold mb-2 text-slate-900">
                 ¥{currentMonthActual.toLocaleString()}
               </p>
               <p className="text-sm text-slate-600">
