@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Calendar, MapPin, Upload, Calculator, Save, User, Building } from 'lucide-react';
+import { Calendar, MapPin, Upload, Calculator, Save } from 'lucide-react';
 import Sidebar from './Sidebar';
 import TopBar from './TopBar';
 
@@ -10,23 +10,10 @@ interface BusinessTripApplicationProps {
 function BusinessTripApplication({ onNavigate }: BusinessTripApplicationProps) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [formData, setFormData] = useState({
-    applicationNumber: '',
-    applicantName: '',
-    department: '',
-    position: '',
-    destination: '',
     purpose: '',
-    period: {
-      startYear: '',
-      startMonth: '',
-      startDay: '',
-      endYear: '',
-      endMonth: '',
-      endDay: ''
-    },
-    objective: '',
-    travelExpenses: '',
-    schedule: '',
+    startDate: '',
+    endDate: '',
+    destination: '',
     estimatedExpenses: {
       dailyAllowance: 0,
       transportation: 0,
@@ -38,23 +25,12 @@ function BusinessTripApplication({ onNavigate }: BusinessTripApplicationProps) {
 
   const [dragActive, setDragActive] = useState(false);
 
-  // 出張日当の自動計算
-  const calculateExpenses = () => {
-    if (formData.period.startYear && formData.period.startMonth && formData.period.startDay &&
-        formData.period.endYear && formData.period.endMonth && formData.period.endDay) {
-      
-      const startDate = new Date(
-        parseInt(formData.period.startYear),
-        parseInt(formData.period.startMonth) - 1,
-        parseInt(formData.period.startDay)
-      );
-      const endDate = new Date(
-        parseInt(formData.period.endYear),
-        parseInt(formData.period.endMonth) - 1,
-        parseInt(formData.period.endDay)
-      );
-      
-      const days = Math.ceil((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)) + 1;
+  // 出張日当の自動計算（1日あたり5,000円と仮定）
+  const calculateDailyAllowance = () => {
+    if (formData.startDate && formData.endDate) {
+      const start = new Date(formData.startDate);
+      const end = new Date(formData.endDate);
+      const days = Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)) + 1;
       const dailyRate = 5000; // 1日あたりの日当
       const transportationRate = 2000; // 1日あたりの交通費
       const accommodationRate = 8000; // 1日あたりの宿泊費
@@ -77,11 +53,8 @@ function BusinessTripApplication({ onNavigate }: BusinessTripApplicationProps) {
   };
 
   React.useEffect(() => {
-    calculateExpenses();
-  }, [
-    formData.period.startYear, formData.period.startMonth, formData.period.startDay,
-    formData.period.endYear, formData.period.endMonth, formData.period.endDay
-  ]);
+    calculateDailyAllowance();
+  }, [formData.startDate, formData.endDate]);
 
   const handleDrag = (e: React.DragEvent) => {
     e.preventDefault();
@@ -126,6 +99,7 @@ function BusinessTripApplication({ onNavigate }: BusinessTripApplicationProps) {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    // ここで申請データを送信
     console.log('出張申請データ:', formData);
     alert('出張申請が送信されました！');
     onNavigate('dashboard');
@@ -138,12 +112,6 @@ function BusinessTripApplication({ onNavigate }: BusinessTripApplicationProps) {
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
-
-  // 現在の日付を取得
-  const currentDate = new Date();
-  const currentYear = currentDate.getFullYear();
-  const currentMonth = currentDate.getMonth() + 1;
-  const currentDay = currentDate.getDate();
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 relative overflow-hidden">
@@ -176,316 +144,74 @@ function BusinessTripApplication({ onNavigate }: BusinessTripApplicationProps) {
           
           <div className="flex-1 overflow-auto p-4 lg:p-6 relative z-10">
             <div className="max-w-4xl mx-auto">
-              {/* ヘッダー */}
-              <div className="text-center mb-8">
-                <h1 className="text-3xl font-bold text-slate-800 mb-4">出張申請書</h1>
-                <div className="flex justify-end mb-4">
-                  <div className="text-right">
-                    <div className="flex items-center space-x-2 mb-2">
-                      <span className="text-sm text-slate-600">申請No.</span>
-                      <div className="border-b border-slate-400 w-32">
-                        <input
-                          type="text"
-                          value={formData.applicationNumber}
-                          onChange={(e) => setFormData(prev => ({ ...prev, applicationNumber: e.target.value }))}
-                          className="w-full bg-transparent text-center text-sm text-slate-800 focus:outline-none"
-                          placeholder=""
-                        />
-                      </div>
-                    </div>
-                    <div className="flex items-center space-x-1 text-sm text-slate-600">
-                      <span>平成</span>
-                      <div className="border-b border-slate-400 w-12 text-center">
-                        <input
-                          type="number"
-                          value={currentYear - 1988}
-                          className="w-full bg-transparent text-center text-slate-800 focus:outline-none"
-                          readOnly
-                        />
-                      </div>
-                      <span>年</span>
-                      <div className="border-b border-slate-400 w-8 text-center">
-                        <input
-                          type="number"
-                          value={currentMonth}
-                          className="w-full bg-transparent text-center text-slate-800 focus:outline-none"
-                          readOnly
-                        />
-                      </div>
-                      <span>月</span>
-                      <div className="border-b border-slate-400 w-8 text-center">
-                        <input
-                          type="number"
-                          value={currentDay}
-                          className="w-full bg-transparent text-center text-slate-800 focus:outline-none"
-                          readOnly
-                        />
-                      </div>
-                      <span>日</span>
-                    </div>
-                  </div>
-                </div>
-                <p className="text-slate-600 text-left mb-6">出張について、下記のとおり申請いたします。</p>
-              </div>
-
+              <h1 className="text-2xl lg:text-3xl font-bold text-slate-800 mb-8">出張申請</h1>
               <form onSubmit={handleSubmit} className="space-y-6">
-                {/* メイン申請フォーム */}
+                {/* 基本情報 */}
                 <div className="backdrop-blur-xl bg-white/20 rounded-xl p-6 border border-white/30 shadow-xl">
-                  <div className="space-y-6">
-                    {/* 申請者情報 */}
-                    <div className="grid grid-cols-12 gap-4 items-center">
-                      <div className="col-span-2 bg-slate-100 p-3 text-center font-medium text-slate-700 border border-slate-300">
-                        出張者
-                      </div>
-                      <div className="col-span-2 bg-slate-100 p-3 text-center font-medium text-slate-700 border border-slate-300">
-                        所属
-                      </div>
-                      <div className="col-span-8 border border-slate-300 p-3">
-                        <div className="grid grid-cols-2 gap-4">
-                          <input
-                            type="text"
-                            value={formData.department}
-                            onChange={(e) => setFormData(prev => ({ ...prev, department: e.target.value }))}
-                            className="w-full bg-transparent text-slate-800 focus:outline-none border-b border-slate-300 pb-1"
-                            placeholder="部署名"
-                            required
-                          />
-                          <div className="flex items-center space-x-2">
-                            <span className="text-slate-600 text-sm">氏名</span>
-                            <input
-                              type="text"
-                              value={formData.applicantName}
-                              onChange={(e) => setFormData(prev => ({ ...prev, applicantName: e.target.value }))}
-                              className="flex-1 bg-transparent text-slate-800 focus:outline-none border-b border-slate-300 pb-1"
-                              placeholder="氏名"
-                              required
-                            />
-                          </div>
-                        </div>
-                      </div>
+                  <h2 className="text-xl font-semibold text-slate-800 mb-4">基本情報</h2>
+                  
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-sm font-medium text-slate-700 mb-2">
+                        出張目的 <span className="text-red-500">*</span>
+                      </label>
+                      <textarea
+                        value={formData.purpose}
+                        onChange={(e) => setFormData(prev => ({ ...prev, purpose: e.target.value }))}
+                        className="w-full px-4 py-3 bg-white/50 border border-white/40 rounded-lg text-slate-700 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-navy-400 focus:border-transparent backdrop-blur-xl"
+                        placeholder="出張の目的を入力してください"
+                        rows={3}
+                        required
+                      />
                     </div>
 
-                    {/* 同行者 */}
-                    <div className="grid grid-cols-12 gap-4 items-center">
-                      <div className="col-span-2 bg-slate-100 p-3 text-center font-medium text-slate-700 border border-slate-300">
-                        同行者
-                      </div>
-                      <div className="col-span-10 border border-slate-300 p-3">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium text-slate-700 mb-2">
+                          <Calendar className="w-4 h-4 inline mr-1" />
+                          出発日 <span className="text-red-500">*</span>
+                        </label>
                         <input
-                          type="text"
-                          value={formData.position}
-                          onChange={(e) => setFormData(prev => ({ ...prev, position: e.target.value }))}
-                          className="w-full bg-transparent text-slate-800 focus:outline-none"
-                          placeholder="同行者がいる場合は記入してください"
+                          type="date"
+                          value={formData.startDate}
+                          onChange={(e) => setFormData(prev => ({ ...prev, startDate: e.target.value }))}
+                          className="w-full px-4 py-3 bg-white/50 border border-white/40 rounded-lg text-slate-700 focus:outline-none focus:ring-2 focus:ring-navy-400 focus:border-transparent backdrop-blur-xl"
+                          required
                         />
                       </div>
-                    </div>
-
-                    {/* 出張先 */}
-                    <div className="grid grid-cols-12 gap-4 items-center">
-                      <div className="col-span-2 bg-slate-100 p-3 text-center font-medium text-slate-700 border border-slate-300">
-                        出張先
-                      </div>
-                      <div className="col-span-10 border border-slate-300 p-3">
+                      <div>
+                        <label className="block text-sm font-medium text-slate-700 mb-2">
+                          <Calendar className="w-4 h-4 inline mr-1" />
+                          帰着日 <span className="text-red-500">*</span>
+                        </label>
                         <input
-                          type="text"
-                          value={formData.destination}
-                          onChange={(e) => setFormData(prev => ({ ...prev, destination: e.target.value }))}
-                          className="w-full bg-transparent text-slate-800 focus:outline-none"
-                          placeholder="※都道府県市区町村名まで記載してください"
+                          type="date"
+                          value={formData.endDate}
+                          onChange={(e) => setFormData(prev => ({ ...prev, endDate: e.target.value }))}
+                          className="w-full px-4 py-3 bg-white/50 border border-white/40 rounded-lg text-slate-700 focus:outline-none focus:ring-2 focus:ring-navy-400 focus:border-transparent backdrop-blur-xl"
                           required
                         />
                       </div>
                     </div>
 
-                    {/* 訪問先 */}
-                    <div className="grid grid-cols-12 gap-4 items-center">
-                      <div className="col-span-2 bg-slate-100 p-3 text-center font-medium text-slate-700 border border-slate-300">
-                        訪問先
-                      </div>
-                      <div className="col-span-10 border border-slate-300 p-3">
-                        <input
-                          type="text"
-                          value={formData.purpose}
-                          onChange={(e) => setFormData(prev => ({ ...prev, purpose: e.target.value }))}
-                          className="w-full bg-transparent text-slate-800 focus:outline-none"
-                          placeholder="※訪問する会社名等を記載してください"
-                          required
-                        />
-                      </div>
-                    </div>
-
-                    {/* 期間 */}
-                    <div className="grid grid-cols-12 gap-4 items-center">
-                      <div className="col-span-2 bg-slate-100 p-3 text-center font-medium text-slate-700 border border-slate-300">
-                        期間
-                      </div>
-                      <div className="col-span-10 border border-slate-300 p-3">
-                        <div className="flex items-center space-x-2 text-sm">
-                          <span className="text-slate-600">平成</span>
-                          <input
-                            type="number"
-                            value={formData.period.startYear}
-                            onChange={(e) => setFormData(prev => ({ 
-                              ...prev, 
-                              period: { ...prev.period, startYear: e.target.value }
-                            }))}
-                            className="w-12 bg-transparent text-center text-slate-800 focus:outline-none border-b border-slate-300"
-                            placeholder="年"
-                            required
-                          />
-                          <span className="text-slate-600">年</span>
-                          <input
-                            type="number"
-                            value={formData.period.startMonth}
-                            onChange={(e) => setFormData(prev => ({ 
-                              ...prev, 
-                              period: { ...prev.period, startMonth: e.target.value }
-                            }))}
-                            className="w-8 bg-transparent text-center text-slate-800 focus:outline-none border-b border-slate-300"
-                            placeholder="月"
-                            min="1"
-                            max="12"
-                            required
-                          />
-                          <span className="text-slate-600">月</span>
-                          <input
-                            type="number"
-                            value={formData.period.startDay}
-                            onChange={(e) => setFormData(prev => ({ 
-                              ...prev, 
-                              period: { ...prev.period, startDay: e.target.value }
-                            }))}
-                            className="w-8 bg-transparent text-center text-slate-800 focus:outline-none border-b border-slate-300"
-                            placeholder="日"
-                            min="1"
-                            max="31"
-                            required
-                          />
-                          <span className="text-slate-600">日</span>
-                          
-                          <span className="mx-4 text-slate-600">〜</span>
-                          
-                          <span className="text-slate-600">平成</span>
-                          <input
-                            type="number"
-                            value={formData.period.endYear}
-                            onChange={(e) => setFormData(prev => ({ 
-                              ...prev, 
-                              period: { ...prev.period, endYear: e.target.value }
-                            }))}
-                            className="w-12 bg-transparent text-center text-slate-800 focus:outline-none border-b border-slate-300"
-                            placeholder="年"
-                            required
-                          />
-                          <span className="text-slate-600">年</span>
-                          <input
-                            type="number"
-                            value={formData.period.endMonth}
-                            onChange={(e) => setFormData(prev => ({ 
-                              ...prev, 
-                              period: { ...prev.period, endMonth: e.target.value }
-                            }))}
-                            className="w-8 bg-transparent text-center text-slate-800 focus:outline-none border-b border-slate-300"
-                            placeholder="月"
-                            min="1"
-                            max="12"
-                            required
-                          />
-                          <span className="text-slate-600">月</span>
-                          <input
-                            type="number"
-                            value={formData.period.endDay}
-                            onChange={(e) => setFormData(prev => ({ 
-                              ...prev, 
-                              period: { ...prev.period, endDay: e.target.value }
-                            }))}
-                            className="w-8 bg-transparent text-center text-slate-800 focus:outline-none border-b border-slate-300"
-                            placeholder="日"
-                            min="1"
-                            max="31"
-                            required
-                          />
-                          <span className="text-slate-600">日</span>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* 目的 */}
-                    <div className="grid grid-cols-12 gap-4">
-                      <div className="col-span-2 bg-slate-100 p-3 text-center font-medium text-slate-700 border border-slate-300">
-                        目的
-                      </div>
-                      <div className="col-span-10 border border-slate-300 p-3 h-24">
-                        <textarea
-                          value={formData.objective}
-                          onChange={(e) => setFormData(prev => ({ ...prev, objective: e.target.value }))}
-                          className="w-full h-full bg-transparent text-slate-800 focus:outline-none resize-none"
-                          placeholder=""
-                          required
-                        />
-                      </div>
-                    </div>
-
-                    {/* 出張費用見積り */}
-                    <div className="grid grid-cols-12 gap-4">
-                      <div className="col-span-2 bg-slate-100 p-3 text-center font-medium text-slate-700 border border-slate-300">
-                        出張費用見積り
-                      </div>
-                      <div className="col-span-10 border border-slate-300 p-3 h-32">
-                        <div className="text-xs text-slate-600 mb-2">※交通費・宿泊費等を自由記載で記載してください</div>
-                        <textarea
-                          value={formData.travelExpenses}
-                          onChange={(e) => setFormData(prev => ({ ...prev, travelExpenses: e.target.value }))}
-                          className="w-full h-20 bg-transparent text-slate-800 focus:outline-none resize-none"
-                          placeholder=""
-                        />
-                      </div>
-                    </div>
-
-                    {/* 日程 */}
-                    <div className="grid grid-cols-12 gap-4">
-                      <div className="col-span-2 bg-slate-100 p-3 text-center font-medium text-slate-700 border border-slate-300">
-                        日程
-                      </div>
-                      <div className="col-span-10 border border-slate-300 p-3 h-40">
-                        <textarea
-                          value={formData.schedule}
-                          onChange={(e) => setFormData(prev => ({ ...prev, schedule: e.target.value }))}
-                          className="w-full h-full bg-transparent text-slate-800 focus:outline-none resize-none"
-                          placeholder=""
-                        />
-                      </div>
+                    <div>
+                      <label className="block text-sm font-medium text-slate-700 mb-2">
+                        <MapPin className="w-4 h-4 inline mr-1" />
+                        訪問先 <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        type="text"
+                        value={formData.destination}
+                        onChange={(e) => setFormData(prev => ({ ...prev, destination: e.target.value }))}
+                        className="w-full px-4 py-3 bg-white/50 border border-white/40 rounded-lg text-slate-700 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-navy-400 focus:border-transparent backdrop-blur-xl"
+                        placeholder="訪問先を入力してください"
+                        required
+                      />
                     </div>
                   </div>
                 </div>
 
-                {/* 承認欄 */}
-                <div className="backdrop-blur-xl bg-white/20 rounded-xl p-6 border border-white/30 shadow-xl">
-                  <div className="text-center mb-4">
-                    <h3 className="text-lg font-semibold text-slate-800">承認欄</h3>
-                  </div>
-                  <div className="grid grid-cols-4 gap-0 border border-slate-300">
-                    <div className="bg-slate-100 p-4 text-center font-medium text-slate-700 border-r border-slate-300 h-20 flex items-center justify-center">
-                      部長
-                    </div>
-                    <div className="bg-slate-100 p-4 text-center font-medium text-slate-700 border-r border-slate-300 h-20 flex items-center justify-center">
-                      取締役
-                    </div>
-                    <div className="bg-slate-100 p-4 text-center font-medium text-slate-700 border-r border-slate-300 h-20 flex items-center justify-center">
-                      経理
-                    </div>
-                    <div className="bg-slate-100 p-4 text-center font-medium text-slate-700 h-20 flex items-center justify-center">
-                      代表取締役
-                    </div>
-                    <div className="p-4 border-r border-slate-300 h-20"></div>
-                    <div className="p-4 border-r border-slate-300 h-20"></div>
-                    <div className="p-4 border-r border-slate-300 h-20"></div>
-                    <div className="p-4 h-20"></div>
-                  </div>
-                </div>
-
-                {/* 予定経費（自動計算） */}
+                {/* 予定経費 */}
                 <div className="backdrop-blur-xl bg-white/20 rounded-xl p-6 border border-white/30 shadow-xl">
                   <h2 className="text-xl font-semibold text-slate-800 mb-4">
                     <Calculator className="w-5 h-5 inline mr-2" />
