@@ -16,7 +16,7 @@ const menuItems = [
   { icon: Home, label: 'ホーム', active: true },
   { icon: Plane, label: '出張申請', active: false },
   { icon: Receipt, label: '経費申請', active: false },
-  { icon: FolderOpen, label: '書類管理', active: false },
+  { icon: FolderOpen, label: '出張精算', active: false },
   { icon: Calculator, label: '節税シミュレーション', active: false },
   { icon: Settings, label: '出張規定管理', active: false },
   { icon: User, label: 'マイページ（設定）', active: false },
