@@ -389,123 +389,125 @@ function DocumentEditor({ onNavigate, documentType, businessTripId }: DocumentEd
         
         {includeTravelExpenses && (
           <div>
-        <label className="block text-sm font-medium text-slate-700 mb-4">
-          旅費 <span className="text-red-500">*</span>
-        </label>
-        
-        {/* 手動入力フォーム */}
-        <div className="bg-white/30 rounded-lg p-4 mb-4">
-          <div className="flex items-center justify-between mb-4">
-            <h4 className="font-medium text-slate-800">旅費入力</h4>
-            <button
-              type="button"
-              onClick={() => {
-                // 申請済経費から選択する機能
-                alert('申請済経費から選択機能を実装予定');
-              }}
-              className="flex items-center space-x-2 px-3 py-2 bg-gradient-to-r from-navy-600 to-navy-800 text-white rounded-lg text-sm font-medium hover:from-navy-700 hover:to-navy-900 transition-all duration-200"
-            >
-              <span>+ 申請済経費から選択</span>
-            </button>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">項目名</label>
-              <input
-                type="text"
-                className="w-full px-3 py-2 bg-white/50 border border-white/40 rounded-lg text-slate-700 focus:outline-none focus:ring-2 focus:ring-navy-400 backdrop-blur-xl"
-                placeholder="例：新幹線代（往復）"
-              />
+            <label className="block text-sm font-medium text-slate-700 mb-4">
+              旅費
+            </label>
+            
+            {/* 手動入力フォーム */}
+            <div className="bg-white/30 rounded-lg p-4 mb-4">
+              <div className="flex items-center justify-between mb-4">
+                <h4 className="font-medium text-slate-800">旅費入力</h4>
+                <button
+                  type="button"
+                  onClick={() => {
+                    // 申請済経費から選択する機能
+                    alert('申請済経費から選択機能を実装予定');
+                  }}
+                  className="flex items-center space-x-2 px-3 py-2 bg-gradient-to-r from-navy-600 to-navy-800 text-white rounded-lg text-sm font-medium hover:from-navy-700 hover:to-navy-900 transition-all duration-200"
+                >
+                  <span>+ 申請済経費から選択</span>
+                </button>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-2">項目名</label>
+                  <input
+                    type="text"
+                    className="w-full px-3 py-2 bg-white/50 border border-white/40 rounded-lg text-slate-700 focus:outline-none focus:ring-2 focus:ring-navy-400 backdrop-blur-xl"
+                    placeholder="例：新幹線代（往復）"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-2">金額（円）</label>
+                  <input
+                    type="number"
+                    className="w-full px-3 py-2 bg-white/50 border border-white/40 rounded-lg text-slate-700 focus:outline-none focus:ring-2 focus:ring-navy-400 backdrop-blur-xl"
+                    placeholder="0"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-2">日付</label>
+                  <input
+                    type="date"
+                    className="w-full px-3 py-2 bg-white/50 border border-white/40 rounded-lg text-slate-700 focus:outline-none focus:ring-2 focus:ring-navy-400 backdrop-blur-xl"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-2">店舗名</label>
+                  <input
+                    type="text"
+                    className="w-full px-3 py-2 bg-white/50 border border-white/40 rounded-lg text-slate-700 focus:outline-none focus:ring-2 focus:ring-navy-400 backdrop-blur-xl"
+                    placeholder="例：JR東日本"
+                  />
+                </div>
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-medium text-slate-700 mb-2">説明</label>
+                  <input
+                    type="text"
+                    className="w-full px-3 py-2 bg-white/50 border border-white/40 rounded-lg text-slate-700 focus:outline-none focus:ring-2 focus:ring-navy-400 backdrop-blur-xl"
+                    placeholder="経費の詳細説明"
+                  />
+                </div>
+              </div>
+              
+              <div className="flex justify-end mt-4">
+                <button
+                  type="button"
+                  className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-emerald-600 to-emerald-800 text-white rounded-lg font-medium hover:from-emerald-700 hover:to-emerald-900 transition-all duration-200"
+                >
+                  <span>追加</span>
+                </button>
+              </div>
             </div>
-            <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">金額（円）</label>
-              <input
-                type="number"
-                className="w-full px-3 py-2 bg-white/50 border border-white/40 rounded-lg text-slate-700 focus:outline-none focus:ring-2 focus:ring-navy-400 backdrop-blur-xl"
-                placeholder="0"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">日付</label>
-              <input
-                type="date"
-                className="w-full px-3 py-2 bg-white/50 border border-white/40 rounded-lg text-slate-700 focus:outline-none focus:ring-2 focus:ring-navy-400 backdrop-blur-xl"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">店舗名</label>
-              <input
-                type="text"
-                className="w-full px-3 py-2 bg-white/50 border border-white/40 rounded-lg text-slate-700 focus:outline-none focus:ring-2 focus:ring-navy-400 backdrop-blur-xl"
-                placeholder="例：JR東日本"
-              />
-            </div>
-            <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-slate-700 mb-2">説明</label>
-              <input
-                type="text"
-                className="w-full px-3 py-2 bg-white/50 border border-white/40 rounded-lg text-slate-700 focus:outline-none focus:ring-2 focus:ring-navy-400 backdrop-blur-xl"
-                placeholder="経費の詳細説明"
-              />
-            </div>
-          </div>
-          
-          <div className="flex justify-end mt-4">
-            <button
-              type="button"
-              className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-emerald-600 to-emerald-800 text-white rounded-lg font-medium hover:from-emerald-700 hover:to-emerald-900 transition-all duration-200"
-            >
-              <span>追加</span>
-            </button>
-          </div>
-        </div>
 
-        {/* 申請済経費から選択 */}
-        <div className="space-y-3">
-          {expenseReportData.availableExpenses.map((expense) => (
-            <div
-              key={expense.id}
-              className={`p-4 rounded-lg border-2 cursor-pointer transition-all duration-200 ${
-                expenseReportData.selectedExpenses.includes(expense.id)
-                  ? 'border-navy-500 bg-navy-50/30'
-                  : 'border-white/40 bg-white/30 hover:border-white/60'
-              }`}
-              onClick={() => toggleExpenseSelection(expense.id)}
-            >
-              <div className="flex items-center justify-between">
-                <div className="flex-1">
-                  <div className="flex items-center space-x-3 mb-2">
-                    <input
-                      type="checkbox"
-                      checked={expenseReportData.selectedExpenses.includes(expense.id)}
-                      onChange={() => toggleExpenseSelection(expense.id)}
-                      className="w-5 h-5 text-navy-600 bg-white/50 border-white/40 rounded focus:ring-navy-400 focus:ring-2"
-                    />
-                    <h4 className="font-medium text-slate-800">{expense.title}</h4>
-                    <span className="px-2 py-1 rounded-full text-xs font-medium text-blue-700 bg-blue-100">
-                      {expense.category}
-                    </span>
-                  </div>
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm text-slate-600 ml-8">
-                    <div>
-                      <span className="font-medium">日付:</span> {expense.date}
-                    </div>
-                    <div>
-                      <span className="font-medium">店舗:</span> {expense.store}
-                    </div>
-                    <div>
-                      <span className="font-medium">説明:</span> {expense.description}
-                    </div>
-                    <div>
-                      <span className="font-medium">金額:</span> ¥{expense.amount.toLocaleString()}
+            {/* 申請済経費から選択 */}
+            <div className="space-y-3">
+              {expenseReportData.availableExpenses.map((expense) => (
+                <div
+                  key={expense.id}
+                  className={`p-4 rounded-lg border-2 cursor-pointer transition-all duration-200 ${
+                    expenseReportData.selectedExpenses.includes(expense.id)
+                      ? 'border-navy-500 bg-navy-50/30'
+                      : 'border-white/40 bg-white/30 hover:border-white/60'
+                  }`}
+                  onClick={() => toggleExpenseSelection(expense.id)}
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="flex-1">
+                      <div className="flex items-center space-x-3 mb-2">
+                        <input
+                          type="checkbox"
+                          checked={expenseReportData.selectedExpenses.includes(expense.id)}
+                          onChange={() => toggleExpenseSelection(expense.id)}
+                          className="w-5 h-5 text-navy-600 bg-white/50 border-white/40 rounded focus:ring-navy-400 focus:ring-2"
+                        />
+                        <h4 className="font-medium text-slate-800">{expense.title}</h4>
+                        <span className="px-2 py-1 rounded-full text-xs font-medium text-blue-700 bg-blue-100">
+                          {expense.category}
+                        </span>
+                      </div>
+                      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm text-slate-600 ml-8">
+                        <div>
+                          <span className="font-medium">日付:</span> {expense.date}
+                        </div>
+                        <div>
+                          <span className="font-medium">店舗:</span> {expense.store}
+                        </div>
+                        <div>
+                          <span className="font-medium">説明:</span> {expense.description}
+                        </div>
+                        <div>
+                          <span className="font-medium">金額:</span> ¥{expense.amount.toLocaleString()}
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
+              ))}
             </div>
-          ))}
-        </div>
+          </div>
+        )}
       </div>
 
       {/* 日当 */}
@@ -519,8 +521,6 @@ function DocumentEditor({ onNavigate, documentType, businessTripId }: DocumentEd
             <span className="text-2xl font-bold text-slate-800">¥{expenseReportData.dailyAllowance.toLocaleString()}</span>
           </div>
         </div>
-      </div>
-        )}
       </div>
 
       {/* 合計金額 */}
