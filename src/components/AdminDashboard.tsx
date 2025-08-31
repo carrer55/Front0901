@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ArrowLeft, Download, Filter, Search, Calendar, Users, TrendingUp, BarChart3, Clock, CheckCircle, FileText, Receipt } from 'lucide-react';
+import { ArrowLeft, Download, Filter, Search, Calendar, Users, TrendingUp, BarChart3, Clock, CheckCircle, FileText, Receipt, Eye } from 'lucide-react';
 import Sidebar from './Sidebar';
 import TopBar from './TopBar';
 
@@ -18,6 +18,10 @@ interface AdminApplication {
   submittedDate: string;
   status: 'pending' | 'approved' | 'rejected' | 'on_hold';
   approver: string;
+  purpose?: string;
+  startDate?: string;
+  endDate?: string;
+  location?: string;
 }
 
 function AdminDashboard({ onNavigate }: AdminDashboardProps) {
@@ -25,8 +29,8 @@ function AdminDashboard({ onNavigate }: AdminDashboardProps) {
   const [searchTerm, setSearchTerm] = useState('');
   const [departmentFilter, setDepartmentFilter] = useState<string>('all');
   const [statusFilter, setStatusFilter] = useState<string>('all');
-  const [selectedCard, setSelectedCard] = useState<'application-pending' | 'application-approved' | 'settlement-pending' | 'settlement-approved'>('application-pending');
   const [dateRange, setDateRange] = useState({ start: '', end: '' });
+  const [showAllApplications, setShowAllApplications] = useState(false);
 
   const [applications] = useState<AdminApplication[]>([
     {
@@ -39,7 +43,11 @@ function AdminDashboard({ onNavigate }: AdminDashboardProps) {
       amount: 52500,
       submittedDate: '2024-07-20',
       status: 'pending',
-      approver: '佐藤部長'
+      approver: '佐藤部長',
+      purpose: 'クライアント訪問および新規開拓営業',
+      startDate: '2024-07-25',
+      endDate: '2024-07-27',
+      location: '東京都港区'
     },
     {
       id: 'BT-2024-002',
@@ -51,7 +59,11 @@ function AdminDashboard({ onNavigate }: AdminDashboardProps) {
       amount: 35000,
       submittedDate: '2024-07-15',
       status: 'approved',
-      approver: '山田経理'
+      approver: '山田経理',
+      purpose: '支社会議参加',
+      startDate: '2024-07-20',
+      endDate: '2024-07-21',
+      location: '大阪府大阪市'
     },
     {
       id: 'EX-2024-001',
@@ -88,6 +100,30 @@ function AdminDashboard({ onNavigate }: AdminDashboardProps) {
       submittedDate: '2024-07-05',
       status: 'approved',
       approver: '佐藤部長'
+    },
+    {
+      id: 'BT-2024-003',
+      type: 'business-trip',
+      category: 'application',
+      title: '福岡出張申請',
+      applicant: '山田花子',
+      department: '営業部',
+      amount: 45000,
+      submittedDate: '2024-07-12',
+      status: 'approved',
+      approver: '佐藤部長'
+    },
+    {
+      id: 'EX-2024-002',
+      type: 'expense',
+      category: 'application',
+      title: '宿泊費申請',
+      applicant: '鈴木美咲',
+      department: '開発部',
+      amount: 15000,
+      submittedDate: '2024-07-08',
+      status: 'pending',
+      approver: '田中部長'
     }
   ]);
 
@@ -135,49 +171,39 @@ function AdminDashboard({ onNavigate }: AdminDashboardProps) {
     };
   };
 
-  const getFilteredApplications = () => {
-    let filtered = applications;
-
-    // カード選択によるフィルタリング
-    if (selectedCard === 'application-pending') {
-      filtered = filtered.filter(app => app.category === 'application' && app.status === 'pending');
-    } else if (selectedCard === 'application-approved') {
-      filtered = filtered.filter(app => app.category === 'application' && app.status === 'approved');
-    } else if (selectedCard === 'settlement-pending') {
-      filtered = filtered.filter(app => app.category === 'settlement' && app.status === 'pending');
-    } else if (selectedCard === 'settlement-approved') {
-      filtered = filtered.filter(app => app.category === 'settlement' && app.status === 'approved');
-    }
-
-    // 検索・フィルタリング
-    filtered = filtered.filter(app => {
-      const matchesSearch = app.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                           app.applicant.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                           app.id.toLowerCase().includes(searchTerm.toLowerCase());
-      const matchesDepartment = departmentFilter === 'all' || app.department === departmentFilter;
-      const matchesStatus = statusFilter === 'all' || app.status === statusFilter;
-      
-      let matchesDate = true;
-      if (dateRange.start && dateRange.end) {
-        const appDate = new Date(app.submittedDate);
-        const startDate = new Date(dateRange.start);
-        const endDate = new Date(dateRange.end);
-        matchesDate = appDate >= startDate && appDate <= endDate;
-      }
-      
-      return matchesSearch && matchesDepartment && matchesStatus && matchesDate;
-    });
-
-    return filtered;
+  const getRecentApplications = () => {
+    const sortedApplications = [...applications].sort((a, b) => 
+      new Date(b.submittedDate).getTime() - new Date(a.submittedDate).getTime()
+    );
+    return showAllApplications ? sortedApplications : sortedApplications.slice(0, 5);
   };
 
-  const handleApprovalAction = (applicationId: string, action: 'approved' | 'rejected' | 'on_hold') => {
-    // 実際の実装では、ここでAPIを呼び出してステータスを更新
-    alert(`申請 ${applicationId} を${getStatusLabel(action)}に変更しました`);
+  const filteredApplications = getRecentApplications().filter(app => {
+    const matchesSearch = app.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         app.applicant.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         app.id.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesDepartment = departmentFilter === 'all' || app.department === departmentFilter;
+    const matchesStatus = statusFilter === 'all' || app.status === statusFilter;
+    
+    let matchesDate = true;
+    if (dateRange.start && dateRange.end) {
+      const appDate = new Date(app.submittedDate);
+      const startDate = new Date(dateRange.start);
+      const endDate = new Date(dateRange.end);
+      matchesDate = appDate >= startDate && appDate <= endDate;
+    }
+    
+    return matchesSearch && matchesDepartment && matchesStatus && matchesDate;
+  });
+
+  const handleCardClick = (category: 'application' | 'settlement', status: 'pending' | 'approved') => {
+    // カードクリック時の画面遷移
+    localStorage.setItem('adminSelectedCategory', category);
+    localStorage.setItem('adminSelectedStatus', status);
+    onNavigate('admin-application-list');
   };
 
   const handleCSVExport = () => {
-    const filteredApplications = getFilteredApplications();
     const csvData = filteredApplications.map(app => ({
       '申請ID': app.id,
       'カテゴリ': app.category === 'application' ? '申請' : '精算',
@@ -196,17 +222,6 @@ function AdminDashboard({ onNavigate }: AdminDashboardProps) {
   };
 
   const cardData = getCardData();
-  const filteredApplications = getFilteredApplications();
-
-  const getSelectedCardTitle = () => {
-    const titles = {
-      'application-pending': '申請 - 承認待ち',
-      'application-approved': '申請 - 承認済',
-      'settlement-pending': '精算 - 承認待ち',
-      'settlement-approved': '精算 - 承認済'
-    };
-    return titles[selectedCard];
-  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 relative overflow-hidden">
@@ -268,12 +283,8 @@ function AdminDashboard({ onNavigate }: AdminDashboardProps) {
                   
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div
-                      onClick={() => setSelectedCard('application-pending')}
-                      className={`p-4 rounded-lg border-2 cursor-pointer transition-all duration-300 transform hover:scale-[1.02] ${
-                        selectedCard === 'application-pending'
-                          ? 'border-amber-500 bg-amber-50/50 shadow-lg'
-                          : 'border-white/40 bg-white/30 hover:bg-white/50'
-                      }`}
+                      onClick={() => handleCardClick('application', 'pending')}
+                      className="p-4 rounded-lg border-2 border-amber-300/50 bg-white/30 hover:bg-white/50 cursor-pointer transition-all duration-300 transform hover:scale-[1.02] hover:shadow-lg"
                     >
                       <div className="flex items-center justify-between mb-2">
                         <Clock className="w-5 h-5 text-amber-600" />
@@ -284,12 +295,8 @@ function AdminDashboard({ onNavigate }: AdminDashboardProps) {
                     </div>
 
                     <div
-                      onClick={() => setSelectedCard('application-approved')}
-                      className={`p-4 rounded-lg border-2 cursor-pointer transition-all duration-300 transform hover:scale-[1.02] ${
-                        selectedCard === 'application-approved'
-                          ? 'border-emerald-500 bg-emerald-50/50 shadow-lg'
-                          : 'border-white/40 bg-white/30 hover:bg-white/50'
-                      }`}
+                      onClick={() => handleCardClick('application', 'approved')}
+                      className="p-4 rounded-lg border-2 border-emerald-300/50 bg-white/30 hover:bg-white/50 cursor-pointer transition-all duration-300 transform hover:scale-[1.02] hover:shadow-lg"
                     >
                       <div className="flex items-center justify-between mb-2">
                         <CheckCircle className="w-5 h-5 text-emerald-600" />
@@ -312,12 +319,8 @@ function AdminDashboard({ onNavigate }: AdminDashboardProps) {
                   
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div
-                      onClick={() => setSelectedCard('settlement-pending')}
-                      className={`p-4 rounded-lg border-2 cursor-pointer transition-all duration-300 transform hover:scale-[1.02] ${
-                        selectedCard === 'settlement-pending'
-                          ? 'border-amber-500 bg-amber-50/50 shadow-lg'
-                          : 'border-white/40 bg-white/30 hover:bg-white/50'
-                      }`}
+                      onClick={() => handleCardClick('settlement', 'pending')}
+                      className="p-4 rounded-lg border-2 border-amber-300/50 bg-white/30 hover:bg-white/50 cursor-pointer transition-all duration-300 transform hover:scale-[1.02] hover:shadow-lg"
                     >
                       <div className="flex items-center justify-between mb-2">
                         <Clock className="w-5 h-5 text-amber-600" />
@@ -328,12 +331,8 @@ function AdminDashboard({ onNavigate }: AdminDashboardProps) {
                     </div>
 
                     <div
-                      onClick={() => setSelectedCard('settlement-approved')}
-                      className={`p-4 rounded-lg border-2 cursor-pointer transition-all duration-300 transform hover:scale-[1.02] ${
-                        selectedCard === 'settlement-approved'
-                          ? 'border-emerald-500 bg-emerald-50/50 shadow-lg'
-                          : 'border-white/40 bg-white/30 hover:bg-white/50'
-                      }`}
+                      onClick={() => handleCardClick('settlement', 'approved')}
+                      className="p-4 rounded-lg border-2 border-emerald-300/50 bg-white/30 hover:bg-white/50 cursor-pointer transition-all duration-300 transform hover:scale-[1.02] hover:shadow-lg"
                     >
                       <div className="flex items-center justify-between mb-2">
                         <CheckCircle className="w-5 h-5 text-emerald-600" />
@@ -400,12 +399,20 @@ function AdminDashboard({ onNavigate }: AdminDashboardProps) {
                 </div>
               </div>
 
-              {/* 選択されたカテゴリの申請一覧 */}
+              {/* 最近の申請一覧 */}
               <div className="backdrop-blur-xl bg-white/20 rounded-xl border border-white/30 shadow-xl overflow-hidden">
                 <div className="p-6 border-b border-white/30">
-                  <h2 className="text-xl font-semibold text-slate-800">
-                    {getSelectedCardTitle()} ({filteredApplications.length}件)
-                  </h2>
+                  <div className="flex items-center justify-between">
+                    <h2 className="text-xl font-semibold text-slate-800">
+                      {showAllApplications ? '全ての申請・精算' : '最近の申請・精算'} ({filteredApplications.length}件)
+                    </h2>
+                    <button
+                      onClick={() => setShowAllApplications(!showAllApplications)}
+                      className="text-navy-600 hover:text-navy-800 text-sm font-medium transition-colors"
+                    >
+                      {showAllApplications ? '最新5件のみ表示' : '...全て表示'}
+                    </button>
+                  </div>
                 </div>
                 
                 <div className="overflow-x-auto">
@@ -413,6 +420,7 @@ function AdminDashboard({ onNavigate }: AdminDashboardProps) {
                     <thead className="bg-white/30 border-b border-white/30">
                       <tr>
                         <th className="text-left py-4 px-6 font-medium text-slate-700">申請ID</th>
+                        <th className="text-left py-4 px-6 font-medium text-slate-700">カテゴリ</th>
                         <th className="text-left py-4 px-6 font-medium text-slate-700">種別</th>
                         <th className="text-left py-4 px-6 font-medium text-slate-700">タイトル</th>
                         <th className="text-left py-4 px-6 font-medium text-slate-700">申請者</th>
@@ -420,15 +428,13 @@ function AdminDashboard({ onNavigate }: AdminDashboardProps) {
                         <th className="text-left py-4 px-6 font-medium text-slate-700">金額</th>
                         <th className="text-left py-4 px-6 font-medium text-slate-700">申請日</th>
                         <th className="text-left py-4 px-6 font-medium text-slate-700">ステータス</th>
-                        {(selectedCard === 'application-pending' || selectedCard === 'settlement-pending') && (
-                          <th className="text-center py-4 px-6 font-medium text-slate-700">承認操作</th>
-                        )}
+                        <th className="text-center py-4 px-6 font-medium text-slate-700">操作</th>
                       </tr>
                     </thead>
                     <tbody>
                       {filteredApplications.length === 0 ? (
                         <tr>
-                          <td colSpan={selectedCard.includes('pending') ? 9 : 8} className="text-center py-12 text-slate-500">
+                          <td colSpan={10} className="text-center py-12 text-slate-500">
                             条件に一致する申請が見つかりません
                           </td>
                         </tr>
@@ -436,6 +442,13 @@ function AdminDashboard({ onNavigate }: AdminDashboardProps) {
                         filteredApplications.map((app) => (
                           <tr key={app.id} className="border-b border-white/20 hover:bg-white/20 transition-colors">
                             <td className="py-4 px-6 text-slate-800 font-medium">{app.id}</td>
+                            <td className="py-4 px-6">
+                              <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                                app.category === 'application' ? 'text-blue-700 bg-blue-100' : 'text-purple-700 bg-purple-100'
+                              }`}>
+                                {app.category === 'application' ? '申請' : '精算'}
+                              </span>
+                            </td>
                             <td className="py-4 px-6 text-slate-700">{getTypeLabel(app.type)}</td>
                             <td className="py-4 px-6 text-slate-800">{app.title}</td>
                             <td className="py-4 px-6 text-slate-800">{app.applicant}</td>
@@ -449,33 +462,20 @@ function AdminDashboard({ onNavigate }: AdminDashboardProps) {
                                 {getStatusLabel(app.status)}
                               </span>
                             </td>
-                            {(selectedCard === 'application-pending' || selectedCard === 'settlement-pending') && (
-                              <td className="py-4 px-6">
-                                <div className="flex items-center justify-center space-x-2">
-                                  <button
-                                    onClick={() => handleApprovalAction(app.id, 'approved')}
-                                    className="px-3 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded text-xs font-medium transition-colors"
-                                    title="承認"
-                                  >
-                                    承認
-                                  </button>
-                                  <button
-                                    onClick={() => handleApprovalAction(app.id, 'on_hold')}
-                                    className="px-3 py-1 bg-orange-600 hover:bg-orange-700 text-white rounded text-xs font-medium transition-colors"
-                                    title="保留"
-                                  >
-                                    保留
-                                  </button>
-                                  <button
-                                    onClick={() => handleApprovalAction(app.id, 'rejected')}
-                                    className="px-3 py-1 bg-red-600 hover:bg-red-700 text-white rounded text-xs font-medium transition-colors"
-                                    title="否認"
-                                  >
-                                    否認
-                                  </button>
-                                </div>
-                              </td>
-                            )}
+                            <td className="py-4 px-6">
+                              <div className="flex items-center justify-center">
+                                <button
+                                  onClick={() => {
+                                    localStorage.setItem('adminSelectedApplication', app.id);
+                                    onNavigate('admin-application-detail');
+                                  }}
+                                  className="p-2 text-slate-600 hover:text-slate-800 hover:bg-white/30 rounded-lg transition-colors"
+                                  title="詳細表示"
+                                >
+                                  <Eye className="w-4 h-4" />
+                                </button>
+                              </div>
+                            </td>
                           </tr>
                         ))
                       )}
