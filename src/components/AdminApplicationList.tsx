@@ -164,6 +164,15 @@ function AdminApplicationList({ onNavigate }: AdminApplicationListProps) {
   };
 
   const filteredApplications = applications.filter(app => {
+    // 部門管理者の場合は自部署のみ表示
+    const userProfile = JSON.parse(localStorage.getItem('userProfile') || '{}');
+    const currentUserRole = userProfile.role;
+    const userDepartment = userProfile.departmentName;
+    
+    if (currentUserRole === 'department_admin' && userDepartment && app.department !== userDepartment) {
+      return false;
+    }
+    
     const matchesCategory = app.category === selectedCategory;
     const matchesStatus = app.status === selectedStatus;
     const matchesSearch = app.title.toLowerCase().includes(searchTerm.toLowerCase()) ||

@@ -85,9 +85,20 @@ function AdminApplicationDetail({ onNavigate }: AdminApplicationDetailProps) {
 
     setIsSubmitting(true);
     
-    // 実際の実装では、ここでAPIを呼び出す
+    // 実際の実装では、ここでAPIを呼び出してステータスを更新
+    // ローカル実装では、ローカルストレージのデータを更新
     setTimeout(() => {
       const actionLabel = action === 'approved' ? '承認' : action === 'rejected' ? '否認' : '保留';
+      
+      // ローカルストレージのアプリケーションデータを更新（実際の実装ではAPI呼び出し）
+      const applications = JSON.parse(localStorage.getItem('adminApplications') || '[]');
+      const updatedApplications = applications.map((app: any) => 
+        app.id === applicationData.id 
+          ? { ...app, status: action, approvedAt: new Date().toISOString(), approverComment: comment }
+          : app
+      );
+      localStorage.setItem('adminApplications', JSON.stringify(updatedApplications));
+      
       alert(`申請を${actionLabel}しました。`);
       setIsSubmitting(false);
       onNavigate('admin-application-list');

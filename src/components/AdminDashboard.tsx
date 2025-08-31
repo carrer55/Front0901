@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { ArrowLeft, Download, Filter, Search, Calendar, Users, TrendingUp, BarChart3, Clock, CheckCircle, FileText, Receipt, Eye } from 'lucide-react';
 import Sidebar from './Sidebar';
 import TopBar from './TopBar';
+import { useUserProfile } from './UserProfileProvider';
 
 interface AdminDashboardProps {
   onNavigate: (view: string) => void;
@@ -31,6 +32,7 @@ function AdminDashboard({ onNavigate }: AdminDashboardProps) {
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [dateRange, setDateRange] = useState({ start: '', end: '' });
   const [showAllApplications, setShowAllApplications] = useState(false);
+  const { userRole } = useUserProfile();
 
   const [applications] = useState<AdminApplication[]>([
     {
@@ -179,6 +181,15 @@ function AdminDashboard({ onNavigate }: AdminDashboardProps) {
   };
 
   const filteredApplications = getRecentApplications().filter(app => {
+    // 部門管理者の場合は自部署のみ表示
+    if (userRole === 'department_admin') {
+      const userProfile = JSON.parse(localStorage.getItem('userProfile') || '{}');
+      const userDepartment = userProfile.departmentName;
+      if (userDepartment && app.department !== userDepartment) {
+        return false;
+      }
+    }
+    
     const matchesSearch = app.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          app.applicant.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          app.id.toLowerCase().includes(searchTerm.toLowerCase());
