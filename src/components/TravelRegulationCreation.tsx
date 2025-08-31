@@ -290,6 +290,8 @@ function TravelRegulationCreation({ onNavigate }: TravelRegulationCreationProps)
                 ...prev, 
                 companyInfo: { ...prev.companyInfo, establishedDate: e.target.value }
               }));
+              // 日付変更時に第11条を自動更新
+              setTimeout(() => updateArticle11WithDate(), 0);
             }}
             onBlur={updateArticle11WithDate}
             className="w-full px-4 py-3 bg-white/50 border border-white/40 rounded-lg text-slate-700 focus:outline-none focus:ring-2 focus:ring-navy-400 backdrop-blur-xl"
@@ -371,6 +373,25 @@ function TravelRegulationCreation({ onNavigate }: TravelRegulationCreationProps)
             <div>
               <span className="text-slate-700 font-medium">宿泊料を実費精算とする</span>
               <p className="text-xs text-slate-500">チェックすると宿泊料は実際にかかった費用を精算します</p>
+            </div>
+          </label>
+        </div>
+      </div>
+
+      {/* 海外出張設定 */}
+      <div className="bg-white/30 rounded-lg p-6">
+        <h3 className="text-lg font-semibold text-slate-800 mb-4">海外出張設定</h3>
+        <div className="space-y-4">
+          <label className="flex items-start space-x-3 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={!data.usePreparationFee}
+              onChange={(e) => setData(prev => ({ ...prev, usePreparationFee: !e.target.checked }))}
+              className="w-5 h-5 text-navy-600 bg-white/50 border-white/40 rounded focus:ring-navy-400 focus:ring-2 mt-0.5"
+            />
+            <div className="text-sm text-slate-700">
+              <span>支度料を使用しない</span>
+              <p className="text-xs text-slate-500">チェックすると支度料は0円として設定されます</p>
             </div>
           </label>
         </div>
@@ -783,9 +804,8 @@ function TravelRegulationCreation({ onNavigate }: TravelRegulationCreationProps)
           </div>
 
           {isSidebarOpen && (
-                  // 日付変更時に第11条を自動更新
-                  setTimeout(() => updateArticle11WithDate(), 0);
             <>
+              <div 
                 className="fixed inset-0 bg-black/50 z-40 lg:hidden"
                 onClick={toggleSidebar}
               />
@@ -838,25 +858,6 @@ function TravelRegulationCreation({ onNavigate }: TravelRegulationCreationProps)
 
                 <div className="backdrop-blur-xl bg-white/20 rounded-xl p-8 border border-white/30 shadow-xl">
                   {renderPreview()}
-                </div>
-              </div>
-
-              {/* 海外出張設定 */}
-              <div className="bg-white/30 rounded-lg p-6">
-                <h3 className="text-lg font-semibold text-slate-800 mb-4">海外出張設定</h3>
-                <div className="space-y-4">
-                  <label className="flex items-start space-x-3 cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={!data.usePreparationFee}
-                      onChange={(e) => setData(prev => ({ ...prev, usePreparationFee: !e.target.checked }))}
-                      className="w-5 h-5 text-navy-600 bg-white/50 border-white/40 rounded focus:ring-navy-400 focus:ring-2 mt-0.5"
-                    />
-                    <div className="text-sm text-slate-700">
-                      <span>支度料を使用しない</span>
-                      <p className="text-xs text-slate-500">チェックすると支度料は0円として設定されます</p>
-                    </div>
-                  </label>
                 </div>
               </div>
             </div>
@@ -953,6 +954,23 @@ function TravelRegulationCreation({ onNavigate }: TravelRegulationCreationProps)
                     onClick={nextStep}
                     disabled={!isStepComplete()}
                     className={`flex items-center space-x-2 px-6 py-3 rounded-lg font-medium transition-all duration-200 ${
+                      !isStepComplete()
+                        ? 'bg-white/30 text-slate-400 cursor-not-allowed'
+                        : 'bg-gradient-to-r from-navy-600 to-navy-800 hover:from-navy-700 hover:to-navy-900 text-white shadow-lg'
+                    }`}
+                  >
+                    <span>次へ</span>
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => setShowPreview(true)}
+                    className="flex items-center space-x-2 px-6 py-3 bg-gradient-to-r from-navy-600 to-navy-800 hover:from-navy-700 hover:to-navy-900 text-white rounded-lg font-medium shadow-lg transition-all duration-200"
+                  >
+                    <Eye className="w-5 h-5" />
+                    <span>プレビュー</span>
+                  </button>
+                )}
+              </div>
             </div>
           </div>
         </div>
