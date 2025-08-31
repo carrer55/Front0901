@@ -412,6 +412,67 @@ function BusinessTripApplication({ onNavigate }: BusinessTripApplicationProps) {
 
   const renderStep3 = () => (
     <div className="space-y-6">
+      <h2 className="text-xl font-semibold text-slate-800 mb-4">
+        <Calculator className="w-5 h-5 inline mr-2" />
+        予定経費（自動計算）
+      </h2>
+      
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="bg-white/30 rounded-lg p-4 backdrop-blur-sm">
+          <p className="text-sm text-slate-600 mb-1">出張日当</p>
+          <p className="text-2xl font-bold text-slate-800">¥{formData.estimatedExpenses.dailyAllowance.toLocaleString()}</p>
+          <p className="text-xs text-slate-500 mt-1">
+            {formData.startDate && formData.endDate ? 
+              `${Math.ceil((new Date(formData.endDate).getTime() - new Date(formData.startDate).getTime()) / (1000 * 60 * 60 * 24)) + 1}日分` : 
+              '日数未設定'
+            }
+          </p>
+        </div>
+        <div className="bg-white/30 rounded-lg p-4 backdrop-blur-sm">
+          <p className="text-sm text-slate-600 mb-1">交通費</p>
+          <p className="text-2xl font-bold text-slate-800">¥{formData.estimatedExpenses.transportation.toLocaleString()}</p>
+          <p className="text-xs text-slate-500 mt-1">{formData.transportationMethod}</p>
+        </div>
+        <div className="bg-white/30 rounded-lg p-4 backdrop-blur-sm">
+          <p className="text-sm text-slate-600 mb-1">宿泊費</p>
+          <p className="text-2xl font-bold text-slate-800">¥{formData.estimatedExpenses.accommodation.toLocaleString()}</p>
+          <p className="text-xs text-slate-500 mt-1">
+            {formData.accommodationRequired ? `${formData.accommodationType}` : '宿泊なし'}
+          </p>
+        </div>
+        <div className="bg-white/30 rounded-lg p-4 backdrop-blur-sm">
+          <p className="text-sm text-slate-600 mb-1">食事代</p>
+          <p className="text-2xl font-bold text-slate-800">¥{formData.estimatedExpenses.meals.toLocaleString()}</p>
+          <p className="text-xs text-slate-500 mt-1">1日2,000円</p>
+        </div>
+        <div className="bg-white/30 rounded-lg p-4 backdrop-blur-sm">
+          <p className="text-sm text-slate-600 mb-1">雑費</p>
+          <p className="text-2xl font-bold text-slate-800">¥{formData.estimatedExpenses.miscellaneous.toLocaleString()}</p>
+          <p className="text-xs text-slate-500 mt-1">1日500円</p>
+        </div>
+        <div className="bg-gradient-to-r from-navy-600 to-navy-800 rounded-lg p-4 text-white">
+          <p className="text-sm text-navy-100 mb-1">合計予定額</p>
+          <p className="text-2xl font-bold">¥{formData.estimatedExpenses.total.toLocaleString()}</p>
+        </div>
+      </div>
+
+      <div>
+        <label className="block text-sm font-medium text-slate-700 mb-2">
+          備考・特記事項
+        </label>
+        <textarea
+          value={formData.remarks}
+          onChange={(e) => setFormData(prev => ({ ...prev, remarks: e.target.value }))}
+          className="w-full px-4 py-3 bg-white/50 border border-white/40 rounded-lg text-slate-700 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-navy-400 focus:border-transparent backdrop-blur-xl"
+          placeholder="特別な事情や注意事項があれば記載してください"
+          rows={3}
+        />
+      </div>
+    </div>
+  );
+
+  const renderTransportationAndAccommodation = () => (
+    <div className="space-y-6">
       <h2 className="text-xl font-semibold text-slate-800 mb-4">交通・宿泊情報</h2>
       
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -573,67 +634,6 @@ function BusinessTripApplication({ onNavigate }: BusinessTripApplicationProps) {
             ))}
           </div>
         )}
-      </div>
-    </div>
-  );
-
-  const renderStep3 = () => (
-    <div className="space-y-6">
-      <h2 className="text-xl font-semibold text-slate-800 mb-4">
-        <Calculator className="w-5 h-5 inline mr-2" />
-        予定経費（自動計算）
-      </h2>
-      
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        <div className="bg-white/30 rounded-lg p-4 backdrop-blur-sm">
-          <p className="text-sm text-slate-600 mb-1">出張日当</p>
-          <p className="text-2xl font-bold text-slate-800">¥{formData.estimatedExpenses.dailyAllowance.toLocaleString()}</p>
-          <p className="text-xs text-slate-500 mt-1">
-            {formData.startDate && formData.endDate ? 
-              `${Math.ceil((new Date(formData.endDate).getTime() - new Date(formData.startDate).getTime()) / (1000 * 60 * 60 * 24)) + 1}日分` : 
-              '日数未設定'
-            }
-          </p>
-        </div>
-        <div className="bg-white/30 rounded-lg p-4 backdrop-blur-sm">
-          <p className="text-sm text-slate-600 mb-1">交通費</p>
-          <p className="text-2xl font-bold text-slate-800">¥{formData.estimatedExpenses.transportation.toLocaleString()}</p>
-          <p className="text-xs text-slate-500 mt-1">{formData.transportationMethod}</p>
-        </div>
-        <div className="bg-white/30 rounded-lg p-4 backdrop-blur-sm">
-          <p className="text-sm text-slate-600 mb-1">宿泊費</p>
-          <p className="text-2xl font-bold text-slate-800">¥{formData.estimatedExpenses.accommodation.toLocaleString()}</p>
-          <p className="text-xs text-slate-500 mt-1">
-            {formData.accommodationRequired ? `${formData.accommodationType}` : '宿泊なし'}
-          </p>
-        </div>
-        <div className="bg-white/30 rounded-lg p-4 backdrop-blur-sm">
-          <p className="text-sm text-slate-600 mb-1">食事代</p>
-          <p className="text-2xl font-bold text-slate-800">¥{formData.estimatedExpenses.meals.toLocaleString()}</p>
-          <p className="text-xs text-slate-500 mt-1">1日2,000円</p>
-        </div>
-        <div className="bg-white/30 rounded-lg p-4 backdrop-blur-sm">
-          <p className="text-sm text-slate-600 mb-1">雑費</p>
-          <p className="text-2xl font-bold text-slate-800">¥{formData.estimatedExpenses.miscellaneous.toLocaleString()}</p>
-          <p className="text-xs text-slate-500 mt-1">1日500円</p>
-        </div>
-        <div className="bg-gradient-to-r from-navy-600 to-navy-800 rounded-lg p-4 text-white">
-          <p className="text-sm text-navy-100 mb-1">合計予定額</p>
-          <p className="text-2xl font-bold">¥{formData.estimatedExpenses.total.toLocaleString()}</p>
-        </div>
-      </div>
-
-      <div>
-        <label className="block text-sm font-medium text-slate-700 mb-2">
-          備考・特記事項
-        </label>
-        <textarea
-          value={formData.remarks}
-          onChange={(e) => setFormData(prev => ({ ...prev, remarks: e.target.value }))}
-          className="w-full px-4 py-3 bg-white/50 border border-white/40 rounded-lg text-slate-700 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-navy-400 focus:border-transparent backdrop-blur-xl"
-          placeholder="特別な事情や注意事項があれば記載してください"
-          rows={3}
-        />
       </div>
     </div>
   );
