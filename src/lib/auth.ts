@@ -85,6 +85,8 @@ class LocalAuth {
         phone: '090-0000-0000',
         role: 'admin',
         plan: 'Pro',
+        departmentId: 'dept-000',
+        departmentName: '経営企画部',
         createdAt: new Date().toISOString()
       };
 
