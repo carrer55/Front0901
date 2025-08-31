@@ -580,7 +580,13 @@ function TravelRegulationCreation({ onNavigate }: TravelRegulationCreationProps)
                         type="number"
                         value={position.overseasPreparationFee}
                         onChange={(e) => updatePosition(position.id, 'overseasPreparationFee', parseInt(e.target.value) || 0)}
-                        className="w-full px-3 py-2 bg-white/50 border border-white/40 rounded text-slate-700 focus:outline-none focus:ring-2 focus:ring-navy-400 text-center"
+                        className={`w-full px-3 py-2 border rounded text-center focus:outline-none focus:ring-2 focus:ring-navy-400 ${
+                          !data.usePreparationFee 
+                            ? 'bg-slate-200 border-slate-300 text-slate-400 cursor-not-allowed' 
+                            : 'bg-white/50 border-white/40 text-slate-700'
+                        }`}
+                        disabled={!data.usePreparationFee}
+                        placeholder={!data.usePreparationFee ? '使用しない' : '0'}
                       />
                     </td>
                     <td className="py-3 px-4">
