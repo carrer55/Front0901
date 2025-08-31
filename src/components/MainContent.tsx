@@ -2,7 +2,6 @@ import React from 'react';
 import StatsCards from './StatsCards';
 import QuickActions from './QuickActions';
 import RecentApplications from './RecentApplications';
-import ActivityFeed from './ActivityFeed';
 
 interface MainContentProps {
   onNavigate: (view: string) => void;
@@ -37,10 +36,7 @@ function MainContent({ onNavigate, onShowDetail }: MainContentProps) {
         <StatsCards />
         <QuickActions onNavigate={onNavigate} />
         
-        <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 lg:gap-6">
-          <RecentApplications onShowDetail={onShowDetail} onNavigate={onNavigate} />
-          <ActivityFeed />
-        </div>
+        <RecentApplications onShowDetail={onShowDetail} onNavigate={onNavigate} />
       </div>
     </div>
   );
