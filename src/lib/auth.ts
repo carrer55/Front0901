@@ -90,6 +90,15 @@ class LocalAuth {
         createdAt: new Date().toISOString()
       };
 
+      // デモモードフラグを設定
+      localStorage.setItem('demoMode', 'true');
+      localStorage.setItem('userProfile', JSON.stringify({
+        full_name: 'デモユーザー',
+        position: '代表取締役',
+        role: 'admin',
+        currentPlan: 'Pro'
+      }));
+
       this.authState = {
         user: demoUser,
         isAuthenticated: true
