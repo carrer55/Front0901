@@ -15,10 +15,22 @@ interface UserProfile {
   company: string;
   department: string;
   allowances: {
-    domestic: number;
-    overseas: number;
-    transportation: number;
-    accommodation: number;
+    domestic: {
+      dailyAllowance: number;
+      accommodation: number;
+      transportation: number;
+      accommodationDisabled: boolean;
+      transportationDisabled: boolean;
+    };
+    overseas: {
+      dailyAllowance: number;
+      accommodation: number;
+      transportation: number;
+      preparationFee: number;
+      accommodationDisabled: boolean;
+      transportationDisabled: boolean;
+      preparationFeeDisabled: boolean;
+    };
   };
 }
 
@@ -45,10 +57,22 @@ function MyPage({ onNavigate }: MyPageProps) {
     company: '株式会社サンプル',
     department: '経営企画部',
     allowances: {
-      domestic: 5000,
-      overseas: 10000,
-      transportation: 2000,
-      accommodation: 10000
+      domestic: {
+        dailyAllowance: 5000,
+        accommodation: 10000,
+        transportation: 2000,
+        accommodationDisabled: false,
+        transportationDisabled: false
+      },
+      overseas: {
+        dailyAllowance: 10000,
+        accommodation: 15000,
+        transportation: 3000,
+        preparationFee: 5000,
+        accommodationDisabled: false,
+        transportationDisabled: false,
+        preparationFeeDisabled: false
+      }
     }
   });
 
@@ -64,6 +88,8 @@ function MyPage({ onNavigate }: MyPageProps) {
     new: '',
     confirm: ''
   });
+
+  const [allowanceTab, setAllowanceTab] = useState<'domestic' | 'overseas'>('domestic');
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -194,89 +220,409 @@ function MyPage({ onNavigate }: MyPageProps) {
 
   const renderAllowancesTab = () => (
     <div className="space-y-6">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div>
-          <label className="block text-sm font-medium text-slate-700 mb-2">国内出張日当（円）</label>
-          <input
-            type="number"
-            value={userProfile.allowances.domestic}
-            onChange={(e) => setUserProfile(prev => ({ 
-              ...prev, 
-              allowances: { ...prev.allowances, domestic: parseInt(e.target.value) || 0 }
-            }))}
-            className="w-full px-4 py-3 bg-white/50 border border-white/40 rounded-lg text-slate-700 focus:outline-none focus:ring-2 focus:ring-navy-400 backdrop-blur-xl"
-          />
-          <p className="text-xs text-slate-500 mt-1">1日あたりの国内出張日当</p>
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-slate-700 mb-2">海外出張日当（円）</label>
-          <input
-            type="number"
-            value={userProfile.allowances.overseas}
-            onChange={(e) => setUserProfile(prev => ({ 
-              ...prev, 
-              allowances: { ...prev.allowances, overseas: parseInt(e.target.value) || 0 }
-            }))}
-            className="w-full px-4 py-3 bg-white/50 border border-white/40 rounded-lg text-slate-700 focus:outline-none focus:ring-2 focus:ring-navy-400 backdrop-blur-xl"
-          />
-          <p className="text-xs text-slate-500 mt-1">1日あたりの海外出張日当</p>
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-slate-700 mb-2">交通費日当（円）</label>
-          <input
-            type="number"
-            value={userProfile.allowances.transportation}
-            onChange={(e) => setUserProfile(prev => ({ 
-              ...prev, 
-              allowances: { ...prev.allowances, transportation: parseInt(e.target.value) || 0 }
-            }))}
-            className="w-full px-4 py-3 bg-white/50 border border-white/40 rounded-lg text-slate-700 focus:outline-none focus:ring-2 focus:ring-navy-400 backdrop-blur-xl"
-          />
-          <p className="text-xs text-slate-500 mt-1">1日あたりの交通費日当</p>
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-slate-700 mb-2">宿泊日当（円）</label>
-          <input
-            type="number"
-            value={userProfile.allowances.accommodation}
-            onChange={(e) => setUserProfile(prev => ({ 
-              ...prev, 
-              allowances: { ...prev.allowances, accommodation: parseInt(e.target.value) || 0 }
-            }))}
-            className="w-full px-4 py-3 bg-white/50 border border-white/40 rounded-lg text-slate-700 focus:outline-none focus:ring-2 focus:ring-navy-400 backdrop-blur-xl"
-          />
-          <p className="text-xs text-slate-500 mt-1">1泊あたりの宿泊日当</p>
-        </div>
+      {/* タブナビゲーション */}
+      <div className="flex space-x-1 bg-white/30 rounded-lg p-1">
+        <button
+          onClick={() => setAllowanceTab('domestic')}
+          className={`flex-1 px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
+            allowanceTab === 'domestic'
+              ? 'bg-navy-600 text-white shadow-lg'
+              : 'text-slate-600 hover:text-slate-800 hover:bg-white/30'
+          }`}
+        >
+          国内出張
+        </button>
+        <button
+          onClick={() => setAllowanceTab('overseas')}
+          className={`flex-1 px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
+            allowanceTab === 'overseas'
+              ? 'bg-navy-600 text-white shadow-lg'
+              : 'text-slate-600 hover:text-slate-800 hover:bg-white/30'
+          }`}
+        >
+          海外出張
+        </button>
       </div>
 
-      <div className="bg-white/30 rounded-lg p-4">
-        <h3 className="text-lg font-semibold text-slate-800 mb-4">日当計算例</h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 text-sm">
-          <div className="text-center">
-            <p className="text-slate-600 mb-1">国内日帰り出張</p>
-            <p className="text-xl font-bold text-slate-800">
-              ¥{(userProfile.allowances.domestic + userProfile.allowances.transportation).toLocaleString()}
-            </p>
-          </div>
-          <div className="text-center">
-            <p className="text-slate-600 mb-1">海外日帰り出張</p>
-            <p className="text-xl font-bold text-slate-800">
-              ¥{(userProfile.allowances.overseas + userProfile.allowances.transportation).toLocaleString()}
-            </p>
-          </div>
-          <div className="text-center">
-            <p className="text-slate-600 mb-1">国内1泊2日出張</p>
-            <p className="text-xl font-bold text-slate-800">
-              ¥{((userProfile.allowances.domestic + userProfile.allowances.transportation) * 2 + userProfile.allowances.accommodation).toLocaleString()}
-            </p>
-          </div>
-          <div className="text-center">
-            <p className="text-slate-600 mb-1">海外2泊3日出張</p>
-            <p className="text-xl font-bold text-slate-800">
-              ¥{((userProfile.allowances.overseas + userProfile.allowances.transportation) * 3 + userProfile.allowances.accommodation * 2).toLocaleString()}
-            </p>
+      {/* 国内出張設定 */}
+      {allowanceTab === 'domestic' && (
+        <div className="space-y-6">
+          <h3 className="text-lg font-semibold text-slate-800">国内出張日当設定</h3>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* 出張日当 */}
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-2">出張日当（円）</label>
+              <input
+                type="number"
+                value={userProfile.allowances.domestic.dailyAllowance}
+                onChange={(e) => setUserProfile(prev => ({ 
+                  ...prev, 
+                  allowances: { 
+                    ...prev.allowances, 
+                    domestic: { 
+                      ...prev.allowances.domestic, 
+                      dailyAllowance: parseInt(e.target.value) || 0 
+                    }
+                  }
+                }))}
+                className="w-full px-4 py-3 bg-white/50 border border-white/40 rounded-lg text-slate-700 focus:outline-none focus:ring-2 focus:ring-navy-400 backdrop-blur-xl"
+                placeholder="5000"
+              />
+              <p className="text-xs text-slate-500 mt-1">1日あたりの出張日当</p>
+            </div>
+
+            {/* 宿泊料 */}
+            <div>
+              <div className="flex items-center justify-between mb-2">
+                <label className="block text-sm font-medium text-slate-700">宿泊料（円）</label>
+                <label className="flex items-center space-x-2 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={userProfile.allowances.domestic.accommodationDisabled}
+                    onChange={(e) => {
+                      const disabled = e.target.checked;
+                      setUserProfile(prev => ({ 
+                        ...prev, 
+                        allowances: { 
+                          ...prev.allowances, 
+                          domestic: { 
+                            ...prev.allowances.domestic, 
+                            accommodationDisabled: disabled,
+                            accommodation: disabled ? 0 : prev.allowances.domestic.accommodation
+                          }
+                        }
+                      }));
+                    }}
+                    className="w-4 h-4 text-navy-600 bg-white/50 border-white/40 rounded focus:ring-navy-400 focus:ring-2"
+                  />
+                  <span className="text-xs text-slate-600">日当を使用しない</span>
+                </label>
+              </div>
+              <input
+                type="number"
+                value={userProfile.allowances.domestic.accommodationDisabled ? 0 : userProfile.allowances.domestic.accommodation}
+                onChange={(e) => setUserProfile(prev => ({ 
+                  ...prev, 
+                  allowances: { 
+                    ...prev.allowances, 
+                    domestic: { 
+                      ...prev.allowances.domestic, 
+                      accommodation: parseInt(e.target.value) || 0 
+                    }
+                  }
+                }))}
+                disabled={userProfile.allowances.domestic.accommodationDisabled}
+                className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-navy-400 backdrop-blur-xl ${
+                  userProfile.allowances.domestic.accommodationDisabled
+                    ? 'bg-slate-200 border-slate-300 text-slate-400 cursor-not-allowed'
+                    : 'bg-white/50 border-white/40 text-slate-700'
+                }`}
+                placeholder={userProfile.allowances.domestic.accommodationDisabled ? '実費精算' : '10000'}
+              />
+              <p className="text-xs text-slate-500 mt-1">1泊あたりの宿泊料</p>
+            </div>
+
+            {/* 交通費 */}
+            <div>
+              <div className="flex items-center justify-between mb-2">
+                <label className="block text-sm font-medium text-slate-700">交通費（円）</label>
+                <label className="flex items-center space-x-2 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={userProfile.allowances.domestic.transportationDisabled}
+                    onChange={(e) => {
+                      const disabled = e.target.checked;
+                      setUserProfile(prev => ({ 
+                        ...prev, 
+                        allowances: { 
+                          ...prev.allowances, 
+                          domestic: { 
+                            ...prev.allowances.domestic, 
+                            transportationDisabled: disabled,
+                            transportation: disabled ? 0 : prev.allowances.domestic.transportation
+                          }
+                        }
+                      }));
+                    }}
+                    className="w-4 h-4 text-navy-600 bg-white/50 border-white/40 rounded focus:ring-navy-400 focus:ring-2"
+                  />
+                  <span className="text-xs text-slate-600">日当を使用しない</span>
+                </label>
+              </div>
+              <input
+                type="number"
+                value={userProfile.allowances.domestic.transportationDisabled ? 0 : userProfile.allowances.domestic.transportation}
+                onChange={(e) => setUserProfile(prev => ({ 
+                  ...prev, 
+                  allowances: { 
+                    ...prev.allowances, 
+                    domestic: { 
+                      ...prev.allowances.domestic, 
+                      transportation: parseInt(e.target.value) || 0 
+                    }
+                  }
+                }))}
+                disabled={userProfile.allowances.domestic.transportationDisabled}
+                className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-navy-400 backdrop-blur-xl ${
+                  userProfile.allowances.domestic.transportationDisabled
+                    ? 'bg-slate-200 border-slate-300 text-slate-400 cursor-not-allowed'
+                    : 'bg-white/50 border-white/40 text-slate-700'
+                }`}
+                placeholder={userProfile.allowances.domestic.transportationDisabled ? '実費精算' : '2000'}
+              />
+              <p className="text-xs text-slate-500 mt-1">1日あたりの交通費</p>
+            </div>
           </div>
         </div>
+      )}
+
+      {/* 海外出張設定 */}
+      {allowanceTab === 'overseas' && (
+        <div className="space-y-6">
+          <h3 className="text-lg font-semibold text-slate-800">海外出張日当設定</h3>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* 出張日当 */}
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-2">出張日当（円）</label>
+              <input
+                type="number"
+                value={userProfile.allowances.overseas.dailyAllowance}
+                onChange={(e) => setUserProfile(prev => ({ 
+                  ...prev, 
+                  allowances: { 
+                    ...prev.allowances, 
+                    overseas: { 
+                      ...prev.allowances.overseas, 
+                      dailyAllowance: parseInt(e.target.value) || 0 
+                    }
+                  }
+                }))}
+                className="w-full px-4 py-3 bg-white/50 border border-white/40 rounded-lg text-slate-700 focus:outline-none focus:ring-2 focus:ring-navy-400 backdrop-blur-xl"
+                placeholder="10000"
+              />
+              <p className="text-xs text-slate-500 mt-1">1日あたりの出張日当</p>
+            </div>
+
+            {/* 宿泊料 */}
+            <div>
+              <div className="flex items-center justify-between mb-2">
+                <label className="block text-sm font-medium text-slate-700">宿泊料（円）</label>
+                <label className="flex items-center space-x-2 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={userProfile.allowances.overseas.accommodationDisabled}
+                    onChange={(e) => {
+                      const disabled = e.target.checked;
+                      setUserProfile(prev => ({ 
+                        ...prev, 
+                        allowances: { 
+                          ...prev.allowances, 
+                          overseas: { 
+                            ...prev.allowances.overseas, 
+                            accommodationDisabled: disabled,
+                            accommodation: disabled ? 0 : prev.allowances.overseas.accommodation
+                          }
+                        }
+                      }));
+                    }}
+                    className="w-4 h-4 text-navy-600 bg-white/50 border-white/40 rounded focus:ring-navy-400 focus:ring-2"
+                  />
+                  <span className="text-xs text-slate-600">日当を使用しない</span>
+                </label>
+              </div>
+              <input
+                type="number"
+                value={userProfile.allowances.overseas.accommodationDisabled ? 0 : userProfile.allowances.overseas.accommodation}
+                onChange={(e) => setUserProfile(prev => ({ 
+                  ...prev, 
+                  allowances: { 
+                    ...prev.allowances, 
+                    overseas: { 
+                      ...prev.allowances.overseas, 
+                      accommodation: parseInt(e.target.value) || 0 
+                    }
+                  }
+                }))}
+                disabled={userProfile.allowances.overseas.accommodationDisabled}
+                className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-navy-400 backdrop-blur-xl ${
+                  userProfile.allowances.overseas.accommodationDisabled
+                    ? 'bg-slate-200 border-slate-300 text-slate-400 cursor-not-allowed'
+                    : 'bg-white/50 border-white/40 text-slate-700'
+                }`}
+                placeholder={userProfile.allowances.overseas.accommodationDisabled ? '実費精算' : '15000'}
+              />
+              <p className="text-xs text-slate-500 mt-1">1泊あたりの宿泊料</p>
+            </div>
+
+            {/* 交通費 */}
+            <div>
+              <div className="flex items-center justify-between mb-2">
+                <label className="block text-sm font-medium text-slate-700">交通費（円）</label>
+                <label className="flex items-center space-x-2 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={userProfile.allowances.overseas.transportationDisabled}
+                    onChange={(e) => {
+                      const disabled = e.target.checked;
+                      setUserProfile(prev => ({ 
+                        ...prev, 
+                        allowances: { 
+                          ...prev.allowances, 
+                          overseas: { 
+                            ...prev.allowances.overseas, 
+                            transportationDisabled: disabled,
+                            transportation: disabled ? 0 : prev.allowances.overseas.transportation
+                          }
+                        }
+                      }));
+                    }}
+                    className="w-4 h-4 text-navy-600 bg-white/50 border-white/40 rounded focus:ring-navy-400 focus:ring-2"
+                  />
+                  <span className="text-xs text-slate-600">日当を使用しない</span>
+                </label>
+              </div>
+              <input
+                type="number"
+                value={userProfile.allowances.overseas.transportationDisabled ? 0 : userProfile.allowances.overseas.transportation}
+                onChange={(e) => setUserProfile(prev => ({ 
+                  ...prev, 
+                  allowances: { 
+                    ...prev.allowances, 
+                    overseas: { 
+                      ...prev.allowances.overseas, 
+                      transportation: parseInt(e.target.value) || 0 
+                    }
+                  }
+                }))}
+                disabled={userProfile.allowances.overseas.transportationDisabled}
+                className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-navy-400 backdrop-blur-xl ${
+                  userProfile.allowances.overseas.transportationDisabled
+                    ? 'bg-slate-200 border-slate-300 text-slate-400 cursor-not-allowed'
+                    : 'bg-white/50 border-white/40 text-slate-700'
+                }`}
+                placeholder={userProfile.allowances.overseas.transportationDisabled ? '実費精算' : '3000'}
+              />
+              <p className="text-xs text-slate-500 mt-1">1日あたりの交通費</p>
+            </div>
+
+            {/* 支度料 */}
+            <div>
+              <div className="flex items-center justify-between mb-2">
+                <label className="block text-sm font-medium text-slate-700">支度料（円）</label>
+                <label className="flex items-center space-x-2 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={userProfile.allowances.overseas.preparationFeeDisabled}
+                    onChange={(e) => {
+                      const disabled = e.target.checked;
+                      setUserProfile(prev => ({ 
+                        ...prev, 
+                        allowances: { 
+                          ...prev.allowances, 
+                          overseas: { 
+                            ...prev.allowances.overseas, 
+                            preparationFeeDisabled: disabled,
+                            preparationFee: disabled ? 0 : prev.allowances.overseas.preparationFee
+                          }
+                        }
+                      }));
+                    }}
+                    className="w-4 h-4 text-navy-600 bg-white/50 border-white/40 rounded focus:ring-navy-400 focus:ring-2"
+                  />
+                  <span className="text-xs text-slate-600">使用しない</span>
+                </label>
+              </div>
+              <input
+                type="number"
+                value={userProfile.allowances.overseas.preparationFeeDisabled ? 0 : userProfile.allowances.overseas.preparationFee}
+                onChange={(e) => setUserProfile(prev => ({ 
+                  ...prev, 
+                  allowances: { 
+                    ...prev.allowances, 
+                    overseas: { 
+                      ...prev.allowances.overseas, 
+                      preparationFee: parseInt(e.target.value) || 0 
+                    }
+                  }
+                }))}
+                disabled={userProfile.allowances.overseas.preparationFeeDisabled}
+                className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-navy-400 backdrop-blur-xl ${
+                  userProfile.allowances.overseas.preparationFeeDisabled
+                    ? 'bg-slate-200 border-slate-300 text-slate-400 cursor-not-allowed'
+                    : 'bg-white/50 border-white/40 text-slate-700'
+                }`}
+                placeholder={userProfile.allowances.overseas.preparationFeeDisabled ? '使用しない' : '5000'}
+              />
+              <p className="text-xs text-slate-500 mt-1">出張準備にかかる支度料</p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 計算例 */}
+      <div className="bg-white/30 rounded-lg p-6">
+        <h3 className="text-lg font-semibold text-slate-800 mb-4">日当計算例</h3>
+        {allowanceTab === 'domestic' ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+            <div className="text-center bg-white/20 rounded-lg p-4">
+              <p className="text-slate-600 mb-2">国内日帰り出張</p>
+              <p className="text-xl font-bold text-slate-800">
+                ¥{(
+                  userProfile.allowances.domestic.dailyAllowance +
+                  (userProfile.allowances.domestic.transportationDisabled ? 0 : userProfile.allowances.domestic.transportation)
+                ).toLocaleString()}
+              </p>
+              <p className="text-xs text-slate-500 mt-1">
+                日当 + {userProfile.allowances.domestic.transportationDisabled ? '交通費実費' : '交通費日当'}
+              </p>
+            </div>
+            <div className="text-center bg-white/20 rounded-lg p-4">
+              <p className="text-slate-600 mb-2">国内1泊2日出張</p>
+              <p className="text-xl font-bold text-slate-800">
+                ¥{(
+                  userProfile.allowances.domestic.dailyAllowance * 2 +
+                  (userProfile.allowances.domestic.transportationDisabled ? 0 : userProfile.allowances.domestic.transportation * 2) +
+                  (userProfile.allowances.domestic.accommodationDisabled ? 0 : userProfile.allowances.domestic.accommodation)
+                ).toLocaleString()}
+              </p>
+              <p className="text-xs text-slate-500 mt-1">
+                日当×2 + {userProfile.allowances.domestic.transportationDisabled ? '交通費実費' : '交通費日当×2'} + {userProfile.allowances.domestic.accommodationDisabled ? '宿泊費実費' : '宿泊料'}
+              </p>
+            </div>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+            <div className="text-center bg-white/20 rounded-lg p-4">
+              <p className="text-slate-600 mb-2">海外日帰り出張</p>
+              <p className="text-xl font-bold text-slate-800">
+                ¥{(
+                  userProfile.allowances.overseas.dailyAllowance +
+                  (userProfile.allowances.overseas.transportationDisabled ? 0 : userProfile.allowances.overseas.transportation) +
+                  (userProfile.allowances.overseas.preparationFeeDisabled ? 0 : userProfile.allowances.overseas.preparationFee)
+                ).toLocaleString()}
+              </p>
+              <p className="text-xs text-slate-500 mt-1">
+                日当 + {userProfile.allowances.overseas.transportationDisabled ? '交通費実費' : '交通費日当'} + {userProfile.allowances.overseas.preparationFeeDisabled ? '' : '支度料'}
+              </p>
+            </div>
+            <div className="text-center bg-white/20 rounded-lg p-4">
+              <p className="text-slate-600 mb-2">海外2泊3日出張</p>
+              <p className="text-xl font-bold text-slate-800">
+                ¥{(
+                  userProfile.allowances.overseas.dailyAllowance * 3 +
+                  (userProfile.allowances.overseas.transportationDisabled ? 0 : userProfile.allowances.overseas.transportation * 3) +
+                  (userProfile.allowances.overseas.accommodationDisabled ? 0 : userProfile.allowances.overseas.accommodation * 2) +
+                  (userProfile.allowances.overseas.preparationFeeDisabled ? 0 : userProfile.allowances.overseas.preparationFee)
+                ).toLocaleString()}
+              </p>
+              <p className="text-xs text-slate-500 mt-1">
+                日当×3 + {userProfile.allowances.overseas.transportationDisabled ? '交通費実費' : '交通費日当×3'} + {userProfile.allowances.overseas.accommodationDisabled ? '宿泊費実費' : '宿泊料×2'} + {userProfile.allowances.overseas.preparationFeeDisabled ? '' : '支度料'}
+              </p>
+            </div>
+          </div>
+        )}
       </div>
 
       <div className="flex justify-end">
