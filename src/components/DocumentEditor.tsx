@@ -376,6 +376,76 @@ function DocumentEditor({ onNavigate, documentType, businessTripId }: DocumentEd
         <label className="block text-sm font-medium text-slate-700 mb-4">
           旅費 <span className="text-red-500">*</span>
         </label>
+        
+        {/* 手動入力フォーム */}
+        <div className="bg-white/30 rounded-lg p-4 mb-4">
+          <div className="flex items-center justify-between mb-4">
+            <h4 className="font-medium text-slate-800">旅費入力</h4>
+            <button
+              type="button"
+              onClick={() => {
+                // 申請済経費から選択する機能
+                alert('申請済経費から選択機能を実装予定');
+              }}
+              className="flex items-center space-x-2 px-3 py-2 bg-gradient-to-r from-navy-600 to-navy-800 text-white rounded-lg text-sm font-medium hover:from-navy-700 hover:to-navy-900 transition-all duration-200"
+            >
+              <span>+ 申請済経費から選択</span>
+            </button>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-2">項目名</label>
+              <input
+                type="text"
+                className="w-full px-3 py-2 bg-white/50 border border-white/40 rounded-lg text-slate-700 focus:outline-none focus:ring-2 focus:ring-navy-400 backdrop-blur-xl"
+                placeholder="例：新幹線代（往復）"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-2">金額（円）</label>
+              <input
+                type="number"
+                className="w-full px-3 py-2 bg-white/50 border border-white/40 rounded-lg text-slate-700 focus:outline-none focus:ring-2 focus:ring-navy-400 backdrop-blur-xl"
+                placeholder="0"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-2">日付</label>
+              <input
+                type="date"
+                className="w-full px-3 py-2 bg-white/50 border border-white/40 rounded-lg text-slate-700 focus:outline-none focus:ring-2 focus:ring-navy-400 backdrop-blur-xl"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-2">店舗名</label>
+              <input
+                type="text"
+                className="w-full px-3 py-2 bg-white/50 border border-white/40 rounded-lg text-slate-700 focus:outline-none focus:ring-2 focus:ring-navy-400 backdrop-blur-xl"
+                placeholder="例：JR東日本"
+              />
+            </div>
+            <div className="md:col-span-2">
+              <label className="block text-sm font-medium text-slate-700 mb-2">説明</label>
+              <input
+                type="text"
+                className="w-full px-3 py-2 bg-white/50 border border-white/40 rounded-lg text-slate-700 focus:outline-none focus:ring-2 focus:ring-navy-400 backdrop-blur-xl"
+                placeholder="経費の詳細説明"
+              />
+            </div>
+          </div>
+          
+          <div className="flex justify-end mt-4">
+            <button
+              type="button"
+              className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-emerald-600 to-emerald-800 text-white rounded-lg font-medium hover:from-emerald-700 hover:to-emerald-900 transition-all duration-200"
+            >
+              <span>追加</span>
+            </button>
+          </div>
+        </div>
+
+        {/* 申請済経費から選択 */}
         <div className="space-y-3">
           {expenseReportData.availableExpenses.map((expense) => (
             <div
@@ -429,7 +499,7 @@ function DocumentEditor({ onNavigate, documentType, businessTripId }: DocumentEd
         </label>
         <div className="bg-white/30 rounded-lg p-4">
           <div className="flex items-center justify-between">
-            <span className="text-slate-700">出張申請時の予定日当</span>
+            <span className="text-slate-700">出張申請に基づいた日当</span>
             <span className="text-2xl font-bold text-slate-800">¥{expenseReportData.dailyAllowance.toLocaleString()}</span>
           </div>
         </div>
@@ -439,7 +509,7 @@ function DocumentEditor({ onNavigate, documentType, businessTripId }: DocumentEd
       <div className="bg-gradient-to-r from-navy-600 to-navy-800 rounded-lg p-6 text-white">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
           <div>
-            <p className="text-navy-100 text-sm mb-1">選択した旅費</p>
+            <p className="text-navy-100 text-sm mb-1">旅費</p>
             <p className="text-2xl font-bold">¥{getSelectedExpensesTotal().toLocaleString()}</p>
           </div>
           <div>
