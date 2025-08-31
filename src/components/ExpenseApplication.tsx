@@ -37,7 +37,7 @@ function ExpenseApplication({ onNavigate }: ExpenseApplicationProps) {
   });
   const [isProcessingOCR, setIsProcessingOCR] = useState(false);
 
-  const categories = ['交通費', '宿泊費', '日当', '雑費'];
+  const categories = ['旅費交通費', '接待交際費', '通信費', '消耗品費', '広告宣伝費', '福利厚生費', '雑費（その他）'];
 
   const createNewExpenseFromOCR = (file: File) => {
     const newExpense: ExpenseItem = {
@@ -114,11 +114,21 @@ function ExpenseApplication({ onNavigate }: ExpenseApplicationProps) {
     
     // カテゴリの自動推定
     const storeName = ocrResult.store.toLowerCase();
-    let suggestedCategory = '雑費';
-    if (storeName.includes('jr') || storeName.includes('タクシー') || storeName.includes('電車')) {
-      suggestedCategory = '交通費';
-    } else if (storeName.includes('ホテル') || storeName.includes('宿泊')) {
-      suggestedCategory = '宿泊費';
+    let suggestedCategory = '雑費（その他）';
+    if (storeName.includes('jr') || storeName.includes('タクシー') || storeName.includes('電車') || storeName.includes('新幹線') || storeName.includes('バス')) {
+      suggestedCategory = '旅費交通費';
+    } else if (storeName.includes('ホテル') || storeName.includes('宿泊') || storeName.includes('旅館')) {
+      suggestedCategory = '旅費交通費';
+    } else if (storeName.includes('レストラン') || storeName.includes('居酒屋') || storeName.includes('カフェ') || storeName.includes('料理')) {
+      suggestedCategory = '接待交際費';
+    } else if (storeName.includes('docomo') || storeName.includes('au') || storeName.includes('softbank') || storeName.includes('通信')) {
+      suggestedCategory = '通信費';
+    } else if (storeName.includes('文具') || storeName.includes('オフィス') || storeName.includes('用品')) {
+      suggestedCategory = '消耗品費';
+    } else if (storeName.includes('広告') || storeName.includes('宣伝') || storeName.includes('印刷')) {
+      suggestedCategory = '広告宣伝費';
+    } else if (storeName.includes('健康') || storeName.includes('福利') || storeName.includes('保険')) {
+      suggestedCategory = '福利厚生費';
     }
     updateExpense(currentExpenseId, 'category', suggestedCategory);
     
@@ -373,7 +383,7 @@ function ExpenseApplication({ onNavigate }: ExpenseApplicationProps) {
                               <select
                                 value={expense.category}
                                 onChange={(e) => updateExpense(expense.id, 'category', e.target.value)}
-                                className="w-full px-3 py-2 bg-white/50 border border-white/40 rounded-lg text-slate-700 focus:outline-none focus:ring-2 focus:ring-navy-400 backdrop-blur-xl"
+                                className="w-full px-3 py-2 bg-white/50 border border-white/40 rounded-lg text-slate-700 focus:outline-none focus:ring-2 focus:ring-navy-400 backdrop-blur-xl text-sm"
                                 required
                               >
                                 {categories.map(category => (
