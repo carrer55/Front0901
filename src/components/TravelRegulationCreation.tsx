@@ -875,6 +875,24 @@ function TravelRegulationCreation({ onNavigate }: TravelRegulationCreationProps)
           <Sidebar isOpen={true} onClose={() => {}} onNavigate={onNavigate} currentView="travel-regulation-creation" />
         </div>
 
+        {/* 海外出張設定 */}
+        <div className="bg-white/30 rounded-lg p-6">
+          <h3 className="text-lg font-semibold text-slate-800 mb-4">海外出張設定</h3>
+          <div className="space-y-4">
+            <label className="flex items-center space-x-3">
+              <input
+                type="checkbox"
+                checked={!data.usePreparationFee}
+                onChange={(e) => setData(prev => ({ ...prev, usePreparationFee: !e.target.checked }))}
+                className="w-5 h-5 text-navy-600 bg-white/50 border-white/40 rounded focus:ring-navy-400 focus:ring-2"
+              />
+              <div>
+                <span className="text-slate-700 font-medium">支度料を使用しない</span>
+                <p className="text-xs text-slate-500">チェックすると支度料は0円として設定されます</p>
+              </div>
+            </label>
+          </div>
+        </div>
         {isSidebarOpen && (
           <>
             <div 
