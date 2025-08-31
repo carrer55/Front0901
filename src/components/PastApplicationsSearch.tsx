@@ -93,7 +93,7 @@ function PastApplicationsSearch({ onNavigate }: PastApplicationsSearchProps) {
       location: '大阪府大阪市',
       visitTarget: '大阪支社'
     }
-  ];
+  ]);
 
   const departments = ['営業部', '総務部', '開発部', '企画部', '経理部'];
 
