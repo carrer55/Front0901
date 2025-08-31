@@ -708,16 +708,16 @@ function TravelRegulationCreation({ onNavigate }: TravelRegulationCreationProps)
                         {data.isAccommodationRealExpense ? '実費' : position.domesticAccommodation.toLocaleString()}
                       </td>
                       <td className="border border-slate-300 py-2 px-3 text-center">
+                        {data.isTransportationRealExpense ? '実費' : position.overseasTransportation.toLocaleString()}
+                      </td>
+                      <td className="border border-slate-300 py-2 px-3 text-center">
+                        {data.usePreparationFee ? position.overseasPreparationFee.toLocaleString() : '0'}
+                      </td>
+                      <td className="border border-slate-300 py-2 px-3 text-center">
                         {position.overseasDailyAllowance.toLocaleString()}
                       </td>
                       <td className="border border-slate-300 py-2 px-3 text-center">
                         {data.isAccommodationRealExpense ? '実費' : position.overseasAccommodation.toLocaleString()}
-                      </td>
-                      <td className="border border-slate-300 py-2 px-3 text-center">
-                        {position.overseasPreparationFee.toLocaleString()}
-                      </td>
-                      <td className="border border-slate-300 py-2 px-3 text-center">
-                        {data.isTransportationRealExpense ? '実費' : position.overseasTransportation.toLocaleString()}
                       </td>
                       <td className="border border-slate-300 py-2 px-3 text-center">
                         {data.isTransportationRealExpense ? '実費' : position.domesticTransportation.toLocaleString()}
