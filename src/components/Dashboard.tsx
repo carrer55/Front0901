@@ -21,6 +21,8 @@ import Help from './Help';
 import Support from './Support';
 import ApplicationStatusList from './ApplicationStatusList';
 import AdminDashboard from './AdminDashboard';
+import DocumentEditor from './DocumentEditor';
+import PastApplicationsSearch from './PastApplicationsSearch';
 
 function Dashboard() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -64,6 +66,12 @@ function Dashboard() {
         return <TravelRegulationHistory onNavigate={navigateToView} />;
       case 'document-management':
         return <DocumentManagement onNavigate={navigateToView} />;
+      case 'document-editor':
+        const businessTripId = localStorage.getItem('editingBusinessTripId') || 'BT-2024-001';
+        const docType = localStorage.getItem('editingDocumentType') as 'business-report' | 'expense-report' || 'business-report';
+        return <DocumentEditor onNavigate={navigateToView} documentType={docType} businessTripId={businessTripId} />;
+      case 'past-applications-search':
+        return <PastApplicationsSearch onNavigate={navigateToView} />;
       case 'document-creation':
         return <DocumentCreation onNavigate={navigateToView} documentType={documentType} />;
       case 'document-preview':

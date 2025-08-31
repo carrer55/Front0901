@@ -158,29 +158,10 @@ function DocumentManagement({ onNavigate }: DocumentManagementProps) {
     const trip = businessTrips.find(t => t.id === businessTripId);
     if (!trip) return;
 
-    const newDocument: Document = {
-      id: `DOC-${Date.now()}`,
-      type: 'business-report',
-      title: `${trip.title}報告書`,
-      businessTripId,
-      status: 'draft',
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-      data: {
-        title: trip.title,
-        purpose: trip.purpose,
-        startDate: trip.startDate,
-        endDate: trip.endDate,
-        location: trip.location,
-        visitTarget: trip.visitTarget,
-        companions: trip.companions,
-        actionAndResults: ''
-      }
-    };
-
-    setDocuments(prev => [...prev, newDocument]);
-    // 実際の実装では、編集画面に遷移
-    alert('出張報告書の下書きを作成しました。編集画面に移動します。');
+    // 編集画面に遷移（データは編集画面で自動入力）
+    localStorage.setItem('editingBusinessTripId', businessTripId);
+    localStorage.setItem('editingDocumentType', 'business-report');
+    onNavigate('document-editor');
   };
 
   const createExpenseReport = (businessTripId: string) => {
@@ -201,29 +182,10 @@ function DocumentManagement({ onNavigate }: DocumentManagementProps) {
       return;
     }
 
-    const newDocument: Document = {
-      id: `DOC-${Date.now()}`,
-      type: 'expense-report',
-      title: `${trip.title}経費精算書`,
-      businessTripId,
-      status: 'draft',
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-      data: {
-        title: trip.title,
-        purpose: trip.purpose,
-        startDate: trip.startDate,
-        endDate: trip.endDate,
-        location: trip.location,
-        visitTarget: trip.visitTarget,
-        availableExpenses,
-        selectedExpenses: [],
-        dailyAllowance: trip.estimatedAmount
-      }
-    };
-
-    setDocuments(prev => [...prev, newDocument]);
-    alert('出張経費精算書の下書きを作成しました。編集画面に移動します。');
+    // 編集画面に遷移（データは編集画面で自動入力）
+    localStorage.setItem('editingBusinessTripId', businessTripId);
+    localStorage.setItem('editingDocumentType', 'expense-report');
+    onNavigate('document-editor');
   };
 
   const handleDocumentSelect = (documentId: string) => {
@@ -394,7 +356,7 @@ function DocumentManagement({ onNavigate }: DocumentManagementProps) {
                           className={`relative backdrop-blur-xl bg-white/30 rounded-lg p-4 border border-white/30 shadow-lg hover:shadow-xl transition-all duration-300 ${
                             trip.hasReport ? 'ring-2 ring-emerald-500/50' : 'hover:bg-white/40 cursor-pointer'
                           }`}
-                          onClick={() => !trip.hasReport && createBusinessReport(trip.id)}
+                          onClick={() => !trip.hasReport ? createBusinessReport(trip.id) : onNavigate('document-editor')}
                         >
                           {trip.hasReport && (
                             <div className="absolute -top-2 -right-2 w-8 h-8 bg-emerald-500 rounded-full flex items-center justify-center shadow-lg">
@@ -426,7 +388,9 @@ function DocumentManagement({ onNavigate }: DocumentManagementProps) {
                             }`}>
                               {trip.hasReport ? '作成済' : '未作成'}
                             </span>
-                            {!trip.hasReport && (
+                            {trip.hasReport ? (
+                              <span className="text-xs text-slate-500">クリックで編集</span>
+                            ) : (
                               <Plus className="w-4 h-4 text-slate-500" />
                             )}
                           </div>
@@ -461,7 +425,7 @@ function DocumentManagement({ onNavigate }: DocumentManagementProps) {
                             className={`relative backdrop-blur-xl bg-white/30 rounded-lg p-4 border border-white/30 shadow-lg hover:shadow-xl transition-all duration-300 ${
                               trip.hasExpenseReport ? 'ring-2 ring-emerald-500/50' : 'hover:bg-white/40 cursor-pointer'
                             }`}
-                            onClick={() => !trip.hasExpenseReport && createExpenseReport(trip.id)}
+                            onClick={() => !trip.hasExpenseReport ? createExpenseReport(trip.id) : onNavigate('document-editor')}
                           >
                             {trip.hasExpenseReport && (
                               <div className="absolute -top-2 -right-2 w-8 h-8 bg-emerald-500 rounded-full flex items-center justify-center shadow-lg">
@@ -496,7 +460,9 @@ function DocumentManagement({ onNavigate }: DocumentManagementProps) {
                               }`}>
                                 {trip.hasExpenseReport ? '作成済' : availableExpenses.length > 0 ? '未作成' : '経費なし'}
                               </span>
-                              {!trip.hasExpenseReport && availableExpenses.length > 0 && (
+                              {trip.hasExpenseReport ? (
+                                <span className="text-xs text-slate-500">クリックで編集</span>
+                              ) : availableExpenses.length > 0 && (
                                 <Plus className="w-4 h-4 text-slate-500" />
                               )}
                             </div>
@@ -513,43 +479,25 @@ function DocumentManagement({ onNavigate }: DocumentManagementProps) {
                       </div>
                     )}
                   </div>
+
+                  {/* 過去の申請を確認するボタン */}
+                  <div className="text-center">
+                    <button
+                      onClick={() => onNavigate('past-applications-search')}
+                      className="flex items-center space-x-2 px-6 py-3 bg-gradient-to-r from-slate-600 to-slate-800 text-white rounded-lg font-medium hover:from-slate-700 hover:to-slate-900 transition-all duration-200 mx-auto"
+                    >
+                      <Search className="w-5 h-5" />
+                      <span>過去の申請を確認する</span>
+                    </button>
+                  </div>
                 </div>
               )}
 
-              {/* 書類管理タブ */}
+              {/* 未提出書類管理タブ */}
               {activeTab === 'manage' && (
                 <div className="space-y-6">
-                  {/* 検索・フィルター */}
-                  <div className="backdrop-blur-xl bg-white/20 rounded-xl p-4 border border-white/30 shadow-xl">
-                    <div className="flex flex-col lg:flex-row gap-4">
-                      <div className="flex-1 relative">
-                        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 w-5 h-5" />
-                        <input
-                          type="text"
-                          placeholder="書類名で検索..."
-                          value={searchTerm}
-                          onChange={(e) => setSearchTerm(e.target.value)}
-                          className="w-full pl-10 pr-4 py-3 bg-white/50 border border-white/40 rounded-lg text-slate-700 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-navy-400 backdrop-blur-xl"
-                        />
-                      </div>
-                      {selectedDocuments.length > 0 && (
-                        <div className="flex items-center space-x-3">
-                          <span className="text-sm text-slate-600">
-                            {selectedDocuments.length}件選択中
-                          </span>
-                          <button
-                            onClick={() => setSelectedDocuments([])}
-                            className="px-3 py-2 text-slate-600 hover:text-slate-800 hover:bg-white/30 rounded-lg transition-colors"
-                          >
-                            選択解除
-                          </button>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-
                   {/* 未提出書類（優先表示） */}
-                  {draftDocuments.length > 0 && (
+                  {draftDocuments.length > 0 ? (
                     <div className="backdrop-blur-xl bg-gradient-to-r from-amber-500/20 to-amber-700/20 rounded-xl p-6 border border-amber-300/30 shadow-xl">
                       <div className="flex items-center justify-between mb-6">
                         <div className="flex items-center space-x-3">
@@ -625,7 +573,7 @@ function DocumentManagement({ onNavigate }: DocumentManagementProps) {
                                 <button
                                   onClick={(e) => {
                                     e.stopPropagation();
-                                    alert('編集画面に移動します');
+                                    onNavigate('document-editor');
                                   }}
                                   className="p-1 text-slate-600 hover:text-slate-800 hover:bg-white/30 rounded transition-colors"
                                 >
@@ -645,6 +593,19 @@ function DocumentManagement({ onNavigate }: DocumentManagementProps) {
                           </div>
                         ))}
                       </div>
+                    </div>
+                  ) : (
+                    <div className="backdrop-blur-xl bg-white/20 rounded-xl p-12 border border-white/30 shadow-xl text-center">
+                      <CheckCircle className="w-16 h-16 text-emerald-600 mx-auto mb-4" />
+                      <h2 className="text-2xl font-bold text-slate-800 mb-2">すべての書類が提出済みです</h2>
+                      <p className="text-slate-600 mb-6">未提出の書類はありません</p>
+                      <button
+                        onClick={() => setActiveTab('create')}
+                        className="flex items-center space-x-2 px-6 py-3 bg-gradient-to-r from-navy-600 to-navy-800 text-white rounded-lg font-medium hover:from-navy-700 hover:to-navy-900 transition-all duration-200 mx-auto"
+                      >
+                        <Plus className="w-5 h-5" />
+                        <span>新しい書類を作成</span>
+                      </button>
                     </div>
                   )}
 
@@ -682,121 +643,15 @@ function DocumentManagement({ onNavigate }: DocumentManagementProps) {
                     </div>
                   </div>
 
-                  {/* 書類一覧 */}
-                  <div className="backdrop-blur-xl bg-white/20 rounded-xl border border-white/30 shadow-xl overflow-hidden">
-                    <div className="p-6 border-b border-white/30">
-                      <h2 className="text-xl font-semibold text-slate-800">全書類一覧</h2>
-                    </div>
-                    
-                    {filteredDocuments.length === 0 ? (
-                      <div className="text-center py-16">
-                        <FileText className="w-16 h-16 text-slate-400 mx-auto mb-4" />
-                        <p className="text-slate-600 text-lg font-medium mb-2">書類がありません</p>
-                        <p className="text-slate-500">「書類作成」タブから新しい書類を作成してください</p>
-                      </div>
-                    ) : (
-                      <div className="overflow-x-auto">
-                        <table className="w-full">
-                          <thead className="bg-white/30 border-b border-white/30">
-                            <tr>
-                              <th className="text-left py-4 px-6 font-medium text-slate-700">
-                                <input
-                                  type="checkbox"
-                                  checked={selectedDocuments.length === filteredDocuments.length}
-                                  onChange={(e) => {
-                                    if (e.target.checked) {
-                                      setSelectedDocuments(filteredDocuments.map(d => d.id));
-                                    } else {
-                                      setSelectedDocuments([]);
-                                    }
-                                  }}
-                                  className="w-4 h-4 text-navy-600 bg-white/50 border-white/40 rounded focus:ring-navy-400 focus:ring-2"
-                                />
-                              </th>
-                              <th className="text-left py-4 px-6 font-medium text-slate-700">書類名</th>
-                              <th className="text-left py-4 px-6 font-medium text-slate-700">種別</th>
-                              <th className="text-left py-4 px-6 font-medium text-slate-700">ステータス</th>
-                              <th className="text-left py-4 px-6 font-medium text-slate-700">作成日</th>
-                              <th className="text-left py-4 px-6 font-medium text-slate-700">更新日</th>
-                              <th className="text-center py-4 px-6 font-medium text-slate-700">操作</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {filteredDocuments.map((document) => (
-                              <tr key={document.id} className="border-b border-white/20 hover:bg-white/20 transition-colors">
-                                <td className="py-4 px-6">
-                                  <input
-                                    type="checkbox"
-                                    checked={selectedDocuments.includes(document.id)}
-                                    onChange={() => handleDocumentSelect(document.id)}
-                                    className="w-4 h-4 text-navy-600 bg-white/50 border-white/40 rounded focus:ring-navy-400 focus:ring-2"
-                                  />
-                                </td>
-                                <td className="py-4 px-6 text-slate-800 font-medium">{document.title}</td>
-                                <td className="py-4 px-6">
-                                  <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                                    document.type === 'business-report' 
-                                      ? 'text-blue-700 bg-blue-100' 
-                                      : 'text-emerald-700 bg-emerald-100'
-                                  }`}>
-                                    {document.type === 'business-report' ? '出張報告書' : '経費精算書'}
-                                  </span>
-                                </td>
-                                <td className="py-4 px-6">
-                                  <div className={`flex items-center space-x-1 px-2 py-1 rounded-full border ${getStatusColor(document.status)} w-fit`}>
-                                    {getStatusIcon(document.status)}
-                                    <span className="text-xs font-medium">{getStatusLabel(document.status)}</span>
-                                  </div>
-                                </td>
-                                <td className="py-4 px-6 text-slate-600 text-sm">
-                                  {new Date(document.createdAt).toLocaleDateString('ja-JP')}
-                                </td>
-                                <td className="py-4 px-6 text-slate-600 text-sm">
-                                  {new Date(document.updatedAt).toLocaleDateString('ja-JP')}
-                                </td>
-                                <td className="py-4 px-6">
-                                  <div className="flex items-center justify-center space-x-2">
-                                    <button
-                                      onClick={() => alert('編集画面に移動します')}
-                                      className="p-2 text-slate-600 hover:text-slate-800 hover:bg-white/30 rounded-lg transition-colors"
-                                      title="編集"
-                                    >
-                                      <Edit className="w-4 h-4" />
-                                    </button>
-                                    <button
-                                      onClick={() => alert('プレビュー画面に移動します')}
-                                      className="p-2 text-slate-600 hover:text-slate-800 hover:bg-white/30 rounded-lg transition-colors"
-                                      title="プレビュー"
-                                    >
-                                      <Eye className="w-4 h-4" />
-                                    </button>
-                                    <button
-                                      onClick={() => alert('PDFをダウンロードします')}
-                                      className="p-2 text-slate-600 hover:text-slate-800 hover:bg-white/30 rounded-lg transition-colors"
-                                      title="ダウンロード"
-                                    >
-                                      <Download className="w-4 h-4" />
-                                    </button>
-                                    {document.status === 'draft' && (
-                                      <button
-                                        onClick={() => {
-                                          setSelectedDocuments([document.id]);
-                                          setShowSubmitModal(true);
-                                        }}
-                                        className="p-2 text-emerald-600 hover:text-emerald-800 hover:bg-emerald-50/30 rounded-lg transition-colors"
-                                        title="提出"
-                                      >
-                                        <Send className="w-4 h-4" />
-                                      </button>
-                                    )}
-                                  </div>
-                                </td>
-                              </tr>
-                            ))}
-                          </tbody>
-                        </table>
-                      </div>
-                    )}
+                  {/* 過去の申請を確認するボタン */}
+                  <div className="text-center">
+                    <button
+                      onClick={() => onNavigate('past-applications-search')}
+                      className="flex items-center space-x-2 px-6 py-3 bg-gradient-to-r from-slate-600 to-slate-800 text-white rounded-lg font-medium hover:from-slate-700 hover:to-slate-900 transition-all duration-200 mx-auto"
+                    >
+                      <Search className="w-5 h-5" />
+                      <span>過去の申請を確認する</span>
+                    </button>
                   </div>
                 </div>
               )}
