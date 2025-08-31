@@ -65,6 +65,7 @@ function DocumentEditor({ onNavigate, documentType, businessTripId }: DocumentEd
     availableExpenses: []
   });
 
+  const [includeTravelExpenses, setIncludeTravelExpenses] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
 
   useEffect(() => {
@@ -148,8 +149,8 @@ function DocumentEditor({ onNavigate, documentType, businessTripId }: DocumentEd
       alert('行動と成果を入力してください');
       return;
     }
-    if (documentType === 'expense-report' && expenseReportData.selectedExpenses.length === 0) {
-      alert('旅費項目を選択してください');
+    if (documentType === 'expense-report' && includeTravelExpenses && expenseReportData.selectedExpenses.length === 0) {
+      alert('出張経費を追加する場合は、旅費項目を選択してください');
       return;
     }
     alert('書類が提出されました！');
@@ -372,7 +373,22 @@ function DocumentEditor({ onNavigate, documentType, businessTripId }: DocumentEd
       </div>
 
       {/* 旅費選択 */}
-      <div>
+      <div className="space-y-4">
+        <div className="flex items-center space-x-3">
+          <input
+            type="checkbox"
+            id="include-travel-expenses"
+            checked={includeTravelExpenses}
+            onChange={(e) => setIncludeTravelExpenses(e.target.checked)}
+            className="w-5 h-5 text-navy-600 bg-white/50 border-white/40 rounded focus:ring-navy-400 focus:ring-2"
+          />
+          <label htmlFor="include-travel-expenses" className="text-sm font-medium text-slate-700 cursor-pointer">
+            出張経費を追加
+          </label>
+        </div>
+        
+        {includeTravelExpenses && (
+          <div>
         <label className="block text-sm font-medium text-slate-700 mb-4">
           旅費 <span className="text-red-500">*</span>
         </label>
@@ -504,13 +520,15 @@ function DocumentEditor({ onNavigate, documentType, businessTripId }: DocumentEd
           </div>
         </div>
       </div>
+        )}
+      </div>
 
       {/* 合計金額 */}
       <div className="bg-gradient-to-r from-navy-600 to-navy-800 rounded-lg p-6 text-white">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
           <div>
             <p className="text-navy-100 text-sm mb-1">旅費</p>
-            <p className="text-2xl font-bold">¥{getSelectedExpensesTotal().toLocaleString()}</p>
+            <p className="text-2xl font-bold">¥{includeTravelExpenses ? getSelectedExpensesTotal().toLocaleString() : '0'}</p>
           </div>
           <div>
             <p className="text-navy-100 text-sm mb-1">日当</p>
@@ -518,7 +536,7 @@ function DocumentEditor({ onNavigate, documentType, businessTripId }: DocumentEd
           </div>
           <div>
             <p className="text-navy-100 text-sm mb-1">合計精算額</p>
-            <p className="text-3xl font-bold">¥{(getSelectedExpensesTotal() + expenseReportData.dailyAllowance).toLocaleString()}</p>
+            <p className="text-3xl font-bold">¥{((includeTravelExpenses ? getSelectedExpensesTotal() : 0) + expenseReportData.dailyAllowance).toLocaleString()}</p>
           </div>
         </div>
       </div>
@@ -613,7 +631,7 @@ function DocumentEditor({ onNavigate, documentType, businessTripId }: DocumentEd
                   <tr className="bg-slate-100">
                     <td className="border border-slate-300 py-2 px-3 font-bold" colSpan={3}>合計</td>
                     <td className="border border-slate-300 py-2 px-3 text-right font-bold">
-                      ¥{(getSelectedExpensesTotal() + expenseReportData.dailyAllowance).toLocaleString()}
+                      ¥{((includeTravelExpenses ? getSelectedExpensesTotal() : 0) + expenseReportData.dailyAllowance).toLocaleString()}
                     </td>
                   </tr>
                 </tbody>
