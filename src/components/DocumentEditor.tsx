@@ -67,6 +67,7 @@ function DocumentEditor({ onNavigate, documentType, businessTripId }: DocumentEd
 
   const [includeTravelExpenses, setIncludeTravelExpenses] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
+  const [showSubmissionModal, setShowSubmissionModal] = useState(false);
 
   useEffect(() => {
     // 出張申請データから自動入力
@@ -134,16 +135,23 @@ function DocumentEditor({ onNavigate, documentType, businessTripId }: DocumentEd
   };
 
   const handleSubmit = () => {
-    if (documentType === 'business-report' && !businessReportData.actionAndResults.trim()) {
-      alert('行動と成果を入力してください');
-      return;
+    if (documentType === 'business-report') {
+      if (!businessReportData.actionAndResults.trim()) {
+        alert('行動と成果を入力してください');
+        return;
+      }
+      // 出張報告書の場合は出張経費精算書作成画面に遷移
+      localStorage.setItem('editingBusinessTripId', businessTripId);
+      localStorage.setItem('editingDocumentType', 'expense-report');
+      onNavigate('document-editor');
+    } else {
+      if (includeTravelExpenses && expenseReportData.selectedExpenses.length === 0) {
+        alert('出張経費を追加する場合は、旅費項目を選択してください');
+        return;
+      }
+      // 出張経費精算書の場合は提出方法選択モーダルを表示
+      setShowSubmissionModal(true);
     }
-    if (documentType === 'expense-report' && includeTravelExpenses && expenseReportData.selectedExpenses.length === 0) {
-      alert('出張経費を追加する場合は、旅費項目を選択してください');
-      return;
-    }
-    alert('書類が提出されました！');
-    onNavigate('document-management');
   };
 
   const toggleExpenseSelection = (expenseId: string) => {
@@ -633,7 +641,7 @@ function DocumentEditor({ onNavigate, documentType, businessTripId }: DocumentEd
   };
 
   const getDocumentTitle = () => {
-    return documentType === 'business-report' ? '出張報告書編集' : '出張経費精算書編集';
+    return documentType === 'business-report' ? '出張報告書作成' : '出張経費精算書作成';
   };
 
   if (showPreview) {
@@ -692,8 +700,17 @@ function DocumentEditor({ onNavigate, documentType, businessTripId }: DocumentEd
                     onClick={handleSubmit}
                     className="flex items-center space-x-2 px-6 py-3 bg-gradient-to-r from-navy-700 to-navy-900 hover:from-navy-800 hover:to-navy-950 text-white rounded-lg font-medium shadow-xl hover:shadow-2xl transition-all duration-200 transform hover:scale-105"
                   >
-                    <Send className="w-5 h-5" />
-                    <span>提出</span>
+                    {documentType === 'business-report' ? (
+                      <>
+                        <Send className="w-5 h-5" />
+                        <span>続けて出張経費精算書を作成</span>
+                      </>
+                    ) : (
+                      <>
+                        <Send className="w-5 h-5" />
+                        <span>報告書・精算書を提出</span>
+                      </>
+                    )}
                   </button>
                 </div>
               </div>
@@ -775,14 +792,67 @@ function DocumentEditor({ onNavigate, documentType, businessTripId }: DocumentEd
                   onClick={handleSubmit}
                   className="flex items-center space-x-2 px-6 py-3 bg-gradient-to-r from-navy-700 to-navy-900 hover:from-navy-800 hover:to-navy-950 text-white rounded-lg font-medium shadow-xl hover:shadow-2xl transition-all duration-200 transform hover:scale-105"
                 >
-                  <Send className="w-5 h-5" />
-                  <span>提出</span>
+                  {documentType === 'business-report' ? (
+                    <>
+                      <Send className="w-5 h-5" />
+                      <span>続けて出張経費精算書を作成</span>
+                    </>
+                  ) : (
+                    <>
+                      <Send className="w-5 h-5" />
+                      <span>報告書・精算書を提出</span>
+                    </>
+                  )}
                 </button>
               </div>
             </div>
           </div>
         </div>
       </div>
+
+      {/* 提出方法選択モーダル */}
+      {showSubmissionModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-xl p-8 max-w-md w-full">
+            <div className="text-center mb-6">
+              <div className="w-16 h-16 bg-navy-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Send className="w-8 h-8 text-navy-600" />
+              </div>
+              <h3 className="text-xl font-semibold text-slate-800 mb-2">提出方法を選択</h3>
+              <p className="text-slate-600">報告書と精算書の提出方法を選択してください</p>
+            </div>
+            
+            <div className="flex flex-col gap-3">
+              <button
+                onClick={() => {
+                  setShowSubmissionModal(false);
+                  alert('システムで提出されました！');
+                  onNavigate('document-management');
+                }}
+                className="w-full px-6 py-3 bg-gradient-to-r from-navy-600 to-navy-800 text-white rounded-lg font-medium hover:from-navy-700 hover:to-navy-900 transition-all duration-200"
+              >
+                システムで提出
+              </button>
+              <button
+                onClick={() => {
+                  setShowSubmissionModal(false);
+                  alert('メールで提出されました！');
+                  onNavigate('document-management');
+                }}
+                className="w-full px-6 py-3 bg-gradient-to-r from-emerald-600 to-emerald-800 text-white rounded-lg font-medium hover:from-emerald-700 hover:to-emerald-900 transition-all duration-200"
+              >
+                メールで提出
+              </button>
+              <button
+                onClick={() => setShowSubmissionModal(false)}
+                className="w-full px-6 py-3 bg-white border border-slate-300 text-slate-700 rounded-lg font-medium hover:bg-slate-50 transition-all duration-200"
+              >
+                キャンセル
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
