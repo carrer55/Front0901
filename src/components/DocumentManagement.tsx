@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { FileText, Calendar, MapPin, Building, Users, CheckCircle, Clock, AlertTriangle, Plus, Eye, Edit } from 'lucide-react';
 import Sidebar from './Sidebar';
 import TopBar from './TopBar';
@@ -22,17 +22,6 @@ interface BusinessTrip {
   hasExpenseReport: boolean;
   reportSubmitted: boolean;
   expenseReportSubmitted: boolean;
-}
-
-interface Document {
-  id: string;
-  type: 'business-report' | 'expense-report';
-  title: string;
-  businessTripId: string;
-  status: 'draft' | 'submitted' | 'approved';
-  createdAt: string;
-  updatedAt: string;
-  data: any;
 }
 
 function DocumentManagement({ onNavigate }: DocumentManagementProps) {
@@ -114,16 +103,12 @@ function DocumentManagement({ onNavigate }: DocumentManagementProps) {
   };
 
   // 各カードの件数を計算
-  const completedTripsCount = businessTrips.filter(trip => 
+  const reportCreationCount = businessTrips.filter(trip => 
     trip.status === 'completed' && !trip.hasReport
   ).length;
 
-  const reportsCreatedCount = businessTrips.filter(trip => 
+  const expenseReportCreationCount = businessTrips.filter(trip => 
     trip.hasReport && !trip.hasExpenseReport
-  ).length;
-
-  const expenseReportsCreatedCount = businessTrips.filter(trip => 
-    trip.hasReport && trip.hasExpenseReport && !trip.reportSubmitted
   ).length;
 
   const submittedCount = businessTrips.filter(trip => 
@@ -216,35 +201,25 @@ function DocumentManagement({ onNavigate }: DocumentManagementProps) {
                 <p className="text-slate-600">出張報告書と経費精算書の作成・管理</p>
               </div>
 
-              {/* 4つのメインカード */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                {/* 完了出張カード */}
-                <div className="backdrop-blur-xl bg-white/20 rounded-xl p-6 border border-white/30 shadow-xl text-center hover:bg-white/30 transition-all duration-300">
-                  <div className="w-16 h-16 bg-gradient-to-br from-blue-600 to-blue-800 rounded-xl flex items-center justify-center mx-auto mb-4 shadow-lg">
-                    <FileText className="w-8 h-8 text-white" />
-                  </div>
-                  <h3 className="text-xl font-bold text-slate-800 mb-2">完了出張</h3>
-                  <p className="text-3xl font-bold text-blue-600 mb-2">{completedTripsCount}件</p>
-                  <p className="text-sm text-slate-600">報告書作成可能</p>
-                </div>
-
-                {/* 報告書作成済カード */}
+              {/* 3つのメインカード */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                {/* 報告書作成カード */}
                 <div className="backdrop-blur-xl bg-white/20 rounded-xl p-6 border border-white/30 shadow-xl text-center hover:bg-white/30 transition-all duration-300">
                   <div className="w-16 h-16 bg-gradient-to-br from-emerald-600 to-emerald-800 rounded-xl flex items-center justify-center mx-auto mb-4 shadow-lg">
                     <CheckCircle className="w-8 h-8 text-white" />
                   </div>
-                  <h3 className="text-xl font-bold text-slate-800 mb-2">報告書作成済</h3>
-                  <p className="text-3xl font-bold text-emerald-600 mb-2">{reportsCreatedCount}件</p>
+                  <h3 className="text-xl font-bold text-slate-800 mb-2">報告書作成</h3>
+                  <p className="text-3xl font-bold text-emerald-600 mb-2">{reportCreationCount}件</p>
                   <p className="text-sm text-slate-600">精算書作成可能</p>
                 </div>
 
-                {/* 精算書作成済カード */}
+                {/* 精算書作成カード */}
                 <div className="backdrop-blur-xl bg-white/20 rounded-xl p-6 border border-white/30 shadow-xl text-center hover:bg-white/30 transition-all duration-300">
                   <div className="w-16 h-16 bg-gradient-to-br from-amber-600 to-amber-800 rounded-xl flex items-center justify-center mx-auto mb-4 shadow-lg">
                     <Clock className="w-8 h-8 text-white" />
                   </div>
-                  <h3 className="text-xl font-bold text-slate-800 mb-2">精算書作成済</h3>
-                  <p className="text-3xl font-bold text-amber-600 mb-2">{expenseReportsCreatedCount}件</p>
+                  <h3 className="text-xl font-bold text-slate-800 mb-2">精算書作成</h3>
+                  <p className="text-3xl font-bold text-amber-600 mb-2">{expenseReportCreationCount}件</p>
                   <p className="text-sm text-slate-600">提出待ち</p>
                 </div>
 
@@ -259,16 +234,16 @@ function DocumentManagement({ onNavigate }: DocumentManagementProps) {
                 </div>
               </div>
 
-              {/* 完了出張一覧 */}
-              {completedTripsCount > 0 && (
+              {/* 報告書作成が必要な出張一覧 */}
+              {reportCreationCount > 0 && (
                 <div className="backdrop-blur-xl bg-white/20 rounded-xl p-6 border border-white/30 shadow-xl mb-6">
                   <div className="flex items-center justify-between mb-6">
                     <div className="flex items-center space-x-3">
-                      <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-blue-800 rounded-xl flex items-center justify-center shadow-lg">
-                        <FileText className="w-5 h-5 text-white" />
+                      <div className="w-10 h-10 bg-gradient-to-br from-emerald-600 to-emerald-800 rounded-xl flex items-center justify-center shadow-lg">
+                        <CheckCircle className="w-5 h-5 text-white" />
                       </div>
                       <div>
-                        <h2 className="text-xl font-bold text-slate-800">完了出張</h2>
+                        <h2 className="text-xl font-bold text-slate-800">報告書作成</h2>
                         <p className="text-slate-600 text-sm">報告書作成が必要な出張</p>
                       </div>
                     </div>
@@ -298,7 +273,7 @@ function DocumentManagement({ onNavigate }: DocumentManagementProps) {
                         </div>
                         
                         <div className="flex items-center justify-between">
-                          <span className="px-2 py-1 rounded-full text-xs font-medium text-blue-700 bg-blue-100">
+                          <span className="px-2 py-1 rounded-full text-xs font-medium text-emerald-700 bg-emerald-100">
                             報告書未作成
                           </span>
                           <Plus className="w-4 h-4 text-slate-500" />
@@ -309,16 +284,16 @@ function DocumentManagement({ onNavigate }: DocumentManagementProps) {
                 </div>
               )}
 
-              {/* 報告書作成済一覧 */}
-              {reportsCreatedCount > 0 && (
+              {/* 精算書作成が必要な出張一覧 */}
+              {expenseReportCreationCount > 0 && (
                 <div className="backdrop-blur-xl bg-white/20 rounded-xl p-6 border border-white/30 shadow-xl mb-6">
                   <div className="flex items-center justify-between mb-6">
                     <div className="flex items-center space-x-3">
-                      <div className="w-10 h-10 bg-gradient-to-br from-emerald-600 to-emerald-800 rounded-xl flex items-center justify-center shadow-lg">
-                        <CheckCircle className="w-5 h-5 text-white" />
+                      <div className="w-10 h-10 bg-gradient-to-br from-amber-600 to-amber-800 rounded-xl flex items-center justify-center shadow-lg">
+                        <Clock className="w-5 h-5 text-white" />
                       </div>
                       <div>
-                        <h2 className="text-xl font-bold text-slate-800">報告書作成済</h2>
+                        <h2 className="text-xl font-bold text-slate-800">精算書作成</h2>
                         <p className="text-slate-600 text-sm">精算書作成が必要な出張</p>
                       </div>
                     </div>
@@ -348,7 +323,7 @@ function DocumentManagement({ onNavigate }: DocumentManagementProps) {
                         </div>
                         
                         <div className="flex items-center justify-between">
-                          <span className="px-2 py-1 rounded-full text-xs font-medium text-emerald-700 bg-emerald-100">
+                          <span className="px-2 py-1 rounded-full text-xs font-medium text-amber-700 bg-amber-100">
                             精算書未作成
                           </span>
                           <Plus className="w-4 h-4 text-slate-500" />
@@ -359,111 +334,28 @@ function DocumentManagement({ onNavigate }: DocumentManagementProps) {
                 </div>
               )}
 
-              {/* 精算書作成済一覧 */}
-              {expenseReportsCreatedCount > 0 && (
-                <div className="backdrop-blur-xl bg-white/20 rounded-xl p-6 border border-white/30 shadow-xl mb-6">
-                  <div className="flex items-center justify-between mb-6">
-                    <div className="flex items-center space-x-3">
-                      <div className="w-10 h-10 bg-gradient-to-br from-amber-600 to-amber-800 rounded-xl flex items-center justify-center shadow-lg">
-                        <Clock className="w-5 h-5 text-white" />
-                      </div>
-                      <div>
-                        <h2 className="text-xl font-bold text-slate-800">精算書作成済</h2>
-                        <p className="text-slate-600 text-sm">提出待ちの書類</p>
-                      </div>
-                    </div>
-                    <button
-                      onClick={() => {
-                        // 一括提出処理
-                        const readyToSubmit = businessTrips.filter(trip => 
-                          trip.hasReport && trip.hasExpenseReport && !trip.reportSubmitted
-                        );
-                        if (readyToSubmit.length > 0) {
-                          setBusinessTrips(prev => prev.map(trip => 
-                            readyToSubmit.some(r => r.id === trip.id)
-                              ? { ...trip, reportSubmitted: true, expenseReportSubmitted: true }
-                              : trip
-                          ));
-                          alert(`${readyToSubmit.length}件の書類を一括提出しました！`);
-                        }
-                      }}
-                      className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-amber-600 to-amber-800 text-white rounded-lg font-medium hover:from-amber-700 hover:to-amber-900 transition-all duration-200"
-                    >
-                      <span>一括提出</span>
-                    </button>
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {businessTrips.filter(trip => trip.hasReport && trip.hasExpenseReport && !trip.reportSubmitted).map((trip) => (
-                      <div
-                        key={trip.id}
-                        className="backdrop-blur-xl bg-white/30 rounded-lg p-4 border border-white/30 shadow-lg hover:shadow-xl transition-all duration-300"
-                      >
-                        <div className="mb-3">
-                          <h3 className="font-semibold text-slate-800 mb-1">{trip.title}</h3>
-                          <div className="flex items-center space-x-2 text-xs text-slate-600">
-                            <Calendar className="w-3 h-3" />
-                            <span>{trip.startDate} ～ {trip.endDate}</span>
-                          </div>
-                          <div className="flex items-center space-x-2 text-xs text-slate-600 mt-1">
-                            <Building className="w-3 h-3" />
-                            <span>{trip.visitTarget}</span>
-                          </div>
-                        </div>
-                        
-                        <div className="text-xs text-slate-500 mb-3">
-                          <p>予定日当: ¥{trip.estimatedAmount.toLocaleString()}</p>
-                        </div>
-                        
-                        <div className="flex items-center justify-between">
-                          <span className="px-2 py-1 rounded-full text-xs font-medium text-amber-700 bg-amber-100">
-                            提出待ち
-                          </span>
-                          <div className="flex space-x-1">
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                // 編集画面に移動
-                                localStorage.setItem('editingBusinessTripId', trip.id);
-                                localStorage.setItem('editingDocumentType', 'business-report');
-                                onNavigate('document-editor');
-                              }}
-                              className="p-1 text-slate-600 hover:text-slate-800 hover:bg-white/30 rounded transition-colors"
-                            >
-                              <Edit className="w-3 h-3" />
-                            </button>
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                alert('プレビュー画面に移動します');
-                              }}
-                              className="p-1 text-slate-600 hover:text-slate-800 hover:bg-white/30 rounded transition-colors"
-                            >
-                              <Eye className="w-3 h-3" />
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
               {/* 提出済一覧 */}
-              {submittedCount > 0 && (
-                <div className="backdrop-blur-xl bg-white/20 rounded-xl p-6 border border-white/30 shadow-xl mb-6">
-                  <div className="flex items-center justify-between mb-6">
-                    <div className="flex items-center space-x-3">
-                      <div className="w-10 h-10 bg-gradient-to-br from-purple-600 to-purple-800 rounded-xl flex items-center justify-center shadow-lg">
-                        <CheckCircle className="w-5 h-5 text-white" />
-                      </div>
-                      <div>
-                        <h2 className="text-xl font-bold text-slate-800">提出済</h2>
-                        <p className="text-slate-600 text-sm">承認待ち・承認完了の書類</p>
-                      </div>
+              <div className="backdrop-blur-xl bg-white/20 rounded-xl p-6 border border-white/30 shadow-xl">
+                <div className="flex items-center justify-between mb-6">
+                  <div className="flex items-center space-x-3">
+                    <div className="w-10 h-10 bg-gradient-to-br from-purple-600 to-purple-800 rounded-xl flex items-center justify-center shadow-lg">
+                      <CheckCircle className="w-5 h-5 text-white" />
+                    </div>
+                    <div>
+                      <h2 className="text-xl font-bold text-slate-800">提出済</h2>
+                      <p className="text-slate-600 text-sm">承認待ち・承認完了の書類</p>
                     </div>
                   </div>
+                  <button
+                    onClick={() => onNavigate('past-applications-search')}
+                    className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-slate-600 to-slate-800 text-white rounded-lg font-medium hover:from-slate-700 hover:to-slate-900 transition-all duration-200"
+                  >
+                    <FileText className="w-4 h-4" />
+                    <span>過去の申請を確認する</span>
+                  </button>
+                </div>
 
+                {submittedCount > 0 ? (
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     {businessTrips.filter(trip => trip.reportSubmitted && trip.expenseReportSubmitted).map((trip) => (
                       <div
@@ -503,18 +395,13 @@ function DocumentManagement({ onNavigate }: DocumentManagementProps) {
                       </div>
                     ))}
                   </div>
-                </div>
-              )}
-
-              {/* 過去の申請を確認するボタン */}
-              <div className="text-center">
-                <button
-                  onClick={() => onNavigate('past-applications-search')}
-                  className="flex items-center space-x-2 px-6 py-3 bg-gradient-to-r from-slate-600 to-slate-800 text-white rounded-lg font-medium hover:from-slate-700 hover:to-slate-900 transition-all duration-200 mx-auto"
-                >
-                  <FileText className="w-5 h-5" />
-                  <span>過去の申請を確認する</span>
-                </button>
+                ) : (
+                  <div className="text-center py-12">
+                    <FileText className="w-16 h-16 text-slate-400 mx-auto mb-4" />
+                    <p className="text-slate-600 text-lg font-medium mb-2">提出済みの書類はありません</p>
+                    <p className="text-slate-500">報告書と精算書を作成・提出すると、ここに表示されます</p>
+                  </div>
+                )}
               </div>
             </div>
           </div>
