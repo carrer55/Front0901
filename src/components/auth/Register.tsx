@@ -115,21 +115,14 @@ function Register({ onNavigate }: RegisterProps) {
                   <Briefcase className="w-4 h-4 inline mr-1" />
                   役職 <span className="text-red-500">*</span>
                 </label>
-                <select
+                <input
+                  type="text"
                   value={formData.position}
                   onChange={(e) => setFormData(prev => ({ ...prev, position: e.target.value }))}
                   className="w-full px-4 py-3 bg-white/50 border border-white/40 rounded-lg text-slate-700 focus:outline-none focus:ring-2 focus:ring-emerald-400 backdrop-blur-xl"
+                  placeholder="例：代表取締役、部長、課長など"
                   required
-                >
-                  <option value="">役職を選択してください</option>
-                  <option value="代表取締役">代表取締役</option>
-                  <option value="取締役">取締役</option>
-                  <option value="部長">部長</option>
-                  <option value="課長">課長</option>
-                  <option value="主任">主任</option>
-                  <option value="一般職">一般職</option>
-                  <option value="その他">その他</option>
-                </select>
+                />
               </div>
 
               <div>

@@ -140,18 +140,13 @@ function MyPage({ onNavigate }: MyPageProps) {
         </div>
         <div>
           <label className="block text-sm font-medium text-slate-700 mb-2">役職</label>
-          <select
+          <input
+            type="text"
             value={userProfile.position}
             onChange={(e) => setUserProfile(prev => ({ ...prev, position: e.target.value }))}
             className="w-full px-4 py-3 bg-white/50 border border-white/40 rounded-lg text-slate-700 focus:outline-none focus:ring-2 focus:ring-navy-400 backdrop-blur-xl"
-          >
-            <option value="代表取締役">代表取締役</option>
-            <option value="取締役">取締役</option>
-            <option value="部長">部長</option>
-            <option value="課長">課長</option>
-            <option value="主任">主任</option>
-            <option value="一般職">一般職</option>
-          </select>
+            placeholder="例：代表取締役、部長、課長など"
+          />
         </div>
         <div>
           <label className="block text-sm font-medium text-slate-700 mb-2">メールアドレス</label>
