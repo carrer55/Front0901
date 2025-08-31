@@ -98,27 +98,16 @@ function DocumentEditor({ onNavigate, documentType, businessTripId }: DocumentEd
           actionAndResults: ''
         });
       } else if (documentType === 'expense-report') {
-        // 利用可能な経費申請を取得
-        const availableExpenses = [
-          {
-            id: 'EX-2024-001',
-            title: '東京出張交通費',
-            amount: 15000,
-            date: '2024-07-25',
-            category: '旅費交通費',
-            store: 'JR東日本',
-            description: '新幹線代（往復）'
-          },
-          {
-            id: 'EX-2024-002',
-            title: '東京出張宿泊費',
-            amount: 12000,
-            date: '2024-07-25',
-            category: '旅費交通費',
-            store: 'ホテルニューオータニ',
-            description: '宿泊費（2泊）'
-          }
-        ];
+        // 利用可能な経費申請を取得（空の配列で初期化）
+        const availableExpenses: Array<{
+          id: string;
+          title: string;
+          amount: number;
+          date: string;
+          category: string;
+          store: string;
+          description: string;
+        }> = [];
 
         setExpenseReportData({
           title: trip.title,
