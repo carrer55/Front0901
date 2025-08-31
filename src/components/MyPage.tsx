@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { User, Settings, CreditCard, Bell, Users, HelpCircle, Edit, Save, Eye, EyeOff, Link } from 'lucide-react';
 import Sidebar from './Sidebar';
 import TopBar from './TopBar';
+import { useUserProfile } from './UserProfileProvider';
 
 interface MyPageProps {
   onNavigate: (view: string) => void;
@@ -48,6 +49,7 @@ function MyPage({ onNavigate }: MyPageProps) {
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showPasswordModal, setShowPasswordModal] = useState(false);
+  const { hasPermission, userRole, userPlan } = useUserProfile();
   
   const [userProfile, setUserProfile] = useState<UserProfile>({
     name: '山田太郎',
@@ -121,10 +123,10 @@ function MyPage({ onNavigate }: MyPageProps) {
     { id: 'profile', label: 'プロフィール', icon: User },
     { id: 'allowances', label: '日当設定', icon: Settings },
     { id: 'notifications', label: '通知設定', icon: Bell },
-    { id: 'accounting', label: '会計ソフト設定', icon: Link },
-    { id: 'users', label: 'ユーザー管理', icon: Users },
-    { id: 'plan', label: 'プラン管理', icon: CreditCard }
-  ];
+    { id: 'accounting', label: '会計ソフト設定', icon: Link, permission: 'accounting_software' },
+    { id: 'users', label: 'ユーザー管理', icon: Users, permission: 'user_management' },
+    { id: 'plan', label: 'プラン管理', icon: CreditCard, permission: 'plan_management' }
+  ].filter(tab => !tab.permission || hasPermission(tab.permission));
 
   const renderProfileTab = () => (
     <div className="space-y-6">

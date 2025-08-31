@@ -6,6 +6,12 @@ interface User {
   company: string;
   position: string;
   phone: string;
+  role: 'admin' | 'department_admin' | 'approver' | 'general_user';
+  plan: 'Free' | 'Pro' | 'Enterprise';
+  departmentId?: string;
+  departmentName?: string;
+  createdAt: string;
+  invitedBy?: string;
 }
 
 interface AuthState {
@@ -76,7 +82,10 @@ class LocalAuth {
         name: 'デモユーザー',
         company: '株式会社デモ',
         position: '代表取締役',
-        phone: '090-0000-0000'
+        phone: '090-0000-0000',
+        role: 'admin',
+        plan: 'Pro',
+        createdAt: new Date().toISOString()
       };
 
       this.authState = {
@@ -101,7 +110,13 @@ class LocalAuth {
           name: user.name,
           company: user.company,
           position: user.position,
-          phone: user.phone
+          phone: user.phone,
+          role: user.role || 'admin',
+          plan: user.plan || 'Free',
+          departmentId: user.departmentId,
+          departmentName: user.departmentName,
+          createdAt: user.createdAt || new Date().toISOString(),
+          invitedBy: user.invitedBy
         },
         isAuthenticated: true
       };
@@ -121,6 +136,11 @@ class LocalAuth {
     company: string;
     position: string;
     phone: string;
+    role?: 'admin' | 'department_admin' | 'approver' | 'general_user';
+    plan?: 'Free' | 'Pro' | 'Enterprise';
+    departmentId?: string;
+    departmentName?: string;
+    invitedBy?: string;
   }): Promise<{ success: boolean; error?: string }> {
     const users = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
     
@@ -131,7 +151,10 @@ class LocalAuth {
 
     const newUser = {
       id: Date.now().toString(),
-      ...userData
+      ...userData,
+      role: userData.role || 'admin', // 新規登録時はデフォルトで管理者
+      plan: userData.plan || 'Free', // 新規登録時はデフォルトでFreeプラン
+      createdAt: new Date().toISOString()
     };
 
     users.push(newUser);
@@ -145,7 +168,13 @@ class LocalAuth {
         name: newUser.name,
         company: newUser.company,
         position: newUser.position,
-        phone: newUser.phone
+        phone: newUser.phone,
+        role: newUser.role,
+        plan: newUser.plan,
+        departmentId: newUser.departmentId,
+        departmentName: newUser.departmentName,
+        createdAt: newUser.createdAt,
+        invitedBy: newUser.invitedBy
       },
       isAuthenticated: true
     };

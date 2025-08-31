@@ -23,6 +23,9 @@ import ApplicationStatusList from './ApplicationStatusList';
 import AdminDashboard from './AdminDashboard';
 import DocumentEditor from './DocumentEditor';
 import PastApplicationsSearch from './PastApplicationsSearch';
+import ApproverDashboard from './ApproverDashboard';
+import UserManagement from './UserManagement';
+import { useUserProfile } from './UserProfileProvider';
 
 function Dashboard() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -30,6 +33,7 @@ function Dashboard() {
   const [applicationDetail, setApplicationDetail] = useState<{type: 'business-trip' | 'expense', id: string} | null>(null);
   const [documentType, setDocumentType] = useState<string>('');
   const [documentId, setDocumentId] = useState<string>('');
+  const { userRole } = useUserProfile();
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -94,6 +98,8 @@ function Dashboard() {
         return <ApplicationStatusList onNavigate={navigateToView} onShowDetail={showApplicationDetail} />;
       case 'admin-dashboard':
         return <AdminDashboard onNavigate={navigateToView} />;
+      case 'user-management':
+        return <UserManagement onNavigate={navigateToView} />;
       case 'application-detail':
         return applicationDetail ? (
           <ApplicationDetail 
@@ -103,6 +109,11 @@ function Dashboard() {
           />
         ) : null;
       default:
+        // 承認者の場合は専用ダッシュボードを表示
+        if (userRole === 'approver') {
+          return <ApproverDashboard onNavigate={navigateToView} onShowDetail={showApplicationDetail} />;
+        }
+        
         return (
           <div className="flex h-screen relative">
             {/* Desktop Sidebar */}

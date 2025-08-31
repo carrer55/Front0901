@@ -11,6 +11,7 @@ import {
   X
 } from 'lucide-react';
 import { auth } from '../lib/auth';
+import { useUserProfile } from './UserProfileProvider';
 
 const menuItems = [
   { icon: Home, label: 'ホーム', active: true },
@@ -30,6 +31,8 @@ interface SidebarProps {
 }
 
 function Sidebar({ isOpen, onClose, onNavigate, currentView = 'dashboard' }: SidebarProps) {
+  const { hasPermission, userRole } = useUserProfile();
+
   const handleMenuClick = (view: string) => {
     if (onNavigate) {
       onNavigate(view);
@@ -40,6 +43,17 @@ function Sidebar({ isOpen, onClose, onNavigate, currentView = 'dashboard' }: Sid
     }
   };
 
+  // メニュー項目の表示判定
+  const shouldShowMenuItem = (label: string): boolean => {
+    switch (label) {
+      case '節税シミュレーション':
+        return hasPermission('tax_simulation');
+      case '出張規定管理':
+        return hasPermission('travel_regulation_management');
+      default:
+        return true;
+    }
+  };
   return (
     <div className={`
       fixed lg:relative z-50 lg:z-auto
@@ -70,7 +84,7 @@ function Sidebar({ isOpen, onClose, onNavigate, currentView = 'dashboard' }: Sid
 
       <nav className="flex-1 px-4 relative z-10 overflow-y-auto">
         <ul className="space-y-2">
-          {menuItems.map((item, index) => {
+          {menuItems.filter(item => shouldShowMenuItem(item.label)).map((item, index) => {
             const Icon = item.icon;
             let clickHandler = () => handleMenuClick('dashboard');
             let isActive = false;

@@ -30,6 +30,11 @@ export function useAuth() {
     company: string;
     position: string;
     phone: string;
+    role?: 'admin' | 'department_admin' | 'approver' | 'general_user';
+    plan?: 'Free' | 'Pro' | 'Enterprise';
+    departmentId?: string;
+    departmentName?: string;
+    invitedBy?: string;
   }) => {
     setLoading(true);
     try {
@@ -64,6 +69,8 @@ export function useAuth() {
     logout,
     updateProfile,
     isAuthenticated: authState.isAuthenticated,
-    isOnboardingComplete: true // ローカル実装では常にtrue
+    isOnboardingComplete: true, // ローカル実装では常にtrue
+    userRole: authState.user?.role || 'general_user',
+    userPlan: authState.user?.plan || 'Free'
   };
 }
