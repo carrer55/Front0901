@@ -953,24 +953,6 @@ function TravelRegulationCreation({ onNavigate }: TravelRegulationCreationProps)
                     onClick={nextStep}
                     disabled={!isStepComplete()}
                     className={`flex items-center space-x-2 px-6 py-3 rounded-lg font-medium transition-all duration-200 ${
-                      isStepComplete()
-                        ? 'bg-gradient-to-r from-navy-700 to-navy-900 hover:from-navy-800 hover:to-navy-950 text-white shadow-xl hover:shadow-2xl transform hover:scale-105'
-                        : 'bg-white/30 text-slate-400 cursor-not-allowed'
-                    }`}
-                  >
-                    <span>次へ</span>
-                    <Calculator className="w-5 h-5" />
-                  </button>
-                ) : (
-                  <button
-                    onClick={() => setShowPreview(true)}
-                    className="flex items-center space-x-2 px-6 py-3 bg-gradient-to-r from-emerald-600 to-emerald-800 hover:from-emerald-700 hover:to-emerald-900 text-white rounded-lg font-medium shadow-xl hover:shadow-2xl transition-all duration-200 transform hover:scale-105"
-                  >
-                    <Eye className="w-5 h-5" />
-                    <span>プレビュー表示</span>
-                  </button>
-                )}
-              </div>
             </div>
           </div>
         </div>
