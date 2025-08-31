@@ -645,7 +645,8 @@ function DocumentManagement({ onNavigate }: DocumentManagementProps) {
                           </div>
                         ))}
                       </div>
-                  </div>
+                    </div>
+                  )}
 
                   {/* 統計情報 */}
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -680,12 +681,7 @@ function DocumentManagement({ onNavigate }: DocumentManagementProps) {
                       <p className="text-sm text-slate-600">提出待ち</p>
                     </div>
                   </div>
-                </div>
-              )}
 
-              {/* 書類管理タブ */}
-              {activeTab === 'manage' && (
-                <div className="space-y-6">
                   {/* 書類一覧 */}
                   <div className="backdrop-blur-xl bg-white/20 rounded-xl border border-white/30 shadow-xl overflow-hidden">
                     <div className="p-6 border-b border-white/30">
