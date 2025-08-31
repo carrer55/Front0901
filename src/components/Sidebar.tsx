@@ -81,7 +81,7 @@ function Sidebar({ isOpen, onClose, onNavigate, currentView = 'dashboard' }: Sid
             } else if (item.label === '経費申請') {
               clickHandler = () => handleMenuClick('expense');
               isActive = currentView === 'expense';
-            } else if (item.label === '書類管理') {
+            } else if (item.label === '出張精算') {
               clickHandler = () => handleMenuClick('document-management');
               isActive = currentView === 'document-management';
             } else if (item.label === '節税シミュレーション') {
