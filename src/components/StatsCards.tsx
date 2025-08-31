@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { TrendingUp, TrendingDown, ChevronDown, ChevronUp, BarChart3 } from 'lucide-react';
 
 function StatsCards() {
-  const [showEstimatedHistory, setShowEstimatedHistory] = useState(false);
   const [showActualHistory, setShowActualHistory] = useState(false);
 
   // 今月の精算見込みデータ
@@ -25,15 +24,6 @@ function StatsCards() {
   const actualPercentageChange = ((actualDifference / previousMonthActual) * 100).toFixed(1);
   const isActualIncrease = actualDifference > 0;
 
-  // 過去実績データ（サンプル）
-  const estimatedHistory = [
-    { month: '2024年6月', amount: 285000, applications: 10 },
-    { month: '2024年5月', amount: 310000, applications: 14 },
-    { month: '2024年4月', amount: 265000, applications: 9 },
-    { month: '2024年3月', amount: 295000, applications: 11 },
-    { month: '2024年2月', amount: 275000, applications: 8 }
-  ];
-
   const actualHistory = [
     { month: '2024年6月', amount: 245000, applications: 7 },
     { month: '2024年5月', amount: 280000, applications: 12 },
@@ -55,19 +45,27 @@ function StatsCards() {
             <div className="flex items-center justify-between mb-6">
               <h3 className="text-slate-700 text-lg font-semibold">今月の精算見込み</h3>
               <div className="flex items-center space-x-2">
-                {isEstimatedIncrease ? (
+                {estimatedApplicationCount > 10 ? (
+                  <TrendingUp className="w-5 h-5 text-emerald-600" />
+                ) : isEstimatedIncrease ? (
                   <TrendingUp className="w-5 h-5 text-emerald-600" />
                 ) : (
                   <TrendingDown className="w-5 h-5 text-red-500" />
                 )}
-                <span className={`text-sm font-medium ${isEstimatedIncrease ? 'text-emerald-600' : 'text-red-500'}`}>
+                <span className={`text-sm font-medium ${
+                  estimatedApplicationCount > 10 ? 'text-emerald-600' : 
+                  isEstimatedIncrease ? 'text-emerald-600' : 'text-red-500'
+                }`}>
                   {isEstimatedIncrease ? '+' : ''}{estimatedPercentageChange}%
                 </span>
               </div>
             </div>
             
             <div className="mb-6">
-              <p className="text-3xl lg:text-4xl font-bold text-slate-900 mb-2">
+              <p className={`text-3xl lg:text-4xl font-bold mb-2 ${
+                currentMonthEstimated > 500000 ? 'text-red-600' : 
+                currentMonthEstimated > 300000 ? 'text-amber-600' : 'text-slate-900'
+              }`}>
                 ¥{currentMonthEstimated.toLocaleString()}
               </p>
               <p className="text-sm text-slate-600">
@@ -81,23 +79,30 @@ function StatsCards() {
             {/* 申請件数ゲージ（小さく） */}
             <div className="bg-white/30 rounded-lg p-3 mb-4">
               <div className="flex items-center justify-between mb-2">
-                <span className="text-sm font-medium text-slate-700">今月の申請件数</span>
-                <span className="text-lg font-bold text-slate-800">{estimatedApplicationCount}件</span>
+                <span className="text-sm font-medium text-slate-700">申請件数</span>
+                <span className={`text-lg font-bold ${
+                  estimatedApplicationCount > 15 ? 'text-red-600' : 
+                  estimatedApplicationCount > 10 ? 'text-amber-600' : 'text-slate-800'
+                }`}>{estimatedApplicationCount}件</span>
               </div>
               
-              {/* 小さな棒グラフゲージ */}
-              <div className="flex items-end space-x-1 h-6">
-                {Array.from({ length: Math.max(estimatedApplicationCount, 10) }, (_, index) => (
+              {/* より小さな棒グラフゲージ */}
+              <div className="flex items-end space-x-1 h-4">
+                {Array.from({ length: Math.max(estimatedApplicationCount, 15) }, (_, index) => (
                   <div
                     key={index}
-                    className={`flex-1 rounded-sm transition-all duration-300 ${
+                    className={`flex-1 rounded-sm transition-all duration-300 max-w-[4px] ${
                       index < estimatedApplicationCount
-                        ? 'bg-gradient-to-t from-navy-600 to-navy-800 group-hover:from-navy-700 group-hover:to-navy-900'
+                        ? estimatedApplicationCount > 15 
+                          ? 'bg-gradient-to-t from-red-500 to-red-700 group-hover:from-red-600 group-hover:to-red-800'
+                          : estimatedApplicationCount > 10
+                          ? 'bg-gradient-to-t from-amber-500 to-amber-700 group-hover:from-amber-600 group-hover:to-amber-800'
+                          : 'bg-gradient-to-t from-navy-600 to-navy-800 group-hover:from-navy-700 group-hover:to-navy-900'
                         : 'bg-slate-200/50'
                     }`}
                     style={{ 
-                      height: index < estimatedApplicationCount ? `${Math.min(100, (index + 1) * 8)}%` : '8%',
-                      maxHeight: '24px'
+                      height: index < estimatedApplicationCount ? `${Math.min(100, (index + 1) * 6)}%` : '6%',
+                      maxHeight: '16px'
                     }}
                   />
                 ))}
@@ -105,41 +110,9 @@ function StatsCards() {
               
               <div className="flex justify-between text-xs text-slate-500 mt-1">
                 <span>0件</span>
-                <span>10件+</span>
+                <span>15件+</span>
               </div>
             </div>
-
-            {/* 過去の実績表示ボタン */}
-            <button
-              onClick={() => setShowEstimatedHistory(!showEstimatedHistory)}
-              className="w-full flex items-center justify-center space-x-2 py-2 text-slate-600 hover:text-slate-800 text-sm transition-colors"
-            >
-              <BarChart3 className="w-4 h-4" />
-              <span>過去の実績を表示</span>
-              {showEstimatedHistory ? (
-                <ChevronUp className="w-4 h-4" />
-              ) : (
-                <ChevronDown className="w-4 h-4" />
-              )}
-            </button>
-
-            {/* 過去実績の展開エリア */}
-            {showEstimatedHistory && (
-              <div className="mt-4 bg-white/20 rounded-lg p-4 border border-white/30">
-                <h4 className="text-sm font-semibold text-slate-800 mb-3">過去5ヶ月の精算見込み</h4>
-                <div className="space-y-2">
-                  {estimatedHistory.map((item, index) => (
-                    <div key={index} className="flex items-center justify-between text-sm">
-                      <span className="text-slate-600">{item.month}</span>
-                      <div className="flex items-center space-x-3">
-                        <span className="text-slate-800 font-medium">¥{item.amount.toLocaleString()}</span>
-                        <span className="text-slate-500 text-xs">{item.applications}件</span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
           </div>
         </div>
 
@@ -165,7 +138,10 @@ function StatsCards() {
             </div>
             
             <div className="mb-6">
-              <p className="text-3xl lg:text-4xl font-bold text-slate-900 mb-2">
+              <p className={`text-3xl lg:text-4xl font-bold mb-2 ${
+                currentMonthActual > 400000 ? 'text-red-600' : 
+                currentMonthActual > 250000 ? 'text-amber-600' : 'text-slate-900'
+              }`}>
                 ¥{currentMonthActual.toLocaleString()}
               </p>
               <p className="text-sm text-slate-600">
@@ -179,23 +155,30 @@ function StatsCards() {
             {/* 申請件数ゲージ（小さく） */}
             <div className="bg-white/30 rounded-lg p-3 mb-4">
               <div className="flex items-center justify-between mb-2">
-                <span className="text-sm font-medium text-slate-700">今月の申請件数</span>
-                <span className="text-lg font-bold text-slate-800">{actualApplicationCount}件</span>
+                <span className="text-sm font-medium text-slate-700">申請件数</span>
+                <span className={`text-lg font-bold ${
+                  actualApplicationCount > 12 ? 'text-red-600' : 
+                  actualApplicationCount > 8 ? 'text-amber-600' : 'text-slate-800'
+                }`}>{actualApplicationCount}件</span>
               </div>
               
-              {/* 小さな棒グラフゲージ */}
-              <div className="flex items-end space-x-1 h-6">
-                {Array.from({ length: Math.max(actualApplicationCount, 10) }, (_, index) => (
+              {/* より小さな棒グラフゲージ */}
+              <div className="flex items-end space-x-1 h-4">
+                {Array.from({ length: Math.max(actualApplicationCount, 15) }, (_, index) => (
                   <div
                     key={index}
-                    className={`flex-1 rounded-sm transition-all duration-300 ${
+                    className={`flex-1 rounded-sm transition-all duration-300 max-w-[4px] ${
                       index < actualApplicationCount
-                        ? 'bg-gradient-to-t from-navy-600 to-navy-800 group-hover:from-navy-700 group-hover:to-navy-900'
+                        ? actualApplicationCount > 12 
+                          ? 'bg-gradient-to-t from-red-500 to-red-700 group-hover:from-red-600 group-hover:to-red-800'
+                          : actualApplicationCount > 8
+                          ? 'bg-gradient-to-t from-amber-500 to-amber-700 group-hover:from-amber-600 group-hover:to-amber-800'
+                          : 'bg-gradient-to-t from-navy-600 to-navy-800 group-hover:from-navy-700 group-hover:to-navy-900'
                         : 'bg-slate-200/50'
                     }`}
                     style={{ 
-                      height: index < actualApplicationCount ? `${Math.min(100, (index + 1) * 8)}%` : '8%',
-                      maxHeight: '24px'
+                      height: index < actualApplicationCount ? `${Math.min(100, (index + 1) * 6)}%` : '6%',
+                      maxHeight: '16px'
                     }}
                   />
                 ))}
@@ -203,7 +186,7 @@ function StatsCards() {
               
               <div className="flex justify-between text-xs text-slate-500 mt-1">
                 <span>0件</span>
-                <span>10件+</span>
+                <span>15件+</span>
               </div>
             </div>
 
