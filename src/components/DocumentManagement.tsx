@@ -1,173 +1,298 @@
 import React, { useState, useEffect } from 'react';
-import { Search, Filter, Download, FileText, Calendar, MapPin, BarChart3, TrendingUp, Plus, Eye, Edit } from 'lucide-react';
+import { Search, Filter, Download, FileText, Calendar, MapPin, BarChart3, TrendingUp, Plus, Eye, Edit, Send, CheckCircle, Clock, AlertTriangle, Users, Building } from 'lucide-react';
 import Sidebar from './Sidebar';
 import TopBar from './TopBar';
-import AdvancedSearch from './AdvancedSearch';
 
 interface DocumentManagementProps {
   onNavigate: (view: string, documentType?: string) => void;
 }
 
-interface Document {
+interface BusinessTrip {
   id: string;
   title: string;
-  type: 'business-report' | 'allowance-detail' | 'expense-settlement' | 'travel-detail' | 'gps-log' | 'monthly-report' | 'annual-report';
-  status: 'draft' | 'submitted' | 'approved' | 'completed';
+  purpose: string;
+  startDate: string;
+  endDate: string;
+  location: string;
+  visitTarget: string;
+  companions: string;
+  estimatedAmount: number;
+  status: 'approved' | 'completed';
+  hasReport: boolean;
+  hasExpenseReport: boolean;
+}
+
+interface ExpenseApplication {
+  id: string;
+  title: string;
+  amount: number;
+  date: string;
+  category: string;
+  store: string;
+  description: string;
+  businessTripId?: string;
+  isUsedInExpenseReport: boolean;
+}
+
+interface Document {
+  id: string;
+  type: 'business-report' | 'expense-report';
+  title: string;
+  businessTripId: string;
+  status: 'draft' | 'submitted' | 'approved';
   createdAt: string;
   updatedAt: string;
-  size: string;
-  thumbnail: string;
-  description: string;
+  data: any;
 }
 
 function DocumentManagement({ onNavigate }: DocumentManagementProps) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [documents, setDocuments] = useState<Document[]>([]);
+  const [activeTab, setActiveTab] = useState<'create' | 'manage'>('create');
   const [searchTerm, setSearchTerm] = useState('');
-  const [filterType, setFilterType] = useState<string>('all');
-  const [filterStatus, setFilterStatus] = useState<string>('all');
-  const [showAdvancedSearch, setShowAdvancedSearch] = useState(false);
+  const [selectedDocuments, setSelectedDocuments] = useState<string[]>([]);
+  const [showSubmitModal, setShowSubmitModal] = useState(false);
+  const [submitMethod, setSubmitMethod] = useState<'system' | 'email'>('system');
 
-  useEffect(() => {
-    // サンプルデータの初期化
-    const sampleDocuments: Document[] = [
-      {
-        id: '1',
-        title: '東京出張報告書_2024年7月',
-        type: 'business-report',
-        status: 'submitted',
-        createdAt: '2024-07-20T10:00:00Z',
-        updatedAt: '2024-07-20T15:30:00Z',
-        size: '2.3MB',
-        thumbnail: '📋',
-        description: '東京クライアント訪問の出張報告書'
-      },
-      {
-        id: '2',
-        title: '7月度日当支給明細',
-        type: 'allowance-detail',
-        status: 'completed',
-        createdAt: '2024-07-31T09:00:00Z',
-        updatedAt: '2024-07-31T09:00:00Z',
-        size: '1.8MB',
-        thumbnail: '💰',
-        description: '7月度の出張日当支給明細書'
-      },
-      {
-        id: '3',
-        title: '7月度旅費精算書',
-        type: 'expense-settlement',
-        status: 'approved',
-        createdAt: '2024-07-31T14:00:00Z',
-        updatedAt: '2024-08-01T10:00:00Z',
-        size: '3.1MB',
-        thumbnail: '🧾',
-        description: '7月度の旅費精算書'
-      },
-      {
-        id: '4',
-        title: '7月度旅費明細書',
-        type: 'travel-detail',
-        status: 'completed',
-        createdAt: '2024-07-31T16:00:00Z',
-        updatedAt: '2024-07-31T16:00:00Z',
-        size: '2.7MB',
-        thumbnail: '✈️',
-        description: '7月度の旅費明細書'
-      },
-      {
-        id: '5',
-        title: '出張ログ台帳_2024年7月',
-        type: 'gps-log',
-        status: 'completed',
-        createdAt: '2024-07-31T18:00:00Z',
-        updatedAt: '2024-07-31T18:00:00Z',
-        size: '5.2MB',
-        thumbnail: '📍',
-        description: 'GPS位置情報と領収書ハッシュ記録'
-      },
-      {
-        id: '6',
-        title: '7月度月次レポート',
-        type: 'monthly-report',
-        status: 'completed',
-        createdAt: '2024-08-01T09:00:00Z',
-        updatedAt: '2024-08-01T09:00:00Z',
-        size: '4.5MB',
-        thumbnail: '📊',
-        description: '7月度の出張・経費月次集計レポート'
-      },
-      {
-        id: '7',
-        title: '2024年度年次レポート',
-        type: 'annual-report',
-        status: 'draft',
-        createdAt: '2024-08-01T11:00:00Z',
-        updatedAt: '2024-08-01T11:00:00Z',
-        size: '8.9MB',
-        thumbnail: '📈',
-        description: '2024年度の年次集計レポート'
+  // サンプルデータ
+  const [businessTrips] = useState<BusinessTrip[]>([
+    {
+      id: 'BT-2024-001',
+      title: '東京出張',
+      purpose: 'クライアント訪問および新規開拓営業',
+      startDate: '2024-07-25',
+      endDate: '2024-07-27',
+      location: '東京都港区',
+      visitTarget: '株式会社サンプル',
+      companions: '田中部長',
+      estimatedAmount: 52500,
+      status: 'completed',
+      hasReport: true,
+      hasExpenseReport: false
+    },
+    {
+      id: 'BT-2024-002',
+      title: '大阪出張',
+      purpose: '支社会議参加',
+      startDate: '2024-07-20',
+      endDate: '2024-07-21',
+      location: '大阪府大阪市',
+      visitTarget: '大阪支社',
+      companions: '',
+      estimatedAmount: 35000,
+      status: 'completed',
+      hasReport: false,
+      hasExpenseReport: false
+    },
+    {
+      id: 'BT-2024-003',
+      title: '福岡出張',
+      purpose: '新規事業説明会',
+      startDate: '2024-08-05',
+      endDate: '2024-08-06',
+      location: '福岡県福岡市',
+      visitTarget: '九州商事株式会社',
+      companions: '佐藤課長、鈴木主任',
+      estimatedAmount: 45000,
+      status: 'approved',
+      hasReport: false,
+      hasExpenseReport: false
+    }
+  ]);
+
+  const [expenseApplications] = useState<ExpenseApplication[]>([
+    {
+      id: 'EX-2024-001',
+      title: '東京出張交通費',
+      amount: 15000,
+      date: '2024-07-25',
+      category: '旅費交通費',
+      store: 'JR東日本',
+      description: '新幹線代（往復）',
+      businessTripId: 'BT-2024-001',
+      isUsedInExpenseReport: false
+    },
+    {
+      id: 'EX-2024-002',
+      title: '東京出張宿泊費',
+      amount: 12000,
+      date: '2024-07-25',
+      category: '旅費交通費',
+      store: 'ホテルニューオータニ',
+      description: '宿泊費（2泊）',
+      businessTripId: 'BT-2024-001',
+      isUsedInExpenseReport: false
+    },
+    {
+      id: 'EX-2024-003',
+      title: '大阪出張交通費',
+      amount: 8500,
+      date: '2024-07-20',
+      category: '旅費交通費',
+      store: 'JR西日本',
+      description: '新幹線代（往復）',
+      businessTripId: 'BT-2024-002',
+      isUsedInExpenseReport: false
+    }
+  ]);
+
+  const [documents, setDocuments] = useState<Document[]>([
+    {
+      id: 'DOC-001',
+      type: 'business-report',
+      title: '東京出張報告書',
+      businessTripId: 'BT-2024-001',
+      status: 'draft',
+      createdAt: '2024-07-28T10:00:00Z',
+      updatedAt: '2024-07-28T15:30:00Z',
+      data: {
+        actionAndResults: '新規クライアントとの商談が成功し、次回契約締結の約束を取り付けた。'
       }
-    ];
-    setDocuments(sampleDocuments);
-  }, []);
+    }
+  ]);
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
 
-  const getTypeLabel = (type: string) => {
-    const labels = {
-      'business-report': '出張報告書',
-      'allowance-detail': '日当支給明細',
-      'expense-settlement': '旅費精算書',
-      'travel-detail': '旅費明細書',
-      'gps-log': '出張ログ台帳',
-      'monthly-report': '月次レポート',
-      'annual-report': '年次レポート'
+  const createBusinessReport = (businessTripId: string) => {
+    const trip = businessTrips.find(t => t.id === businessTripId);
+    if (!trip) return;
+
+    const newDocument: Document = {
+      id: `DOC-${Date.now()}`,
+      type: 'business-report',
+      title: `${trip.title}報告書`,
+      businessTripId,
+      status: 'draft',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      data: {
+        title: trip.title,
+        purpose: trip.purpose,
+        startDate: trip.startDate,
+        endDate: trip.endDate,
+        location: trip.location,
+        visitTarget: trip.visitTarget,
+        companions: trip.companions,
+        actionAndResults: ''
+      }
     };
-    return labels[type as keyof typeof labels] || type;
+
+    setDocuments(prev => [...prev, newDocument]);
+    // 実際の実装では、編集画面に遷移
+    alert('出張報告書の下書きを作成しました。編集画面に移動します。');
+  };
+
+  const createExpenseReport = (businessTripId: string) => {
+    const trip = businessTrips.find(t => t.id === businessTripId);
+    const report = documents.find(d => d.businessTripId === businessTripId && d.type === 'business-report');
+    
+    if (!trip || !report) {
+      alert('出張報告書を先に作成してください。');
+      return;
+    }
+
+    const availableExpenses = expenseApplications.filter(
+      exp => exp.businessTripId === businessTripId && !exp.isUsedInExpenseReport
+    );
+
+    if (availableExpenses.length === 0) {
+      alert('この出張に関連する未使用の経費申請がありません。');
+      return;
+    }
+
+    const newDocument: Document = {
+      id: `DOC-${Date.now()}`,
+      type: 'expense-report',
+      title: `${trip.title}経費精算書`,
+      businessTripId,
+      status: 'draft',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      data: {
+        title: trip.title,
+        purpose: trip.purpose,
+        startDate: trip.startDate,
+        endDate: trip.endDate,
+        location: trip.location,
+        visitTarget: trip.visitTarget,
+        availableExpenses,
+        selectedExpenses: [],
+        dailyAllowance: trip.estimatedAmount
+      }
+    };
+
+    setDocuments(prev => [...prev, newDocument]);
+    alert('出張経費精算書の下書きを作成しました。編集画面に移動します。');
+  };
+
+  const handleDocumentSelect = (documentId: string) => {
+    setSelectedDocuments(prev => 
+      prev.includes(documentId) 
+        ? prev.filter(id => id !== documentId)
+        : [...prev, documentId]
+    );
+  };
+
+  const handleBulkSubmit = () => {
+    if (selectedDocuments.length === 0) {
+      alert('提出する書類を選択してください。');
+      return;
+    }
+    setShowSubmitModal(true);
+  };
+
+  const handleSubmit = () => {
+    const method = submitMethod === 'system' ? 'システム内承認' : 'メール送信';
+    alert(`${selectedDocuments.length}件の書類を${method}で提出しました。`);
+    
+    // ステータスを更新
+    setDocuments(prev => prev.map(doc => 
+      selectedDocuments.includes(doc.id) 
+        ? { ...doc, status: 'submitted' as const }
+        : doc
+    ));
+    
+    setSelectedDocuments([]);
+    setShowSubmitModal(false);
+  };
+
+  const getStatusIcon = (status: string) => {
+    switch (status) {
+      case 'draft':
+        return <Edit className="w-4 h-4 text-amber-600" />;
+      case 'submitted':
+        return <Clock className="w-4 h-4 text-blue-600" />;
+      case 'approved':
+        return <CheckCircle className="w-4 h-4 text-emerald-600" />;
+      default:
+        return <AlertTriangle className="w-4 h-4 text-slate-400" />;
+    }
   };
 
   const getStatusLabel = (status: string) => {
     const labels = {
-      'draft': '下書き',
+      'draft': '未提出',
       'submitted': '提出済み',
-      'approved': '承認済み',
-      'completed': '完了'
+      'approved': '承認済み'
     };
     return labels[status as keyof typeof labels] || status;
   };
 
   const getStatusColor = (status: string) => {
     const colors = {
-      'draft': 'text-slate-700 bg-slate-100',
-      'submitted': 'text-amber-700 bg-amber-100',
-      'approved': 'text-blue-700 bg-blue-100',
-      'completed': 'text-emerald-700 bg-emerald-100'
+      'draft': 'text-amber-700 bg-amber-100 border-amber-200',
+      'submitted': 'text-blue-700 bg-blue-100 border-blue-200',
+      'approved': 'text-emerald-700 bg-emerald-100 border-emerald-200'
     };
-    return colors[status as keyof typeof colors] || 'text-slate-700 bg-slate-100';
+    return colors[status as keyof typeof colors] || 'text-slate-700 bg-slate-100 border-slate-200';
   };
 
-  const filteredDocuments = documents.filter(doc => {
-    const matchesSearch = doc.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         doc.description.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesType = filterType === 'all' || doc.type === filterType;
-    const matchesStatus = filterStatus === 'all' || doc.status === filterStatus;
-    return matchesSearch && matchesType && matchesStatus;
-  });
+  const filteredDocuments = documents.filter(doc =>
+    doc.title.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
-  const handleCreateDocument = (type: string) => {
-    onNavigate('document-creation', type);
-  };
-
-  const handlePreviewDocument = (documentId: string) => {
-    onNavigate('document-preview', documentId);
-  };
-
-  const handleDownloadDocument = (documentId: string) => {
-    alert(`ダウンロード中: ${documents.find(d => d.id === documentId)?.title}`);
-  };
+  const draftDocuments = filteredDocuments.filter(doc => doc.status === 'draft');
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 relative overflow-hidden">
@@ -196,173 +321,556 @@ function DocumentManagement({ onNavigate }: DocumentManagementProps) {
           
           <div className="flex-1 overflow-auto p-4 lg:p-6 relative z-10">
             <div className="max-w-7xl mx-auto">
+              {/* ヘッダー */}
               <div className="flex items-center justify-between mb-8">
-                <h1 className="text-2xl lg:text-3xl font-bold text-slate-800">書類管理</h1>
-                <div className="flex space-x-3">
-                  <div className="relative">
-                    <select
-                      value={filterType}
-                      onChange={(e) => setFilterType(e.target.value)}
-                      className="px-4 py-2 bg-white/50 border border-white/40 rounded-lg text-slate-700 focus:outline-none focus:ring-2 focus:ring-navy-400 backdrop-blur-xl"
-                    >
-                      <option value="all">すべての種類</option>
-                      <option value="business-report">出張報告書</option>
-                      <option value="allowance-detail">日当支給明細</option>
-                      <option value="expense-settlement">旅費精算書</option>
-                      <option value="travel-detail">旅費明細書</option>
-                      <option value="gps-log">出張ログ台帳</option>
-                      <option value="monthly-report">月次レポート</option>
-                      <option value="annual-report">年次レポート</option>
-                    </select>
-                  </div>
+                <div>
+                  <h1 className="text-3xl lg:text-4xl font-bold text-slate-800 mb-2">書類管理</h1>
+                  <p className="text-slate-600">出張報告書と経費精算書の作成・管理</p>
                 </div>
-              </div>
-
-              {/* 検索・フィルター */}
-              <div className="backdrop-blur-xl bg-white/20 rounded-xl p-4 border border-white/30 shadow-xl mb-6">
-                <div className="flex flex-col lg:flex-row gap-4">
-                  <div className="flex-1 relative">
-                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 w-5 h-5" />
-                    <input
-                      type="text"
-                      placeholder="書類名や説明で検索..."
-                      value={searchTerm}
-                      onChange={(e) => setSearchTerm(e.target.value)}
-                      className="w-full pl-10 pr-4 py-3 bg-white/50 border border-white/40 rounded-lg text-slate-700 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-navy-400 backdrop-blur-xl"
-                    />
-                  </div>
-                  <div className="flex gap-3">
-                    <button
-                      onClick={() => setShowAdvancedSearch(true)}
-                      className="flex items-center space-x-2 px-4 py-3 bg-gradient-to-r from-slate-600 to-slate-800 text-white rounded-lg font-medium hover:from-slate-700 hover:to-slate-900 transition-all duration-200"
-                    >
-                      <Filter className="w-4 h-4" />
-                      <span>高度検索</span>
-                    </button>
-                    <select
-                      value={filterStatus}
-                      onChange={(e) => setFilterStatus(e.target.value)}
-                      className="px-4 py-3 bg-white/50 border border-white/40 rounded-lg text-slate-700 focus:outline-none focus:ring-2 focus:ring-navy-400 backdrop-blur-xl"
-                    >
-                      <option value="all">すべてのステータス</option>
-                      <option value="draft">下書き</option>
-                      <option value="submitted">提出済み</option>
-                      <option value="approved">承認済み</option>
-                      <option value="completed">完了</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-
-              {/* 新規作成ボタン */}
-              <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3 mb-6">
-                {[
-                  { type: 'business-report', label: '出張報告書', icon: '📋' },
-                  { type: 'allowance-detail', label: '日当支給明細', icon: '💰' },
-                  { type: 'expense-settlement', label: '旅費精算書', icon: '🧾' },
-                  { type: 'travel-detail', label: '旅費明細書', icon: '✈️' },
-                  { type: 'gps-log', label: '出張ログ台帳', icon: '📍' },
-                  { type: 'monthly-report', label: '月次レポート', icon: '📊' },
-                  { type: 'annual-report', label: '年次レポート', icon: '📈' }
-                ].map((item) => (
+                {draftDocuments.length > 0 && (
                   <button
-                    key={item.type}
-                    onClick={() => handleCreateDocument(item.type)}
-                    className="flex flex-col items-center justify-center p-4 bg-gradient-to-r from-slate-700 to-slate-900 hover:from-slate-800 hover:to-slate-950 text-white rounded-lg font-medium transition-all duration-200 transform hover:scale-[1.02] shadow-lg hover:shadow-xl"
+                    onClick={handleBulkSubmit}
+                    className="flex items-center space-x-2 px-6 py-3 bg-gradient-to-r from-emerald-600 to-emerald-800 text-white rounded-xl font-medium hover:from-emerald-700 hover:to-emerald-900 transition-all duration-200 shadow-xl hover:shadow-2xl transform hover:scale-105"
                   >
-                    <FileText className="w-6 h-6 mb-2 text-slate-300" />
-                    <span className="text-xs text-center text-slate-100">{item.label}</span>
-                    <Plus className="w-4 h-4 mt-1" />
+                    <Send className="w-5 h-5" />
+                    <span>まとめて提出 ({draftDocuments.length})</span>
                   </button>
-                ))}
+                )}
               </div>
 
-              {/* 書類一覧 */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                {filteredDocuments.map((document) => (
-                  <div key={document.id} className="backdrop-blur-xl bg-white/10 rounded-lg border border-white/20 shadow-lg hover:shadow-xl hover:bg-white/15 transition-all duration-300 overflow-hidden">
-                    {/* サムネイル */}
-                    <div className="h-24 bg-gradient-to-br from-slate-600 to-slate-700 flex items-center justify-center border-b border-white/10">
-                      <FileText className="w-8 h-8 text-slate-300" />
+              {/* タブナビゲーション */}
+              <div className="backdrop-blur-xl bg-white/20 rounded-xl border border-white/30 shadow-xl mb-8">
+                <div className="flex">
+                  <button
+                    onClick={() => setActiveTab('create')}
+                    className={`flex-1 px-6 py-4 font-semibold transition-all duration-200 rounded-l-xl ${
+                      activeTab === 'create'
+                        ? 'bg-gradient-to-r from-navy-600 to-navy-800 text-white shadow-lg'
+                        : 'text-slate-600 hover:text-slate-800 hover:bg-white/30'
+                    }`}
+                  >
+                    <div className="flex items-center justify-center space-x-2">
+                      <Plus className="w-5 h-5" />
+                      <span>書類作成</span>
+                    </div>
+                  </button>
+                  <button
+                    onClick={() => setActiveTab('manage')}
+                    className={`flex-1 px-6 py-4 font-semibold transition-all duration-200 rounded-r-xl ${
+                      activeTab === 'manage'
+                        ? 'bg-gradient-to-r from-navy-600 to-navy-800 text-white shadow-lg'
+                        : 'text-slate-600 hover:text-slate-800 hover:bg-white/30'
+                    }`}
+                  >
+                    <div className="flex items-center justify-center space-x-2">
+                      <FileText className="w-5 h-5" />
+                      <span>書類管理</span>
+                    </div>
+                  </button>
+                </div>
+              </div>
+
+              {/* 書類作成タブ */}
+              {activeTab === 'create' && (
+                <div className="space-y-8">
+                  {/* 出張報告書作成 */}
+                  <div className="backdrop-blur-xl bg-white/20 rounded-xl p-6 border border-white/30 shadow-xl">
+                    <div className="flex items-center justify-between mb-6">
+                      <div className="flex items-center space-x-3">
+                        <div className="w-12 h-12 bg-gradient-to-br from-blue-600 to-blue-800 rounded-xl flex items-center justify-center shadow-lg">
+                          <FileText className="w-6 h-6 text-white" />
+                        </div>
+                        <div>
+                          <h2 className="text-xl font-bold text-slate-800">出張報告書</h2>
+                          <p className="text-slate-600 text-sm">完了した出張から報告書を作成</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                      {businessTrips.filter(trip => trip.status === 'completed').map((trip) => (
+                        <div
+                          key={trip.id}
+                          className={`relative backdrop-blur-xl bg-white/30 rounded-lg p-4 border border-white/30 shadow-lg hover:shadow-xl transition-all duration-300 ${
+                            trip.hasReport ? 'ring-2 ring-emerald-500/50' : 'hover:bg-white/40 cursor-pointer'
+                          }`}
+                          onClick={() => !trip.hasReport && createBusinessReport(trip.id)}
+                        >
+                          {trip.hasReport && (
+                            <div className="absolute -top-2 -right-2 w-8 h-8 bg-emerald-500 rounded-full flex items-center justify-center shadow-lg">
+                              <CheckCircle className="w-5 h-5 text-white" />
+                            </div>
+                          )}
+                          
+                          <div className="mb-3">
+                            <h3 className="font-semibold text-slate-800 mb-1">{trip.title}</h3>
+                            <div className="flex items-center space-x-2 text-xs text-slate-600">
+                              <Calendar className="w-3 h-3" />
+                              <span>{trip.startDate} ～ {trip.endDate}</span>
+                            </div>
+                            <div className="flex items-center space-x-2 text-xs text-slate-600 mt-1">
+                              <MapPin className="w-3 h-3" />
+                              <span>{trip.location}</span>
+                            </div>
+                          </div>
+                          
+                          <div className="text-xs text-slate-500 mb-3">
+                            <p className="truncate">{trip.purpose}</p>
+                          </div>
+                          
+                          <div className="flex items-center justify-between">
+                            <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                              trip.hasReport 
+                                ? 'text-emerald-700 bg-emerald-100' 
+                                : 'text-amber-700 bg-amber-100'
+                            }`}>
+                              {trip.hasReport ? '作成済' : '未作成'}
+                            </span>
+                            {!trip.hasReport && (
+                              <Plus className="w-4 h-4 text-slate-500" />
+                            )}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* 出張経費精算書作成 */}
+                  <div className="backdrop-blur-xl bg-white/20 rounded-xl p-6 border border-white/30 shadow-xl">
+                    <div className="flex items-center justify-between mb-6">
+                      <div className="flex items-center space-x-3">
+                        <div className="w-12 h-12 bg-gradient-to-br from-emerald-600 to-emerald-800 rounded-xl flex items-center justify-center shadow-lg">
+                          <BarChart3 className="w-6 h-6 text-white" />
+                        </div>
+                        <div>
+                          <h2 className="text-xl font-bold text-slate-800">出張経費精算書</h2>
+                          <p className="text-slate-600 text-sm">出張報告書から経費精算書を作成</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                      {businessTrips.filter(trip => trip.hasReport).map((trip) => {
+                        const availableExpenses = expenseApplications.filter(
+                          exp => exp.businessTripId === trip.id && !exp.isUsedInExpenseReport
+                        );
+                        
+                        return (
+                          <div
+                            key={trip.id}
+                            className={`relative backdrop-blur-xl bg-white/30 rounded-lg p-4 border border-white/30 shadow-lg hover:shadow-xl transition-all duration-300 ${
+                              trip.hasExpenseReport ? 'ring-2 ring-emerald-500/50' : 'hover:bg-white/40 cursor-pointer'
+                            }`}
+                            onClick={() => !trip.hasExpenseReport && createExpenseReport(trip.id)}
+                          >
+                            {trip.hasExpenseReport && (
+                              <div className="absolute -top-2 -right-2 w-8 h-8 bg-emerald-500 rounded-full flex items-center justify-center shadow-lg">
+                                <CheckCircle className="w-5 h-5 text-white" />
+                              </div>
+                            )}
+                            
+                            <div className="mb-3">
+                              <h3 className="font-semibold text-slate-800 mb-1">{trip.title}</h3>
+                              <div className="flex items-center space-x-2 text-xs text-slate-600">
+                                <Calendar className="w-3 h-3" />
+                                <span>{trip.startDate} ～ {trip.endDate}</span>
+                              </div>
+                              <div className="flex items-center space-x-2 text-xs text-slate-600 mt-1">
+                                <Building className="w-3 h-3" />
+                                <span>{trip.visitTarget}</span>
+                              </div>
+                            </div>
+                            
+                            <div className="text-xs text-slate-500 mb-3">
+                              <p>利用可能経費: {availableExpenses.length}件</p>
+                              <p>予定日当: ¥{trip.estimatedAmount.toLocaleString()}</p>
+                            </div>
+                            
+                            <div className="flex items-center justify-between">
+                              <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                                trip.hasExpenseReport 
+                                  ? 'text-emerald-700 bg-emerald-100' 
+                                  : availableExpenses.length > 0
+                                  ? 'text-amber-700 bg-amber-100'
+                                  : 'text-slate-700 bg-slate-100'
+                              }`}>
+                                {trip.hasExpenseReport ? '作成済' : availableExpenses.length > 0 ? '未作成' : '経費なし'}
+                              </span>
+                              {!trip.hasExpenseReport && availableExpenses.length > 0 && (
+                                <Plus className="w-4 h-4 text-slate-500" />
+                              )}
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+
+                    {businessTrips.filter(trip => trip.hasReport).length === 0 && (
+                      <div className="text-center py-12">
+                        <FileText className="w-16 h-16 text-slate-400 mx-auto mb-4" />
+                        <p className="text-slate-600 text-lg font-medium mb-2">出張報告書がありません</p>
+                        <p className="text-slate-500">先に出張報告書を作成してください</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* 書類管理タブ */}
+              {activeTab === 'manage' && (
+                <div className="space-y-6">
+                  {/* 検索・フィルター */}
+                  <div className="backdrop-blur-xl bg-white/20 rounded-xl p-4 border border-white/30 shadow-xl">
+                    <div className="flex flex-col lg:flex-row gap-4">
+                      <div className="flex-1 relative">
+                        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 w-5 h-5" />
+                        <input
+                          type="text"
+                          placeholder="書類名で検索..."
+                          value={searchTerm}
+                          onChange={(e) => setSearchTerm(e.target.value)}
+                          className="w-full pl-10 pr-4 py-3 bg-white/50 border border-white/40 rounded-lg text-slate-700 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-navy-400 backdrop-blur-xl"
+                        />
+                      </div>
+                      {selectedDocuments.length > 0 && (
+                        <div className="flex items-center space-x-3">
+                          <span className="text-sm text-slate-600">
+                            {selectedDocuments.length}件選択中
+                          </span>
+                          <button
+                            onClick={() => setSelectedDocuments([])}
+                            className="px-3 py-2 text-slate-600 hover:text-slate-800 hover:bg-white/30 rounded-lg transition-colors"
+                          >
+                            選択解除
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* 未提出書類（優先表示） */}
+                  {draftDocuments.length > 0 && (
+                    <div className="backdrop-blur-xl bg-gradient-to-r from-amber-500/20 to-amber-700/20 rounded-xl p-6 border border-amber-300/30 shadow-xl">
+                      <div className="flex items-center justify-between mb-6">
+                        <div className="flex items-center space-x-3">
+                          <div className="w-10 h-10 bg-amber-500 rounded-full flex items-center justify-center">
+                            <AlertTriangle className="w-5 h-5 text-white" />
+                          </div>
+                          <div>
+                            <h2 className="text-xl font-bold text-slate-800">未提出書類</h2>
+                            <p className="text-slate-600 text-sm">提出が必要な書類があります</p>
+                          </div>
+                        </div>
+                        <div className="flex space-x-3">
+                          <button
+                            onClick={() => setSelectedDocuments(draftDocuments.map(d => d.id))}
+                            className="px-4 py-2 bg-white/50 hover:bg-white/70 text-slate-700 rounded-lg font-medium transition-colors"
+                          >
+                            すべて選択
+                          </button>
+                          <button
+                            onClick={handleBulkSubmit}
+                            className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-emerald-600 to-emerald-800 text-white rounded-lg font-medium hover:from-emerald-700 hover:to-emerald-900 transition-all duration-200"
+                          >
+                            <Send className="w-4 h-4" />
+                            <span>まとめて提出</span>
+                          </button>
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        {draftDocuments.map((document) => (
+                          <div
+                            key={document.id}
+                            className={`backdrop-blur-xl bg-white/40 rounded-lg p-4 border-2 transition-all duration-300 cursor-pointer ${
+                              selectedDocuments.includes(document.id)
+                                ? 'border-navy-500 bg-navy-50/30 shadow-lg'
+                                : 'border-white/40 hover:border-white/60 hover:bg-white/50'
+                            }`}
+                            onClick={() => handleDocumentSelect(document.id)}
+                          >
+                            <div className="flex items-start justify-between mb-3">
+                              <div className="flex-1">
+                                <h3 className="font-semibold text-slate-800 mb-1">{document.title}</h3>
+                                <div className="flex items-center space-x-2 text-xs text-slate-600">
+                                  <span className={`px-2 py-1 rounded-full ${
+                                    document.type === 'business-report' 
+                                      ? 'text-blue-700 bg-blue-100' 
+                                      : 'text-emerald-700 bg-emerald-100'
+                                  }`}>
+                                    {document.type === 'business-report' ? '出張報告書' : '経費精算書'}
+                                  </span>
+                                </div>
+                              </div>
+                              <input
+                                type="checkbox"
+                                checked={selectedDocuments.includes(document.id)}
+                                onChange={() => handleDocumentSelect(document.id)}
+                                className="w-5 h-5 text-navy-600 bg-white/50 border-white/40 rounded focus:ring-navy-400 focus:ring-2"
+                                onClick={(e) => e.stopPropagation()}
+                              />
+                            </div>
+                            
+                            <div className="text-xs text-slate-500 mb-3">
+                              <p>作成日: {new Date(document.createdAt).toLocaleDateString('ja-JP')}</p>
+                              <p>更新日: {new Date(document.updatedAt).toLocaleDateString('ja-JP')}</p>
+                            </div>
+                            
+                            <div className="flex items-center justify-between">
+                              <div className={`flex items-center space-x-1 px-2 py-1 rounded-full border ${getStatusColor(document.status)}`}>
+                                {getStatusIcon(document.status)}
+                                <span className="text-xs font-medium">{getStatusLabel(document.status)}</span>
+                              </div>
+                              <div className="flex space-x-1">
+                                <button
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    alert('編集画面に移動します');
+                                  }}
+                                  className="p-1 text-slate-600 hover:text-slate-800 hover:bg-white/30 rounded transition-colors"
+                                >
+                                  <Edit className="w-3 h-3" />
+                                </button>
+                                <button
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    alert('プレビュー画面に移動します');
+                                  }}
+                                  className="p-1 text-slate-600 hover:text-slate-800 hover:bg-white/30 rounded transition-colors"
+                                >
+                                  <Eye className="w-3 h-3" />
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                  </div>
+
+                  {/* 統計情報 */}
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div className="backdrop-blur-xl bg-white/20 rounded-xl p-6 border border-white/30 shadow-xl text-center">
+                      <div className="w-12 h-12 bg-gradient-to-br from-blue-600 to-blue-800 rounded-xl flex items-center justify-center mx-auto mb-4">
+                        <FileText className="w-6 h-6 text-white" />
+                      </div>
+                      <h3 className="text-lg font-semibold text-slate-800 mb-2">完了出張</h3>
+                      <p className="text-3xl font-bold text-slate-800 mb-1">
+                        {businessTrips.filter(t => t.status === 'completed').length}件
+                      </p>
+                      <p className="text-sm text-slate-600">報告書作成可能</p>
                     </div>
                     
-                    {/* 書類情報 */}
-                    <div className="p-3">
-                      <div className="flex items-start justify-between mb-2">
-                        <h3 className="font-medium text-slate-800 text-sm leading-tight line-clamp-2">{document.title}</h3>
-                        <span className={`px-2 py-1 rounded text-xs font-medium ${getStatusColor(document.status)} ml-2 flex-shrink-0`}>
-                          {getStatusLabel(document.status)}
-                        </span>
+                    <div className="backdrop-blur-xl bg-white/20 rounded-xl p-6 border border-white/30 shadow-xl text-center">
+                      <div className="w-12 h-12 bg-gradient-to-br from-emerald-600 to-emerald-800 rounded-xl flex items-center justify-center mx-auto mb-4">
+                        <CheckCircle className="w-6 h-6 text-white" />
                       </div>
-                      
-                      <p className="text-xs text-slate-600 mb-2 line-clamp-1">{getTypeLabel(document.type)}</p>
-                      
-                      <div className="space-y-1 text-xs text-slate-500 mb-3">
-                        <div className="flex justify-between">
-                          <span>作成日:</span>
-                          <span className="text-slate-600">{new Date(document.createdAt).toLocaleDateString('ja-JP')}</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span>サイズ:</span>
-                          <span className="text-slate-600">{document.size}</span>
-                        </div>
+                      <h3 className="text-lg font-semibold text-slate-800 mb-2">作成済報告書</h3>
+                      <p className="text-3xl font-bold text-slate-800 mb-1">
+                        {businessTrips.filter(t => t.hasReport).length}件
+                      </p>
+                      <p className="text-sm text-slate-600">精算書作成可能</p>
+                    </div>
+                    
+                    <div className="backdrop-blur-xl bg-white/20 rounded-xl p-6 border border-white/30 shadow-xl text-center">
+                      <div className="w-12 h-12 bg-gradient-to-br from-amber-600 to-amber-800 rounded-xl flex items-center justify-center mx-auto mb-4">
+                        <Clock className="w-6 h-6 text-white" />
                       </div>
-                      
-                      {/* アクションボタン */}
-                      <div className="flex justify-between pt-2 border-t border-white/20">
-                        <button
-                          onClick={() => handlePreviewDocument(document.id)}
-                          className="flex items-center space-x-1 px-2 py-1 text-slate-600 hover:text-slate-800 hover:bg-white/20 rounded transition-colors"
-                        >
-                          <Eye className="w-3 h-3" />
-                          <span className="text-xs">表示</span>
-                        </button>
-                        <button
-                          onClick={() => handleCreateDocument(document.type)}
-                          className="flex items-center space-x-1 px-2 py-1 text-slate-600 hover:text-slate-800 hover:bg-white/20 rounded transition-colors"
-                        >
-                          <Edit className="w-3 h-3" />
-                          <span className="text-xs">編集</span>
-                        </button>
-                        <button
-                          onClick={() => handleDownloadDocument(document.id)}
-                          className="flex items-center space-x-1 px-2 py-1 text-slate-700 hover:text-slate-900 hover:bg-slate-100/20 rounded transition-colors"
-                        >
-                          <Download className="w-3 h-3" />
-                          <span className="text-xs">DL</span>
-                        </button>
-                      </div>
+                      <h3 className="text-lg font-semibold text-slate-800 mb-2">未提出書類</h3>
+                      <p className="text-3xl font-bold text-slate-800 mb-1">{draftDocuments.length}件</p>
+                      <p className="text-sm text-slate-600">提出待ち</p>
                     </div>
                   </div>
-                ))}
-              </div>
+                </div>
+              )}
 
-              {filteredDocuments.length === 0 && (
-                <div className="text-center py-12">
-                  <FileText className="w-12 h-12 text-slate-400 mx-auto mb-4" />
-                  <p className="text-slate-600 text-base font-medium">
-                    {searchTerm || filterType !== 'all' || filterStatus !== 'all' 
-                      ? '条件に一致する書類が見つかりません' 
-                      : '書類がまだ作成されていません'}
-                  </p>
-                  <p className="text-slate-500 text-sm mt-2">上部のボタンから新しい書類を作成してください</p>
+              {/* 書類管理タブ */}
+              {activeTab === 'manage' && (
+                <div className="space-y-6">
+                  {/* 書類一覧 */}
+                  <div className="backdrop-blur-xl bg-white/20 rounded-xl border border-white/30 shadow-xl overflow-hidden">
+                    <div className="p-6 border-b border-white/30">
+                      <h2 className="text-xl font-semibold text-slate-800">全書類一覧</h2>
+                    </div>
+                    
+                    {filteredDocuments.length === 0 ? (
+                      <div className="text-center py-16">
+                        <FileText className="w-16 h-16 text-slate-400 mx-auto mb-4" />
+                        <p className="text-slate-600 text-lg font-medium mb-2">書類がありません</p>
+                        <p className="text-slate-500">「書類作成」タブから新しい書類を作成してください</p>
+                      </div>
+                    ) : (
+                      <div className="overflow-x-auto">
+                        <table className="w-full">
+                          <thead className="bg-white/30 border-b border-white/30">
+                            <tr>
+                              <th className="text-left py-4 px-6 font-medium text-slate-700">
+                                <input
+                                  type="checkbox"
+                                  checked={selectedDocuments.length === filteredDocuments.length}
+                                  onChange={(e) => {
+                                    if (e.target.checked) {
+                                      setSelectedDocuments(filteredDocuments.map(d => d.id));
+                                    } else {
+                                      setSelectedDocuments([]);
+                                    }
+                                  }}
+                                  className="w-4 h-4 text-navy-600 bg-white/50 border-white/40 rounded focus:ring-navy-400 focus:ring-2"
+                                />
+                              </th>
+                              <th className="text-left py-4 px-6 font-medium text-slate-700">書類名</th>
+                              <th className="text-left py-4 px-6 font-medium text-slate-700">種別</th>
+                              <th className="text-left py-4 px-6 font-medium text-slate-700">ステータス</th>
+                              <th className="text-left py-4 px-6 font-medium text-slate-700">作成日</th>
+                              <th className="text-left py-4 px-6 font-medium text-slate-700">更新日</th>
+                              <th className="text-center py-4 px-6 font-medium text-slate-700">操作</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {filteredDocuments.map((document) => (
+                              <tr key={document.id} className="border-b border-white/20 hover:bg-white/20 transition-colors">
+                                <td className="py-4 px-6">
+                                  <input
+                                    type="checkbox"
+                                    checked={selectedDocuments.includes(document.id)}
+                                    onChange={() => handleDocumentSelect(document.id)}
+                                    className="w-4 h-4 text-navy-600 bg-white/50 border-white/40 rounded focus:ring-navy-400 focus:ring-2"
+                                  />
+                                </td>
+                                <td className="py-4 px-6 text-slate-800 font-medium">{document.title}</td>
+                                <td className="py-4 px-6">
+                                  <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                                    document.type === 'business-report' 
+                                      ? 'text-blue-700 bg-blue-100' 
+                                      : 'text-emerald-700 bg-emerald-100'
+                                  }`}>
+                                    {document.type === 'business-report' ? '出張報告書' : '経費精算書'}
+                                  </span>
+                                </td>
+                                <td className="py-4 px-6">
+                                  <div className={`flex items-center space-x-1 px-2 py-1 rounded-full border ${getStatusColor(document.status)} w-fit`}>
+                                    {getStatusIcon(document.status)}
+                                    <span className="text-xs font-medium">{getStatusLabel(document.status)}</span>
+                                  </div>
+                                </td>
+                                <td className="py-4 px-6 text-slate-600 text-sm">
+                                  {new Date(document.createdAt).toLocaleDateString('ja-JP')}
+                                </td>
+                                <td className="py-4 px-6 text-slate-600 text-sm">
+                                  {new Date(document.updatedAt).toLocaleDateString('ja-JP')}
+                                </td>
+                                <td className="py-4 px-6">
+                                  <div className="flex items-center justify-center space-x-2">
+                                    <button
+                                      onClick={() => alert('編集画面に移動します')}
+                                      className="p-2 text-slate-600 hover:text-slate-800 hover:bg-white/30 rounded-lg transition-colors"
+                                      title="編集"
+                                    >
+                                      <Edit className="w-4 h-4" />
+                                    </button>
+                                    <button
+                                      onClick={() => alert('プレビュー画面に移動します')}
+                                      className="p-2 text-slate-600 hover:text-slate-800 hover:bg-white/30 rounded-lg transition-colors"
+                                      title="プレビュー"
+                                    >
+                                      <Eye className="w-4 h-4" />
+                                    </button>
+                                    <button
+                                      onClick={() => alert('PDFをダウンロードします')}
+                                      className="p-2 text-slate-600 hover:text-slate-800 hover:bg-white/30 rounded-lg transition-colors"
+                                      title="ダウンロード"
+                                    >
+                                      <Download className="w-4 h-4" />
+                                    </button>
+                                    {document.status === 'draft' && (
+                                      <button
+                                        onClick={() => {
+                                          setSelectedDocuments([document.id]);
+                                          setShowSubmitModal(true);
+                                        }}
+                                        className="p-2 text-emerald-600 hover:text-emerald-800 hover:bg-emerald-50/30 rounded-lg transition-colors"
+                                        title="提出"
+                                      >
+                                        <Send className="w-4 h-4" />
+                                      </button>
+                                    )}
+                                  </div>
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    )}
+                  </div>
                 </div>
               )}
             </div>
-
-            {/* 高度検索モーダル */}
-            {showAdvancedSearch && (
-              <AdvancedSearch
-                onSearch={(filters) => {
-                  console.log('Advanced search filters:', filters);
-                  // ここで高度検索の結果を処理
-                }}
-                onClose={() => setShowAdvancedSearch(false)}
-              />
-            )}
           </div>
         </div>
       </div>
+
+      {/* 提出方法選択モーダル */}
+      {showSubmitModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-xl p-8 max-w-md w-full">
+            <h3 className="text-xl font-semibold text-slate-800 mb-6 text-center">提出方法を選択</h3>
+            
+            <div className="space-y-4 mb-6">
+              <label className="flex items-start space-x-3 cursor-pointer p-4 border-2 border-slate-200 rounded-lg hover:border-navy-400 transition-colors">
+                <input
+                  type="radio"
+                  name="submitMethod"
+                  value="system"
+                  checked={submitMethod === 'system'}
+                  onChange={(e) => setSubmitMethod(e.target.value as 'system' | 'email')}
+                  className="w-5 h-5 text-navy-600 mt-0.5"
+                />
+                <div>
+                  <div className="font-medium text-slate-800 mb-1">システム内承認</div>
+                  <div className="text-sm text-slate-600">承認者アカウントに直接申請を送信</div>
+                  <div className="text-xs text-slate-500 mt-1">• 即座に通知 • 承認履歴が残る • リアルタイム状況確認</div>
+                </div>
+              </label>
+              
+              <label className="flex items-start space-x-3 cursor-pointer p-4 border-2 border-slate-200 rounded-lg hover:border-navy-400 transition-colors">
+                <input
+                  type="radio"
+                  name="submitMethod"
+                  value="email"
+                  checked={submitMethod === 'email'}
+                  onChange={(e) => setSubmitMethod(e.target.value as 'system' | 'email')}
+                  className="w-5 h-5 text-navy-600 mt-0.5"
+                />
+                <div>
+                  <div className="font-medium text-slate-800 mb-1">メール送信</div>
+                  <div className="text-sm text-slate-600">PDF生成して承認者にメール送信</div>
+                  <div className="text-xs text-slate-500 mt-1">• PDF自動生成 • メール添付 • 外部承認対応</div>
+                </div>
+              </label>
+            </div>
+            
+            <div className="text-center text-sm text-slate-600 mb-6">
+              {selectedDocuments.length}件の書類を提出します
+            </div>
+            
+            <div className="flex justify-end space-x-3">
+              <button
+                onClick={() => setShowSubmitModal(false)}
+                className="px-6 py-3 text-slate-600 hover:text-slate-800 transition-colors"
+              >
+                キャンセル
+              </button>
+              <button
+                onClick={handleSubmit}
+                className="flex items-center space-x-2 px-6 py-3 bg-gradient-to-r from-navy-600 to-navy-800 text-white rounded-lg font-medium hover:from-navy-700 hover:to-navy-900 transition-all duration-200"
+              >
+                <Send className="w-4 h-4" />
+                <span>提出する</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
