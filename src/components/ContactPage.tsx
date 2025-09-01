@@ -331,11 +331,3 @@ function ContactPage({ onNavigate }: ContactPageProps) {
               </div>
             </div>
           </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-export default ContactPage;
-            
