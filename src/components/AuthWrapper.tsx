@@ -14,6 +14,7 @@ import SecurityPage from './SecurityPage';
 import CompanyInfo from './CompanyInfo';
 import PrivacyPolicy from './PrivacyPolicy';
 import TermsOfService from './TermsOfService';
+import ContactPage from './ContactPage';
 
 function AuthWrapper() {
   const [currentView, setCurrentView] = useState<string>('landing');
@@ -63,6 +64,8 @@ function AuthWrapper() {
       return <PrivacyPolicy onNavigate={navigateToView} />;
     case 'terms-of-service':
       return <TermsOfService onNavigate={navigateToView} />;
+    case 'contact':
+      return <ContactPage onNavigate={navigateToView} />;
     case 'login':
       return <Login onNavigate={navigateToView} onLoginSuccess={handleLoginSuccess} />;
     case 'register':

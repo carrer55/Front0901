@@ -245,76 +245,132 @@ function PrivacyPolicy({ onNavigate }: PrivacyPolicyProps) {
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 relative overflow-hidden">
-      <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width=%2260%22 height=%2260%22 viewBox=%220 0 60 60%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cg fill=%22none%22 fill-rule=%22evenodd%22%3E%3Cg fill=%22%23334155%22 fill-opacity=%220.03%22%3E%3Ccircle cx=%2230%22 cy=%2230%22 r=%221%22/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-40"></div>
-      <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-blue-100/20 via-transparent to-indigo-100/20"></div>
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-navy-900 to-indigo-900 relative overflow-hidden">
+      {/* Animated Background */}
+      <div className="absolute inset-0">
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-600/20 via-purple-600/10 to-indigo-600/20"></div>
+        <div className="absolute inset-0 opacity-30">
+          {[...Array(20)].map((_, i) => (
+            <div
+              key={i}
+              className="absolute w-2 h-2 bg-white/20 rounded-full animate-pulse"
+              style={{
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+                animationDelay: `${Math.random() * 3}s`,
+                animationDuration: `${3 + Math.random() * 2}s`
+              }}
+            />
+          ))}
+        </div>
+      </div>
 
+      {/* Navigation */}
+      <nav className="relative z-50 backdrop-blur-xl bg-white/10 border-b border-white/20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-20">
+            <button
+              onClick={() => onNavigate('landing')}
+              className="flex items-center space-x-3"
+            >
+              <img 
+                src="/IconOnly_Transparent_NoBuffer.LPver.png" 
+                alt="賢者の精算アイコン" 
+                className="h-12 w-auto object-contain"
+              />
+              <span className="text-2xl font-bold text-white">賢者の精算</span>
+            </button>
+            
+            <button
+              onClick={() => onNavigate('landing')}
+              className="flex items-center space-x-2 px-6 py-3 bg-white/10 hover:bg-white/20 backdrop-blur-xl border border-white/30 text-white rounded-full font-semibold transition-all duration-300"
+            >
+              <ArrowLeft className="w-5 h-5" />
+              <span>戻る</span>
+            </button>
+          </div>
+        </div>
+      </nav>
       <div className="relative z-10 p-4 lg:p-6">
-        <div className="max-w-7xl mx-auto">
+        <div className="max-w-6xl mx-auto">
           {/* Header */}
-          <div className="flex items-center justify-between mb-8">
-            <div className="flex items-center space-x-4">
-              <button
-                onClick={() => onNavigate('landing')}
-                className="flex items-center space-x-2 px-4 py-2 text-slate-600 hover:text-slate-800 hover:bg-white/30 rounded-lg transition-all duration-200 backdrop-blur-sm"
-              >
-                <ArrowLeft className="w-5 h-5" />
-                <span>戻る</span>
-              </button>
-              <h1 className="text-3xl lg:text-4xl font-bold text-slate-800">プライバシーポリシー</h1>
-            </div>
+          <div className="text-center mb-16 pt-20">
+            <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">
+              <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+                プライバシーポリシー
+              </span>
+            </h1>
+            <p className="text-xl text-white/80 max-w-3xl mx-auto">
+              お客様の個人情報保護に関する当社の取り組み
+            </p>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-            {/* サイドナビゲーション */}
-            <div className="lg:col-span-1">
-              <div className="backdrop-blur-xl bg-white/20 rounded-xl p-4 border border-white/30 shadow-xl sticky top-6">
-                <nav className="space-y-2">
-                  {sections.map((section) => {
-                    const Icon = section.icon;
-                    return (
-                      <button
-                        key={section.id}
-                        onClick={() => setSelectedSection(section.id)}
-                        className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-all duration-200 ${
-                          selectedSection === section.id
-                            ? 'bg-navy-600 text-white shadow-lg'
-                            : 'text-slate-600 hover:text-slate-800 hover:bg-white/30'
-                        }`}
-                      >
-                        <Icon className="w-4 h-4" />
-                        <span className="font-medium text-sm">{section.label}</span>
-                      </button>
-                    );
-                  })}
-                </nav>
+          {/* 全内容を1ページに表示 */}
+          <div className="backdrop-blur-xl bg-white/10 rounded-3xl p-8 border border-white/20 shadow-2xl">
+            <div className="space-y-12">
+              {renderOverview()}
+              
+              <div className="border-t border-white/20 pt-12">
+                <h2 className="text-3xl font-bold text-white mb-6">個人情報の収集</h2>
+                <div className="space-y-6 text-white/80">
+                  <p className="text-lg leading-relaxed">
+                    当社では、サービス提供に必要な範囲で以下の個人情報を収集いたします。
+                  </p>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="bg-white/10 rounded-2xl p-6 border border-white/20">
+                      <h4 className="font-semibold text-white mb-3">アカウント情報</h4>
+                      <ul className="space-y-1 text-sm text-white/70">
+                        <li>• 氏名</li>
+                        <li>• メールアドレス</li>
+                        <li>• 電話番号</li>
+                        <li>• 会社名・部署名</li>
+                        <li>• 役職</li>
+                      </ul>
+                    </div>
+                    <div className="bg-white/10 rounded-2xl p-6 border border-white/20">
+                      <h4 className="font-semibold text-white mb-3">利用情報</h4>
+                      <ul className="space-y-1 text-sm text-white/70">
+                        <li>• 申請データ（出張・経費申請の内容）</li>
+                        <li>• 領収書・証憑書類</li>
+                        <li>• システム利用ログ</li>
+                        <li>• IPアドレス・ブラウザ情報</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
               </div>
-            </div>
-
-            {/* メインコンテンツ */}
-            <div className="lg:col-span-3">
-              <div className="backdrop-blur-xl bg-white/20 rounded-xl p-8 border border-white/30 shadow-xl">
-                {selectedSection === 'overview' && renderOverview()}
-                {selectedSection === 'collection' && (
-                  <div className="space-y-6">
-                    <h2 className="text-3xl font-bold text-slate-800 mb-4">個人情報の収集</h2>
-                    <p className="text-slate-600 mb-6">
-                      当社では、サービス提供に必要な範囲で以下の個人情報を収集いたします。
-                    </p>
-                    {/* 収集情報の詳細内容 */}
+              
+              <div className="border-t border-white/20 pt-12">
+                <h2 className="text-3xl font-bold text-white mb-6">利用目的</h2>
+                <div className="space-y-6 text-white/80">
+                  <p className="text-lg leading-relaxed">
+                    収集した個人情報は、以下の目的でのみ利用いたします。
+                  </p>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="bg-white/10 rounded-2xl p-6 border border-white/20">
+                      <h4 className="font-semibold text-white mb-3">サービス提供・運営</h4>
+                      <ul className="space-y-1 text-sm text-white/70">
+                        <li>• アカウント管理・認証</li>
+                        <li>• 申請処理・承認ワークフロー</li>
+                        <li>• 精算処理・支払い管理</li>
+                        <li>• レポート・統計の生成</li>
+                      </ul>
+                    </div>
+                    <div className="bg-white/10 rounded-2xl p-6 border border-white/20">
+                      <h4 className="font-semibold text-white mb-3">カスタマーサポート</h4>
+                      <ul className="space-y-1 text-sm text-white/70">
+                        <li>• お問い合わせ対応</li>
+                        <li>• 技術サポート</li>
+                        <li>• 利用方法のご案内</li>
+                        <li>• トラブルシューティング</li>
+                      </ul>
+                    </div>
                   </div>
-                )}
-                {selectedSection === 'usage' && (
-                  <div className="space-y-6">
-                    <h2 className="text-3xl font-bold text-slate-800 mb-4">利用目的</h2>
-                    <p className="text-slate-600 mb-6">
-                      収集した個人情報は、以下の目的でのみ利用いたします。
-                    </p>
-                    {/* 利用目的の詳細内容 */}
-                  </div>
-                )}
-                {selectedSection === 'rights' && renderRights()}
-                {/* 他のセクションも同様に実装 */}
+                </div>
+              </div>
+              
+              <div className="border-t border-white/20 pt-12">
+                {renderRights()}
               </div>
             </div>
           </div>

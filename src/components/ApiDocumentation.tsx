@@ -375,30 +375,70 @@ applications = client.applications.list()`}
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 relative overflow-hidden">
-      <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width=%2260%22 height=%2260%22 viewBox=%220 0 60 60%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cg fill=%22none%22 fill-rule=%22evenodd%22%3E%3Cg fill=%22%23334155%22 fill-opacity=%220.03%22%3E%3Ccircle cx=%2230%22 cy=%2230%22 r=%221%22/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-40"></div>
-      <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-blue-100/20 via-transparent to-indigo-100/20"></div>
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-navy-900 to-indigo-900 relative overflow-hidden">
+      {/* Animated Background */}
+      <div className="absolute inset-0">
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-600/20 via-purple-600/10 to-indigo-600/20"></div>
+        <div className="absolute inset-0 opacity-30">
+          {[...Array(20)].map((_, i) => (
+            <div
+              key={i}
+              className="absolute w-2 h-2 bg-white/20 rounded-full animate-pulse"
+              style={{
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+                animationDelay: `${Math.random() * 3}s`,
+                animationDuration: `${3 + Math.random() * 2}s`
+              }}
+            />
+          ))}
+        </div>
+      </div>
 
+      {/* Navigation */}
+      <nav className="relative z-50 backdrop-blur-xl bg-white/10 border-b border-white/20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-20">
+            <button
+              onClick={() => onNavigate('landing')}
+              className="flex items-center space-x-3"
+            >
+              <img 
+                src="/IconOnly_Transparent_NoBuffer.LPver.png" 
+                alt="賢者の精算アイコン" 
+                className="h-12 w-auto object-contain"
+              />
+              <span className="text-2xl font-bold text-white">賢者の精算</span>
+            </button>
+            
+            <button
+              onClick={() => onNavigate('landing')}
+              className="flex items-center space-x-2 px-6 py-3 bg-white/10 hover:bg-white/20 backdrop-blur-xl border border-white/30 text-white rounded-full font-semibold transition-all duration-300"
+            >
+              <ArrowLeft className="w-5 h-5" />
+              <span>戻る</span>
+            </button>
+          </div>
+        </div>
+      </nav>
       <div className="relative z-10 p-4 lg:p-6">
         <div className="max-w-7xl mx-auto">
           {/* Header */}
-          <div className="flex items-center justify-between mb-8">
-            <div className="flex items-center space-x-4">
-              <button
-                onClick={() => onNavigate('landing')}
-                className="flex items-center space-x-2 px-4 py-2 text-slate-600 hover:text-slate-800 hover:bg-white/30 rounded-lg transition-all duration-200 backdrop-blur-sm"
-              >
-                <ArrowLeft className="w-5 h-5" />
-                <span>戻る</span>
-              </button>
-              <h1 className="text-3xl lg:text-4xl font-bold text-slate-800">API ドキュメント</h1>
-            </div>
+          <div className="text-center mb-16 pt-20">
+            <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">
+              <span className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+                API ドキュメント
+              </span>
+            </h1>
+            <p className="text-xl text-white/80 max-w-3xl mx-auto">
+              賢者の精算APIを使用して、システム連携を実現しましょう
+            </p>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
             {/* サイドナビゲーション */}
             <div className="lg:col-span-1">
-              <div className="backdrop-blur-xl bg-white/20 rounded-xl p-4 border border-white/30 shadow-xl sticky top-6">
+              <div className="backdrop-blur-xl bg-white/10 rounded-3xl p-6 border border-white/20 shadow-2xl sticky top-6">
                 <nav className="space-y-2">
                   {sections.map((section) => {
                     const Icon = section.icon;
@@ -408,8 +448,8 @@ applications = client.applications.list()`}
                         onClick={() => setSelectedSection(section.id)}
                         className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-all duration-200 ${
                           selectedSection === section.id
-                            ? 'bg-navy-600 text-white shadow-lg'
-                            : 'text-slate-600 hover:text-slate-800 hover:bg-white/30'
+                            ? 'bg-gradient-to-r from-emerald-500 to-teal-600 text-white shadow-lg'
+                            : 'text-white/70 hover:text-white hover:bg-white/20'
                         }`}
                       >
                         <Icon className="w-4 h-4" />
@@ -423,7 +463,7 @@ applications = client.applications.list()`}
 
             {/* メインコンテンツ */}
             <div className="lg:col-span-3">
-              <div className="backdrop-blur-xl bg-white/20 rounded-xl p-8 border border-white/30 shadow-xl">
+              <div className="backdrop-blur-xl bg-white/10 rounded-3xl p-8 border border-white/20 shadow-2xl">
                 {selectedSection === 'overview' && renderOverview()}
                 {selectedSection === 'authentication' && renderAuthentication()}
                 {selectedSection === 'endpoints' && renderEndpoints()}

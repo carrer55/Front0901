@@ -604,17 +604,15 @@ function LandingPage({ onNavigate }: LandingPageProps) {
                 <li><a href="#features" className="hover:text-white transition-colors">機能一覧</a></li>
                 <li><a href="#pricing" className="hover:text-white transition-colors">料金プラン</a></li>
                 <li><button onClick={() => onNavigate('api-documentation')} className="hover:text-white transition-colors text-left">API ドキュメント</button></li>
-                <li><button onClick={() => onNavigate('security')} className="hover:text-white transition-colors text-left">セキュリティ</button></li>
               </ul>
             </div>
 
             <div>
               <h3 className="text-base lg:text-lg font-bold text-white mb-4 lg:mb-6">サポート</h3>
               <ul className="space-y-2 lg:space-y-3 text-sm lg:text-base text-white/70">
-                <li><a href="#" className="hover:text-white transition-colors">ヘルプセンター</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">導入支援</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">お問い合わせ</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">システム状況</a></li>
+                <li><button onClick={() => onNavigate('contact')} className="hover:text-white transition-colors text-left">ヘルプセンター</button></li>
+                <li><button onClick={() => onNavigate('contact')} className="hover:text-white transition-colors text-left">お問い合わせ</button></li>
+                <li><a href="#pricing" className="hover:text-white transition-colors">導入支援</a></li>
               </ul>
             </div>
           </div>
