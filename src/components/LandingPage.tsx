@@ -368,54 +368,6 @@ function LandingPage({ onNavigate }: LandingPageProps) {
         </div>
       </section>
 
-      {/* Demo Section */}
-      <section className="relative z-10 py-32 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-20">
-            <h2 className="text-4xl md:text-6xl font-bold text-white mb-6">
-              <span className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-                節税シミュレーションを体験
-              </span>
-            </h2>
-            <p className="text-xl text-white/80 max-w-3xl mx-auto mb-12">
-              直感的なインターフェースで節税効果を今すぐお試しください
-            </p>
-            
-            <button
-              onClick={() => onNavigate('landing-tax-simulation')}
-              className="group px-12 py-6 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white rounded-full font-bold text-xl shadow-2xl hover:shadow-blue-500/25 transition-all duration-300 transform hover:scale-105 flex items-center space-x-4 mx-auto"
-            >
-              <span>節税シミュレーション</span>
-              <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
-                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-              </div>
-            </button>
-          </div>
-
-          {/* Screenshot/Demo Area */}
-          <div className="relative">
-            <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-3xl blur-3xl"></div>
-            <div className="relative backdrop-blur-xl bg-white/10 rounded-3xl p-8 border border-white/20 shadow-2xl">
-              <div className="aspect-video bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl flex items-center justify-center">
-                <div className="text-center">
-                  <div className="w-24 h-24 mx-auto mb-6 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-2xl flex items-center justify-center shadow-2xl">
-                    <Play className="w-12 h-12 text-white" />
-                  </div>
-                  <h3 className="text-2xl font-bold text-white mb-4">インタラクティブデモ</h3>
-                  <p className="text-white/70 mb-6">実際の操作感を体験できます</p>
-                  <button
-                    onClick={() => onNavigate('login')}
-                    className="px-8 py-3 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white rounded-full font-semibold shadow-xl transition-all duration-300"
-                  >
-                    今すぐ体験する
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* Testimonials Section */}
       <section id="testimonials" className="relative z-10 py-32 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
@@ -557,57 +509,6 @@ function LandingPage({ onNavigate }: LandingPageProps) {
             </div>
           </div>
 
-          {/* 初期設定オプション */}
-          <div className="mt-20">
-            <div className="backdrop-blur-xl bg-gradient-to-br from-amber-500/20 to-orange-500/20 rounded-3xl p-8 border border-amber-400/30 shadow-2xl">
-              <div className="text-center mb-8">
-                <h3 className="text-2xl md:text-3xl font-bold text-white mb-4">
-                  <span className="bg-gradient-to-r from-amber-400 to-orange-400 bg-clip-text text-transparent">
-                    初期設定オプション
-                  </span>
-                </h3>
-                <div className="text-4xl font-bold text-white mb-4">¥50,000</div>
-                <p className="text-white/80 text-lg max-w-3xl mx-auto">
-                  税理士連携、各種日当設定、規程作成の法令準拠サポートによって安心、安全の運用が可能
-                </p>
-              </div>
-              
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="text-center">
-                  <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-amber-500 to-orange-600 rounded-2xl flex items-center justify-center shadow-xl">
-                    <Users className="w-8 h-8 text-white" />
-                  </div>
-                  <h4 className="text-lg font-semibold text-white mb-2">税理士連携</h4>
-                  <p className="text-white/70 text-sm">専門家による法令準拠チェックと最適化提案</p>
-                </div>
-                
-                <div className="text-center">
-                  <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-amber-500 to-orange-600 rounded-2xl flex items-center justify-center shadow-xl">
-                    <Calculator className="w-8 h-8 text-white" />
-                  </div>
-                  <h4 className="text-lg font-semibold text-white mb-2">各種日当設定</h4>
-                  <p className="text-white/70 text-sm">役職・地域別の最適な日当額設定と自動計算</p>
-                </div>
-                
-                <div className="text-center">
-                  <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-amber-500 to-orange-600 rounded-2xl flex items-center justify-center shadow-xl">
-                    <FileText className="w-8 h-8 text-white" />
-                  </div>
-                  <h4 className="text-lg font-semibold text-white mb-2">規程作成サポート</h4>
-                  <p className="text-white/70 text-sm">法令準拠した出張旅費規程の作成と運用支援</p>
-                </div>
-              </div>
-              
-              <div className="text-center mt-8">
-                <button
-                  onClick={() => onNavigate('register')}
-                  className="px-8 py-4 bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white rounded-full font-bold text-lg shadow-2xl hover:shadow-amber-500/25 transition-all duration-300 transform hover:scale-105"
-                >
-                  初期設定オプションで始める
-                </button>
-              </div>
-            </div>
-          </div>
         </div>
       </section>
 
