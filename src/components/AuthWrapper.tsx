@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../hooks/useAuth';
+import LandingPage from './LandingPage';
 import Login from './auth/Login';
 import Register from './auth/Register';
 import RegisterSuccess from './auth/RegisterSuccess';
@@ -9,7 +10,7 @@ import PasswordReset from './auth/PasswordReset';
 import Dashboard from './Dashboard';
 
 function AuthWrapper() {
-  const [currentView, setCurrentView] = useState<string>('login');
+  const [currentView, setCurrentView] = useState<string>('landing');
   const { isAuthenticated, loading } = useAuth();
 
   const handleLoginSuccess = () => {
@@ -42,6 +43,10 @@ function AuthWrapper() {
   }
 
   switch (currentView) {
+    case 'landing':
+      return <LandingPage onNavigate={navigateToView} />;
+    case 'login':
+      return <Login onNavigate={navigateToView} onLoginSuccess={handleLoginSuccess} />;
     case 'register':
       return <Register onNavigate={navigateToView} />;
     case 'register-success':
@@ -53,7 +58,7 @@ function AuthWrapper() {
     case 'password-reset':
       return <PasswordReset onNavigate={navigateToView} />;
     default:
-      return <Login onNavigate={navigateToView} onLoginSuccess={handleLoginSuccess} />;
+      return <LandingPage onNavigate={navigateToView} />;
   }
 }
 
