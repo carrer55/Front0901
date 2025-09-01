@@ -17,7 +17,8 @@ import {
   Globe,
   Award,
   Clock,
-  BarChart3
+  BarChart3,
+  User
 } from 'lucide-react';
 
 interface LandingPageProps {
