@@ -509,18 +509,6 @@ function LandingPage({ onNavigate }: LandingPageProps) {
                   </div>
                 )}
                 
-                {plan.name === 'Pro' && (
-                  <div className="absolute -top-2 -right-2">
-                    <div className="relative">
-                      <div className="bg-gradient-to-r from-red-500 to-pink-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-xl animate-pulse">
-                        今だけ
-                      </div>
-                      {/* 吹き出しの矢印 */}
-                      <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-l-transparent border-r-4 border-r-transparent border-t-4 border-t-red-500"></div>
-                    </div>
-                  </div>
-                )}
-                
                 <div className="text-center mb-8">
                   <h3 className="text-2xl font-bold text-white mb-2">{plan.name}</h3>
                   <p className="text-white/70 mb-6">{plan.description}</p>
@@ -539,12 +527,25 @@ function LandingPage({ onNavigate }: LandingPageProps) {
                   ))}
                 </ul>
 
-                <button
-                  onClick={() => onNavigate('register')}
-                  className={`w-full px-6 py-4 ${plan.buttonStyle} text-white rounded-full font-bold shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105`}
-                >
-                  {plan.name === 'Pro' ? '7日間の無料トライアル' : plan.buttonText}
-                </button>
+                <div className="relative">
+                  {plan.name === 'Pro' && (
+                    <div className="absolute -top-3 -right-3">
+                      <div className="relative">
+                        <div className="bg-gradient-to-r from-red-500 to-pink-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-xl animate-pulse">
+                          今だけ
+                        </div>
+                        {/* 吹き出しの矢印 */}
+                        <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-l-transparent border-r-4 border-r-transparent border-t-4 border-t-red-500"></div>
+                      </div>
+                    </div>
+                  )}
+                  <button
+                    onClick={() => onNavigate('register')}
+                    className={`w-full px-6 py-4 ${plan.buttonStyle} text-white rounded-full font-bold shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105`}
+                  >
+                    {plan.name === 'Pro' ? '7日間の無料トライアル' : plan.buttonText}
+                  </button>
+                </div>
               </div>
             ))}
           </div>
