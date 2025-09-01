@@ -137,7 +137,7 @@ function LandingPage({ onNavigate }: LandingPageProps) {
         'API連携',
         'チャットサポート'
       ],
-      buttonText: '7日間無料トライアル',
+      buttonText: '無料ではじめる',
       buttonStyle: 'bg-gradient-to-r from-navy-600 to-navy-800 hover:from-navy-700 hover:to-navy-900',
       popular: true
     },
@@ -282,7 +282,7 @@ function LandingPage({ onNavigate }: LandingPageProps) {
                 onClick={() => onNavigate('register')}
                 className="group px-8 py-4 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white rounded-full font-bold text-lg shadow-2xl hover:shadow-emerald-500/25 transition-all duration-300 transform hover:scale-105 flex items-center space-x-3"
               >
-                <span>7日間無料トライアル</span>
+                <span>無料ではじめる</span>
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </button>
               
@@ -563,8 +563,8 @@ function LandingPage({ onNavigate }: LandingPageProps) {
             </h2>
             
             <p className="text-xl text-white/80 mb-12 max-w-2xl mx-auto">
-              7日間の無料トライアルで、賢者の精算の威力を実感してください。
-              クレジットカードの登録は不要です。
+              賢者の精算の威力を実感してください。
+              今すぐ無料で始められます。
             </p>
 
             <div className="flex flex-col sm:flex-row gap-6 justify-center">
@@ -572,7 +572,7 @@ function LandingPage({ onNavigate }: LandingPageProps) {
                 onClick={() => onNavigate('register')}
                 className="group px-10 py-5 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white rounded-full font-bold text-xl shadow-2xl hover:shadow-emerald-500/25 transition-all duration-300 transform hover:scale-105 flex items-center justify-center space-x-3"
               >
-                <span>無料トライアルを開始</span>
+                <span>無料ではじめる</span>
                 <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform" />
               </button>
               
