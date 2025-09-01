@@ -696,5 +696,3 @@ function LandingPage({ onNavigate }: LandingPageProps) {
 }
 
 export default LandingPage;
-
-export default LandingPage
