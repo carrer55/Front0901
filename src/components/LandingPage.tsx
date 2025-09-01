@@ -563,59 +563,6 @@ function LandingPage({ onNavigate }: LandingPageProps) {
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="relative z-10 py-32 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-4xl mx-auto text-center">
-          <div className="backdrop-blur-xl bg-gradient-to-br from-emerald-500/20 to-teal-500/20 rounded-3xl p-12 md:p-16 border border-emerald-400/30 shadow-2xl">
-            <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
-              今すぐ始めて、
-              <br className="hidden md:block" />
-              <span className="bg-gradient-to-r from-emerald-400 to-teal-400 bg-clip-text text-transparent">
-                業務効率を3倍に
-              </span>
-            </h2>
-            
-            <p className="text-xl text-white/80 mb-12 max-w-2xl mx-auto">
-              賢者の精算の威力を実感してください。
-              今すぐ無料で始められます。
-            </p>
-
-            <div className="flex flex-col sm:flex-row gap-6 justify-center">
-              <button
-                onClick={() => onNavigate('register')}
-                className="group px-10 py-5 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white rounded-full font-bold text-xl shadow-2xl hover:shadow-emerald-500/25 transition-all duration-300 transform hover:scale-105 flex items-center justify-center space-x-3"
-              >
-                <span>無料ではじめる</span>
-                <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform" />
-              </button>
-              
-              <button
-                onClick={() => onNavigate('login')}
-                className="px-10 py-5 bg-white/10 hover:bg-white/20 backdrop-blur-xl border border-white/30 text-white rounded-full font-bold text-xl transition-all duration-300 flex items-center justify-center space-x-3"
-              >
-                <span>ログイン</span>
-                <User className="w-6 h-6" />
-              </button>
-            </div>
-
-            <div className="mt-8 flex flex-wrap justify-center items-center gap-8 text-white/60">
-              <div className="flex items-center space-x-2">
-                <Award className="w-5 h-5 text-emerald-400" />
-                <span>ISO27001認証取得</span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Globe className="w-5 h-5 text-emerald-400" />
-                <span>99.9%稼働率保証</span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Clock className="w-5 h-5 text-emerald-400" />
-                <span>24時間サポート</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* Footer */}
       <footer id="contact" className="relative z-10 py-20 px-4 sm:px-6 lg:px-8 border-t border-white/20">
         <div className="max-w-7xl mx-auto">
