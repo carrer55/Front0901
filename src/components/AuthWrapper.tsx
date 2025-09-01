@@ -9,6 +9,11 @@ import Onboarding from './auth/Onboarding';
 import PasswordReset from './auth/PasswordReset';
 import Dashboard from './Dashboard';
 import LandingTaxSimulation from './LandingTaxSimulation';
+import ApiDocumentation from './ApiDocumentation';
+import SecurityPage from './SecurityPage';
+import CompanyInfo from './CompanyInfo';
+import PrivacyPolicy from './PrivacyPolicy';
+import TermsOfService from './TermsOfService';
 
 function AuthWrapper() {
   const [currentView, setCurrentView] = useState<string>('landing');
@@ -48,6 +53,16 @@ function AuthWrapper() {
       return <LandingPage onNavigate={navigateToView} />;
     case 'landing-tax-simulation':
       return <LandingTaxSimulation onNavigate={navigateToView} />;
+    case 'api-documentation':
+      return <ApiDocumentation onNavigate={navigateToView} />;
+    case 'security':
+      return <SecurityPage onNavigate={navigateToView} />;
+    case 'company-info':
+      return <CompanyInfo onNavigate={navigateToView} />;
+    case 'privacy-policy':
+      return <PrivacyPolicy onNavigate={navigateToView} />;
+    case 'terms-of-service':
+      return <TermsOfService onNavigate={navigateToView} />;
     case 'login':
       return <Login onNavigate={navigateToView} onLoginSuccess={handleLoginSuccess} />;
     case 'register':

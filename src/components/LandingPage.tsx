@@ -603,8 +603,8 @@ function LandingPage({ onNavigate }: LandingPageProps) {
               <ul className="space-y-2 lg:space-y-3 text-sm lg:text-base text-white/70">
                 <li><a href="#features" className="hover:text-white transition-colors">機能一覧</a></li>
                 <li><a href="#pricing" className="hover:text-white transition-colors">料金プラン</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">API ドキュメント</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">セキュリティ</a></li>
+                <li><button onClick={() => onNavigate('api-documentation')} className="hover:text-white transition-colors text-left">API ドキュメント</button></li>
+                <li><button onClick={() => onNavigate('security')} className="hover:text-white transition-colors text-left">セキュリティ</button></li>
               </ul>
             </div>
 
@@ -622,10 +622,10 @@ function LandingPage({ onNavigate }: LandingPageProps) {
           <div className="border-t border-white/20 mt-12 lg:mt-16 pt-6 lg:pt-8">
             <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
               <div className="flex flex-wrap justify-center md:justify-start gap-6 text-sm text-white/60">
-                <a href="#" className="hover:text-white transition-colors">会社概要</a>
-                <a href="#" className="hover:text-white transition-colors">プライバシーポリシー</a>
-                <a href="#" className="hover:text-white transition-colors">利用規約</a>
-                <a href="#" className="hover:text-white transition-colors">セキュリティ</a>
+                <button onClick={() => onNavigate('company-info')} className="hover:text-white transition-colors">会社概要</button>
+                <button onClick={() => onNavigate('privacy-policy')} className="hover:text-white transition-colors">プライバシーポリシー</button>
+                <button onClick={() => onNavigate('terms-of-service')} className="hover:text-white transition-colors">利用規約</button>
+                <button onClick={() => onNavigate('security')} className="hover:text-white transition-colors">セキュリティ</button>
               </div>
               <div className="text-center md:text-right">
             <p className="text-white/60">
