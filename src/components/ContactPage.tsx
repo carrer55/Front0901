@@ -331,21 +331,3 @@ function ContactPage({ onNavigate }: ContactPageProps) {
               </div>
             </div>
             
-            {/* 戻るボタン */}
-            <div className="text-center mt-16">
-              <button
-                onClick={() => onNavigate('landing')}
-                className="flex items-center justify-center space-x-2 px-8 py-4 bg-gradient-to-r from-navy-600 to-navy-800 hover:from-navy-700 hover:to-navy-900 text-white rounded-full font-bold shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 mx-auto"
-              >
-                <ArrowLeft className="w-5 h-5" />
-                <span>トップページに戻る</span>
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-export default ContactPage;
