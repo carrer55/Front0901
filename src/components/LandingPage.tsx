@@ -272,9 +272,9 @@ function LandingPage({ onNavigate }: LandingPageProps) {
             <p className="text-xl md:text-2xl text-white/80 mb-12 max-w-4xl mx-auto leading-relaxed">
               出張旅費・経費精算を革新する、AI搭載のオールインワンソリューション。
               <br className="hidden md:block" />
-              OCR自動読み取り、節税シミュレーション、法令準拠の規程作成で、
+              複雑な処理を簡単な手続きに変換し、
               <br className="hidden md:block" />
-              <span className="text-emerald-300 font-semibold">年間200万円の節税効果</span>を実現。
+              <span className="text-emerald-300 font-semibold">年間200万円以上の節税効果</span>を実現。
             </p>
 
             <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
