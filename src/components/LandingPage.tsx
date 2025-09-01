@@ -276,7 +276,6 @@ function LandingPage({ onNavigate }: LandingPageProps) {
               出張旅費精算を革新する、AI搭載のオールインワンソリューション。
               <br />
               AIで賢く効率化し、
-              AIで賢く効率化し、
               <span className="text-emerald-300 font-semibold">年間200万円以上の節税効果</span>を実現。
             </p>
 
