@@ -274,6 +274,8 @@ function LandingPage({ onNavigate }: LandingPageProps) {
             
             <p className="text-xl md:text-2xl text-white/80 mb-12 max-w-4xl mx-auto leading-relaxed">
               出張旅費精算を革新する、AI搭載のオールインワンソリューション。
+              <br />
+              AIで賢く効率化し、
               AIで賢く効率化し、
               <span className="text-emerald-300 font-semibold">年間200万円以上の節税効果</span>を実現。
             </p>
