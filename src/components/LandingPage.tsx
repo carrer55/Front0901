@@ -162,7 +162,7 @@ function LandingPage({ onNavigate }: LandingPageProps) {
   ];
 
   const stats = [
-    { number: '10,000+', label: '導入企業数', icon: Users },
+    { number: '95%', label: '業務時間削減', icon: Clock },
     { number: '99.9%', label: 'アップタイム', icon: Shield },
     { number: '3倍', label: '業務効率向上', icon: TrendingUp },
     { number: '200万円', label: '平均年間節税額', icon: Calculator }
