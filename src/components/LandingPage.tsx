@@ -206,7 +206,7 @@ function LandingPage({ onNavigate }: LandingPageProps) {
             <div className="flex items-center space-x-4">
               <div className="flex items-center space-x-3">
                 <img 
-                  src="/IconOnly_NoBuffer.png" 
+                  src="/IconOnly_Transparent_NoBuffer.LPver.png" 
                   alt="賢者の精算アイコン" 
                   className="h-12 w-auto object-contain"
                 />
@@ -573,7 +573,7 @@ function LandingPage({ onNavigate }: LandingPageProps) {
             <div className="md:col-span-2">
               <div className="flex items-center space-x-3 mb-6">
                 <img 
-                  src="/IconOnly_NoBuffer.png" 
+                  src="/IconOnly_Transparent_NoBuffer.LPver.png" 
                   alt="賢者の精算アイコン" 
                   className="h-16 w-auto object-contain"
                 />
