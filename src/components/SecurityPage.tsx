@@ -423,3 +423,5 @@ function SecurityPage({ onNavigate }: SecurityPageProps) {
 }
 
 export default SecurityPage;
+
+export default SecurityPage
