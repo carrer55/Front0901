@@ -306,7 +306,7 @@ function ContactPage({ onNavigate }: ContactPageProps) {
                       rows={6}
                       placeholder="お問い合わせ内容を詳しくお聞かせください"
                       required
-              <h2 className="text-3xl font-bold text-white mb-6">お問い合わせフォーム</h2>
+                    />
                   </div>
 
                   <button
@@ -323,11 +323,10 @@ function ContactPage({ onNavigate }: ContactPageProps) {
                       <>
                         <Send className="w-5 h-5" />
                         <span>送信する</span>
-              <h2 className="text-3xl font-bold text-white mb-6">お問い合わせ概要</h2>
+                      </>
                     )}
                   </button>
-                  ご質問やご相談がございましたら、下記のフォームよりお気軽にお問い合わせください。
-                  2営業日以内にご返信させていただきます。
+                  </form>
                 </div>
               </div>
             </div>
