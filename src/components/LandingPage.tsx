@@ -204,11 +204,14 @@ function LandingPage({ onNavigate }: LandingPageProps) {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-20">
             <div className="flex items-center space-x-4">
-              <img 
-                src="/FullLogo_Transparent_NoBuffer.LPver.png" 
-                alt="賢者の精算ロゴ" 
-                className="h-12 w-auto object-contain"
-              />
+              <div className="flex items-center space-x-3">
+                <img 
+                  src="/IconOnly_NoBuffer.png" 
+                  alt="賢者の精算アイコン" 
+                  className="h-12 w-auto object-contain"
+                />
+                <span className="text-2xl font-bold text-white">賢者の精算</span>
+              </div>
             </div>
             
             {/* Desktop Navigation */}
@@ -568,11 +571,14 @@ function LandingPage({ onNavigate }: LandingPageProps) {
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
             <div className="md:col-span-2">
-              <img 
-                src="/FullLogo_Transparent_NoBuffer.LPver.png" 
-                alt="賢者の精算ロゴ" 
-                className="h-16 w-auto object-contain mb-6"
-              />
+              <div className="flex items-center space-x-3 mb-6">
+                <img 
+                  src="/IconOnly_NoBuffer.png" 
+                  alt="賢者の精算アイコン" 
+                  className="h-16 w-auto object-contain"
+                />
+                <span className="text-2xl font-bold text-white">賢者の精算</span>
+              </div>
               <p className="text-white/70 mb-6 max-w-md">
                 出張旅費・経費精算の革新的なソリューション。
                 AI技術で業務効率化と節税効果を同時に実現します。
