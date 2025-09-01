@@ -216,15 +216,99 @@ function TermsOfService({ onNavigate }: TermsOfServiceProps) {
 
           {/* 全内容を1ページに表示 */}
           <div className="backdrop-blur-xl bg-white/10 rounded-3xl p-8 border border-white/20 shadow-2xl">
-            <div className="space-y-12">
-              {renderOverview()}
-              
-              <div className="border-t border-white/20 pt-12">
-                {renderDefinitions()}
+            <div className="max-w-4xl mx-auto space-y-12">
+              {/* 概要 */}
+              <div>
+                <h2 className="text-3xl font-bold text-white mb-6">利用規約</h2>
+                <p className="text-white/80 text-lg leading-relaxed mb-6">
+                  この利用規約（以下「本規約」）は、株式会社賢者の精算（以下「当社」）が提供する
+                  「賢者の精算」サービス（以下「本サービス」）の利用条件を定めるものです。
+                </p>
+                
+                <div className="space-y-4 text-white/80">
+                  <p>• 本サービスをご利用いただく前に、必ず本規約をお読みください</p>
+                  <p>• 本サービスの利用により、本規約に同意したものとみなされます</p>
+                  <p>• 本規約は予告なく変更される場合があります</p>
+                </div>
+                
+                <p className="text-white/70 mt-6">最終更新日：2024年7月1日</p>
               </div>
               
+              {/* 定義 */}
               <div className="border-t border-white/20 pt-12">
-                {renderProhibited()}
+                <h2 className="text-3xl font-bold text-white mb-6">定義</h2>
+                <p className="text-white/80 text-lg leading-relaxed mb-6">
+                  本規約において使用する用語の定義は以下のとおりです。
+                </p>
+                
+                <div className="space-y-6">
+                  <div>
+                    <h3 className="text-xl font-semibold text-white mb-2">1. 本サービス</h3>
+                    <p className="text-white/80">当社が提供する「賢者の精算」およびその関連サービス</p>
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-semibold text-white mb-2">2. ユーザー</h3>
+                    <p className="text-white/80">本サービスを利用する個人または法人</p>
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-semibold text-white mb-2">3. アカウント</h3>
+                    <p className="text-white/80">本サービス利用のために作成される利用者識別情報</p>
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-semibold text-white mb-2">4. コンテンツ</h3>
+                    <p className="text-white/80">ユーザーが本サービスに投稿・アップロードする一切の情報</p>
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-semibold text-white mb-2">5. 知的財産権</h3>
+                    <p className="text-white/80">著作権、特許権、商標権その他の知的財産に関する権利</p>
+                  </div>
+                </div>
+              </div>
+              
+              {/* 禁止事項 */}
+              <div className="border-t border-white/20 pt-12">
+                <h2 className="text-3xl font-bold text-white mb-6">禁止事項</h2>
+                <p className="text-white/80 text-lg leading-relaxed mb-6">
+                  ユーザーは、本サービスの利用にあたり、以下の行為を行ってはなりません。
+                </p>
+                
+                <div className="space-y-3">
+                  {[
+                    '法令または公序良俗に違反する行為',
+                    '犯罪行為に関連する行為',
+                    '当社、他のユーザー、または第三者の知的財産権を侵害する行為',
+                    '当社、他のユーザー、または第三者の名誉、信用を毀損または不当に差別もしくは誹謗中傷する行為',
+                    '当社、他のユーザー、または第三者の財産を侵害する行為、または侵害のおそれのある行為',
+                    '当社、他のユーザー、または第三者に不利益、損害、不快感を与える行為',
+                    '反社会的勢力等への利益供与その他の協力行為',
+                    '宗教活動または政治活動',
+                    '本サービスのネットワークまたはシステム等に過度な負荷をかける行為',
+                    'BOT、チート、その他の技術的手段を利用してサービスを不正に操作する行為',
+                    '当社が許諾しない方法による本サービスの商業的利用',
+                    '面識のない異性との出会いや交際を目的とした行為',
+                    '他のユーザーの個人情報の収集、蓄積行為',
+                    '当社が定める一定のデータ容量を超えてサーバーに負担をかける行為',
+                    'その他、当社が不適切と判断する行為'
+                  ].map((item, index) => (
+                    <div key={index} className="text-white/80">
+                      • {item}
+                    </div>
+                  ))}
+                </div>
+                
+                <div className="mt-8 p-6 bg-red-500/20 border border-red-400/30 rounded-lg">
+                  <h4 className="text-lg font-semibold text-white mb-4">違反時の措置</h4>
+                  <p className="text-white/80 mb-4">
+                    上記禁止事項に違反した場合、当社は以下の措置を講じる場合があります：
+                  </p>
+                  <div className="space-y-2 text-white/80">
+                    <p>• 警告の実施</p>
+                    <p>• アカウントの一時停止</p>
+                    <p>• アカウントの永久停止</p>
+                    <p>• 損害賠償請求</p>
+                    <p>• 法的措置の実施</p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
