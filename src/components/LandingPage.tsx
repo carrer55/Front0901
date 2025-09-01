@@ -580,8 +580,8 @@ function LandingPage({ onNavigate }: LandingPageProps) {
                 <span className="text-2xl font-bold text-white">賢者の精算</span>
               </div>
               <p className="text-white/70 mb-6 max-w-md">
-                出張旅費・経費精算の革新的なソリューション。
-                AI技術で業務効率化と節税効果を同時に実現します。
+                出張精算に特化した革新的なソリューション。
+                AI技術で効率化と節税効果を同時に実現。
               </p>
               <div className="flex space-x-4">
                 <button className="w-10 h-10 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center transition-colors">
