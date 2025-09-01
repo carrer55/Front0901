@@ -435,40 +435,260 @@ applications = client.applications.list()`}
             </p>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-            {/* サイドナビゲーション */}
-            <div className="lg:col-span-1">
-              <div className="backdrop-blur-xl bg-white/10 rounded-3xl p-6 border border-white/20 shadow-2xl sticky top-6">
-                <nav className="space-y-2">
-                  {sections.map((section) => {
-                    const Icon = section.icon;
-                    return (
+          {/* 全内容を1ページに表示 */}
+          <div className="backdrop-blur-xl bg-white/10 rounded-3xl p-8 border border-white/20 shadow-2xl">
+            <div className="space-y-12">
+              {/* API概要 */}
+              <div>
+                <h2 className="text-3xl font-bold text-white mb-6">API概要</h2>
+                <div className="space-y-6 text-white/80">
+                  <p className="text-lg leading-relaxed">
+                    賢者の精算APIは、出張申請・経費精算システムとの連携を可能にするRESTful APIです。
+                    申請の作成、承認、データ取得など、システムの主要機能をプログラムから利用できます。
+                  </p>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                      <h4 className="font-semibold text-white mb-2">ベースURL</h4>
+                      <code className="text-emerald-300 bg-slate-800/50 px-3 py-2 rounded text-sm">
+                        https://api.kenjano-seisan.com/v1
+                      </code>
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-white mb-2">認証方式</h4>
+                      <p className="text-white/70">Bearer Token (JWT)</p>
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <h4 className="font-semibold text-white mb-3">主な機能</h4>
+                    <ul className="space-y-2 text-white/70">
+                      <li>• 出張申請・経費申請の作成・更新・削除</li>
+                      <li>• 承認ワークフローの制御</li>
+                      <li>• レポート・統計データの取得</li>
+                      <li>• ユーザー管理・権限制御</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="border-t border-white/20 pt-12">
+                <h2 className="text-3xl font-bold text-white mb-6">認証</h2>
+                <div className="space-y-6 text-white/80">
+                  <p className="text-lg leading-relaxed">
+                    APIへのアクセスには、JWTトークンによる認証が必要です。
+                  </p>
+                  
+                  <div>
+                    <h3 className="text-lg font-semibold text-white mb-4">1. トークン取得</h3>
+                    <div className="bg-slate-900 rounded-lg p-4 relative">
                       <button
-                        key={section.id}
-                        onClick={() => setSelectedSection(section.id)}
-                        className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-all duration-200 ${
-                          selectedSection === section.id
-                            ? 'bg-gradient-to-r from-emerald-500 to-teal-600 text-white shadow-lg'
-                            : 'text-white/70 hover:text-white hover:bg-white/20'
-                        }`}
+                        onClick={() => copyToClipboard(`curl -X POST https://api.kenjano-seisan.com/v1/auth/login \\
+  -H "Content-Type: application/json" \\
+  -d '{
+    "email": "your@email.com",
+    "password": "your_password"
+  }'`, 'auth-example')}
+                        className="absolute top-2 right-2 p-2 text-slate-400 hover:text-white transition-colors"
                       >
-                        <Icon className="w-4 h-4" />
-                        <span className="font-medium">{section.label}</span>
+                        {copiedCode === 'auth-example' ? <CheckCircle className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
                       </button>
-                    );
-                  })}
-                </nav>
+                      <pre className="text-emerald-400 text-sm overflow-x-auto">
+{`curl -X POST https://api.kenjano-seisan.com/v1/auth/login \\
+  -H "Content-Type: application/json" \\
+  -d '{
+    "email": "your@email.com",
+    "password": "your_password"
+  }'`}
+                      </pre>
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <h3 className="text-lg font-semibold text-white mb-4">2. APIリクエスト</h3>
+                    <div className="bg-slate-900 rounded-lg p-4 relative">
+                      <button
+                        onClick={() => copyToClipboard(`curl -X GET https://api.kenjano-seisan.com/v1/applications \\
+  -H "Authorization: Bearer YOUR_JWT_TOKEN" \\
+  -H "Content-Type: application/json"`, 'request-example')}
+                        className="absolute top-2 right-2 p-2 text-slate-400 hover:text-white transition-colors"
+                      >
+                        {copiedCode === 'request-example' ? <CheckCircle className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                      </button>
+                      <pre className="text-emerald-400 text-sm overflow-x-auto">
+{`curl -X GET https://api.kenjano-seisan.com/v1/applications \\
+  -H "Authorization: Bearer YOUR_JWT_TOKEN" \\
+  -H "Content-Type: application/json"`}
+                      </pre>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="border-t border-white/20 pt-12">
+                <h2 className="text-3xl font-bold text-white mb-6">エンドポイント</h2>
+                <div className="space-y-6 text-white/80">
+                  <p className="text-lg leading-relaxed">
+                    利用可能なAPIエンドポイントの一覧です。
+                  </p>
+                  
+                  <div className="space-y-8">
+                    {apiEndpoints.map((endpoint, index) => (
+                      <div key={index} className="space-y-4">
+                        <div className="flex items-center space-x-3">
+                          <span className={`px-3 py-1 rounded-full text-xs font-bold ${getMethodColor(endpoint.method)}`}>
+                            {endpoint.method}
+                          </span>
+                          <code className="text-lg font-mono text-emerald-300">{endpoint.path}</code>
+                        </div>
+                        
+                        <p className="text-white/70">{endpoint.description}</p>
+
+                        {endpoint.parameters && (
+                          <div>
+                            <h4 className="font-semibold text-white mb-2">パラメータ</h4>
+                            <div className="overflow-x-auto">
+                              <table className="w-full text-sm">
+                                <thead>
+                                  <tr className="border-b border-white/30">
+                                    <th className="text-left py-2 px-3 text-white/80">名前</th>
+                                    <th className="text-left py-2 px-3 text-white/80">型</th>
+                                    <th className="text-left py-2 px-3 text-white/80">必須</th>
+                                    <th className="text-left py-2 px-3 text-white/80">説明</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  {endpoint.parameters.map((param, paramIndex) => (
+                                    <tr key={paramIndex} className="border-b border-white/20">
+                                      <td className="py-2 px-3 font-mono text-emerald-300">{param.name}</td>
+                                      <td className="py-2 px-3 text-white/70">{param.type}</td>
+                                      <td className="py-2 px-3">
+                                        <span className={`px-2 py-1 rounded text-xs ${
+                                          param.required ? 'text-red-300 bg-red-600/30' : 'text-white/60 bg-slate-600/30'
+                                        }`}>
+                                          {param.required ? '必須' : '任意'}
+                                        </span>
+                                      </td>
+                                      <td className="py-2 px-3 text-white/70">{param.description}</td>
+                                    </tr>
+                                  ))}
+                                </tbody>
+                              </table>
+                            </div>
+                          </div>
+                        )}
+
+                        <div>
+                          <h4 className="font-semibold text-white mb-2">レスポンス例</h4>
+                          <div className="bg-slate-900 rounded-lg p-4 relative">
+                            <button
+                              onClick={() => copyToClipboard(endpoint.example, `example-${index}`)}
+                              className="absolute top-2 right-2 p-2 text-slate-400 hover:text-white transition-colors"
+                            >
+                              {copiedCode === `example-${index}` ? <CheckCircle className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                            </button>
+                            <pre className="text-emerald-400 text-sm overflow-x-auto">
+                              {endpoint.example}
+                            </pre>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+              
+              <div className="border-t border-white/20 pt-12">
+                <h2 className="text-3xl font-bold text-white mb-6">SDK・ライブラリ</h2>
+                <div className="space-y-6 text-white/80">
+                  <p className="text-lg leading-relaxed">
+                    各プログラミング言語向けのSDKとサンプルコードをご提供しています。
+                  </p>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                      <h3 className="text-lg font-semibold text-white mb-4">JavaScript/Node.js</h3>
+                      <div className="bg-slate-900 rounded-lg p-4 relative">
+                        <button
+                          onClick={() => copyToClipboard(`npm install @kenjano-seisan/api-client
+
+import { KenjaClient } from '@kenjano-seisan/api-client';
+
+const client = new KenjaClient({
+  apiKey: 'your-api-key',
+  baseURL: 'https://api.kenjano-seisan.com/v1'
+});
+
+// 申請一覧取得
+const applications = await client.applications.list();`, 'js-sdk')}
+                          className="absolute top-2 right-2 p-2 text-slate-400 hover:text-white transition-colors"
+                        >
+                          {copiedCode === 'js-sdk' ? <CheckCircle className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                        </button>
+                        <pre className="text-emerald-400 text-sm overflow-x-auto">
+{`npm install @kenjano-seisan/api-client
+
+import { KenjaClient } from '@kenjano-seisan/api-client';
+
+const client = new KenjaClient({
+  apiKey: 'your-api-key',
+  baseURL: 'https://api.kenjano-seisan.com/v1'
+});
+
+// 申請一覧取得
+const applications = await client.applications.list();`}
+                        </pre>
+                      </div>
+                    </div>
+
+                    <div>
+                      <h3 className="text-lg font-semibold text-white mb-4">Python</h3>
+                      <div className="bg-slate-900 rounded-lg p-4 relative">
+                        <button
+                          onClick={() => copyToClipboard(`pip install kenjano-seisan
+
+from kenjano_seisan import KenjaClient
+
+client = KenjaClient(
+    api_key='your-api-key',
+    base_url='https://api.kenjano-seisan.com/v1'
+)
+
+# 申請一覧取得
+applications = client.applications.list()`, 'python-sdk')}
+                          className="absolute top-2 right-2 p-2 text-slate-400 hover:text-white transition-colors"
+                        >
+                          {copiedCode === 'python-sdk' ? <CheckCircle className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                        </button>
+                        <pre className="text-emerald-400 text-sm overflow-x-auto">
+{`pip install kenjano-seisan
+
+from kenjano_seisan import KenjaClient
+
+client = KenjaClient(
+    api_key='your-api-key',
+    base_url='https://api.kenjano-seisan.com/v1'
+)
+
+# 申請一覧取得
+applications = client.applications.list()`}
+                        </pre>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
-
-            {/* メインコンテンツ */}
-            <div className="lg:col-span-3">
-              <div className="backdrop-blur-xl bg-white/10 rounded-3xl p-8 border border-white/20 shadow-2xl">
-                {selectedSection === 'overview' && renderOverview()}
-                {selectedSection === 'authentication' && renderAuthentication()}
-                {selectedSection === 'endpoints' && renderEndpoints()}
-                {selectedSection === 'sdks' && renderSDKs()}
-              </div>
+            
+            {/* 戻るボタン */}
+            <div className="text-center mt-12">
+              <button
+                onClick={() => onNavigate('landing')}
+                className="flex items-center justify-center space-x-2 px-8 py-4 bg-gradient-to-r from-navy-600 to-navy-800 hover:from-navy-700 hover:to-navy-900 text-white rounded-full font-bold shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 mx-auto"
+              >
+                <ArrowLeft className="w-5 h-5" />
+                <span>トップページに戻る</span>
+              </button>
             </div>
           </div>
         </div>

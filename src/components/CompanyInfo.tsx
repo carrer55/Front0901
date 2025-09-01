@@ -93,9 +93,9 @@ function CompanyInfo({ onNavigate }: CompanyInfoProps) {
             </p>
           </div>
 
-          <div className="backdrop-blur-xl bg-white/10 rounded-3xl p-12 border border-white/20 shadow-2xl">
-            <div className="max-w-4xl mx-auto space-y-12">
-              {/* 会社基本情報 */}
+          <div className="backdrop-blur-xl bg-white/10 rounded-3xl p-8 border border-white/20 shadow-2xl">
+            <div className="space-y-12">
+              {/* 会社概要 */}
               <div className="text-center mb-12">
                 <h2 className="text-4xl font-bold text-white mb-4">{companyData.name}</h2>
                 <p className="text-xl text-white/80 mb-8">{companyData.englishName}</p>
@@ -178,6 +178,17 @@ function CompanyInfo({ onNavigate }: CompanyInfoProps) {
                   </div>
                 </div>
               </div>
+            </div>
+            
+            {/* 戻るボタン */}
+            <div className="text-center mt-12">
+              <button
+                onClick={() => onNavigate('landing')}
+                className="flex items-center justify-center space-x-2 px-8 py-4 bg-gradient-to-r from-navy-600 to-navy-800 hover:from-navy-700 hover:to-navy-900 text-white rounded-full font-bold shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 mx-auto"
+              >
+                <ArrowLeft className="w-5 h-5" />
+                <span>トップページに戻る</span>
+              </button>
             </div>
           </div>
         </div>
