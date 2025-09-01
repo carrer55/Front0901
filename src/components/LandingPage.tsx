@@ -556,6 +556,58 @@ function LandingPage({ onNavigate }: LandingPageProps) {
               <span>• モバイル対応</span>
             </div>
           </div>
+
+          {/* 初期設定オプション */}
+          <div className="mt-20">
+            <div className="backdrop-blur-xl bg-gradient-to-br from-amber-500/20 to-orange-500/20 rounded-3xl p-8 border border-amber-400/30 shadow-2xl">
+              <div className="text-center mb-8">
+                <h3 className="text-2xl md:text-3xl font-bold text-white mb-4">
+                  <span className="bg-gradient-to-r from-amber-400 to-orange-400 bg-clip-text text-transparent">
+                    初期設定オプション
+                  </span>
+                </h3>
+                <div className="text-4xl font-bold text-white mb-4">¥50,000</div>
+                <p className="text-white/80 text-lg max-w-3xl mx-auto">
+                  税理士連携、各種日当設定、規程作成の法令準拠サポートによって安心、安全の運用が可能
+                </p>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="text-center">
+                  <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-amber-500 to-orange-600 rounded-2xl flex items-center justify-center shadow-xl">
+                    <Users className="w-8 h-8 text-white" />
+                  </div>
+                  <h4 className="text-lg font-semibold text-white mb-2">税理士連携</h4>
+                  <p className="text-white/70 text-sm">専門家による法令準拠チェックと最適化提案</p>
+                </div>
+                
+                <div className="text-center">
+                  <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-amber-500 to-orange-600 rounded-2xl flex items-center justify-center shadow-xl">
+                    <Calculator className="w-8 h-8 text-white" />
+                  </div>
+                  <h4 className="text-lg font-semibold text-white mb-2">各種日当設定</h4>
+                  <p className="text-white/70 text-sm">役職・地域別の最適な日当額設定と自動計算</p>
+                </div>
+                
+                <div className="text-center">
+                  <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-amber-500 to-orange-600 rounded-2xl flex items-center justify-center shadow-xl">
+                    <FileText className="w-8 h-8 text-white" />
+                  </div>
+                  <h4 className="text-lg font-semibold text-white mb-2">規程作成サポート</h4>
+                  <p className="text-white/70 text-sm">法令準拠した出張旅費規程の作成と運用支援</p>
+                </div>
+              </div>
+              
+              <div className="text-center mt-8">
+                <button
+                  onClick={() => onNavigate('register')}
+                  className="px-8 py-4 bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white rounded-full font-bold text-lg shadow-2xl hover:shadow-amber-500/25 transition-all duration-300 transform hover:scale-105"
+                >
+                  初期設定オプションで始める
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
