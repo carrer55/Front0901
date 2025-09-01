@@ -278,7 +278,7 @@ function LandingPage({ onNavigate }: LandingPageProps) {
       </nav>
 
       {/* Hero Section */}
-      <section className="relative z-10 pt-20 pb-32 px-4 sm:px-6 lg:px-8">
+      <section className="relative z-10 pt-16 pb-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <div className="inline-flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-emerald-500/20 to-teal-500/20 rounded-full border border-emerald-400/30 mb-8">
@@ -329,8 +329,8 @@ function LandingPage({ onNavigate }: LandingPageProps) {
             </div>
           </div>
 
-          {/* Hero Stats */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mt-20">
+          {/* Hero Stats - Reduced top margin */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mt-12">
             {stats.map((stat, index) => {
               const Icon = stat.icon;
               return (
@@ -352,9 +352,9 @@ function LandingPage({ onNavigate }: LandingPageProps) {
       </section>
 
       {/* Features Section */}
-      <section id="features" className="relative z-10 py-32 px-4 sm:px-6 lg:px-8">
+      <section id="features" className="relative z-10 py-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-20">
+          <div className="text-center mb-16">
             <h2 className="text-4xl md:text-6xl font-bold text-white mb-6">
               <span className="bg-gradient-to-r from-emerald-400 to-teal-400 bg-clip-text text-transparent">
                 革新的な機能
@@ -391,9 +391,9 @@ function LandingPage({ onNavigate }: LandingPageProps) {
       </section>
 
       {/* Testimonials Section */}
-      <section id="testimonials" className="relative z-10 py-32 px-4 sm:px-6 lg:px-8">
+      <section id="testimonials" className="relative z-10 py-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-20">
+          <div className="text-center mb-16">
             <h2 className="text-4xl md:text-6xl font-bold text-white mb-6">
               <span className="bg-gradient-to-r from-yellow-400 to-orange-400 bg-clip-text text-transparent">
                 お客様の声
@@ -448,9 +448,9 @@ function LandingPage({ onNavigate }: LandingPageProps) {
       </section>
 
       {/* Pricing Section */}
-      <section id="pricing" className="relative z-10 py-32 px-4 sm:px-6 lg:px-8">
+      <section id="pricing" className="relative z-10 py-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-20">
+          <div className="text-center mb-16">
             <h2 className="text-4xl md:text-6xl font-bold text-white mb-6">
               <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
                 シンプルな料金体系
@@ -531,8 +531,8 @@ function LandingPage({ onNavigate }: LandingPageProps) {
             </div>
           </div>
 
-          {/* 初期設定オプション */}
-          <div className="mt-20">
+          {/* 初期設定オプション - Reduced top margin */}
+          <div className="mt-16">
             <div className="backdrop-blur-xl bg-gradient-to-br from-amber-500/20 to-orange-500/20 rounded-3xl p-8 border border-amber-400/30 shadow-2xl">
               <div className="text-center mb-8">
                 <h3 className="text-2xl md:text-3xl font-bold text-white mb-4">
@@ -586,7 +586,7 @@ function LandingPage({ onNavigate }: LandingPageProps) {
       </section>
 
       {/* Footer */}
-      <footer id="contact" className="relative z-10 py-20 px-4 sm:px-6 lg:px-8 border-t border-white/20">
+      <footer id="contact" className="relative z-10 py-16 px-4 sm:px-6 lg:px-8 border-t border-white/20">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
             <div className="lg:col-span-2">
@@ -661,7 +661,7 @@ function LandingPage({ onNavigate }: LandingPageProps) {
             </div>
           </div>
 
-          <div className="border-t border-white/20 mt-12 lg:mt-16 pt-6 lg:pt-8">
+          <div className="border-t border-white/20 mt-10 lg:mt-12 pt-6 lg:pt-8">
             <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
               <div className="flex flex-wrap justify-center md:justify-start gap-6 text-sm text-white/60">
                 <button onClick={() => onNavigate('company-info')} className="hover:text-white transition-colors">会社概要</button>
