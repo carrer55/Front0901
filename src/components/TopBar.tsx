@@ -60,7 +60,7 @@ function TopBar({ onMenuClick, onNavigate }: TopBarProps) {
           </div>
           <div className="relative group">
             <button 
-              onClick={() => onNavigate && onNavigate('support')}
+              onClick={() => onNavigate && onNavigate('contact')}
               className="p-2 text-slate-600 hover:text-slate-800 hover:bg-white/30 rounded-lg transition-all duration-200 backdrop-blur-sm hover:shadow-lg"
             >
               <MessageCircle className="w-5 h-5" />

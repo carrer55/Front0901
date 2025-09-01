@@ -167,91 +167,69 @@ function ContactPage({ onNavigate }: ContactPageProps) {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {/* Contact Information */}
-            <div className="space-y-6">
-              <div className="backdrop-blur-xl bg-white/10 rounded-3xl p-8 border border-white/20 shadow-2xl">
-                <div className="flex items-center space-x-4 mb-6">
-                  <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-2xl flex items-center justify-center">
-                    <Phone className="w-6 h-6 text-white" />
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-bold text-white">電話でのお問い合わせ</h3>
-                    <p className="text-white/70 text-sm">お急ぎの場合はお電話ください</p>
-                  </div>
+          <div className="max-w-2xl mx-auto">
+            <div className="space-y-12">
+              {/* お問い合わせ概要 */}
+              <div>
+                <h2 className="text-3xl font-bold text-white mb-6">お問い合わせ概要</h2>
+                <div className="space-y-6 text-white">
+                  <p className="text-lg leading-relaxed">
+                    ご質問やご相談がございましたら、下記のフォームよりお気軽にお問い合わせください。
+                    2営業日以内にご返信させていただきます。
+                  </p>
                 </div>
-                <div className="space-y-2 text-white/80">
-                  <p className="text-xl font-bold">03-1234-5678</p>
-                  <div className="flex items-center space-x-2 text-sm">
-                    <Clock className="w-4 h-4" />
-                    <span>平日 9:00-18:00</span>
+              </div>
+              
+              <div className="border-t border-white/20 pt-12">
+                <h2 className="text-3xl font-bold text-white mb-6">連絡先情報</h2>
+                <div className="space-y-6 text-white">
+                  <div>
+                    <h3 className="text-xl font-semibold text-white mb-2">電話でのお問い合わせ</h3>
+                    <p className="text-white mb-2">03-1234-5678</p>
+                    <p className="text-white">受付時間：平日 9:00-18:00</p>
+                  </div>
+                  
+                  <div>
+                    <h3 className="text-xl font-semibold text-white mb-2">メールでのお問い合わせ</h3>
+                    <p className="text-white mb-2">info@kenjano-seisan.com</p>
+                    <p className="text-white">24時間以内にご返信いたします</p>
+                  </div>
+                  
+                  <div>
+                    <h3 className="text-xl font-semibold text-white mb-2">所在地</h3>
+                    <p className="text-white">〒100-0005</p>
+                    <p className="text-white">東京都千代田区丸の内1-1-1 丸の内ビル10F</p>
                   </div>
                 </div>
               </div>
-
-              <div className="backdrop-blur-xl bg-white/10 rounded-3xl p-8 border border-white/20 shadow-2xl">
-                <div className="flex items-center space-x-4 mb-6">
-                  <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center">
-                    <Mail className="w-6 h-6 text-white" />
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-bold text-white">メールでのお問い合わせ</h3>
-                    <p className="text-white/70 text-sm">詳細なご質問はメールで</p>
-                  </div>
-                </div>
-                <div className="space-y-2 text-white/80">
-                  <p className="font-medium">info@kenjano-seisan.com</p>
-                  <p className="text-sm text-white/60">24時間以内にご返信いたします</p>
-                </div>
-              </div>
-
-              <div className="backdrop-blur-xl bg-white/10 rounded-3xl p-8 border border-white/20 shadow-2xl">
-                <div className="flex items-center space-x-4 mb-6">
-                  <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-600 rounded-2xl flex items-center justify-center">
-                    <MapPin className="w-6 h-6 text-white" />
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-bold text-white">所在地</h3>
-                    <p className="text-white/70 text-sm">本社オフィス</p>
-                  </div>
-                </div>
-                <div className="text-white/80 text-sm">
-                  <p>〒100-0005</p>
-                  <p>東京都千代田区丸の内1-1-1</p>
-                  <p>丸の内ビル10F</p>
-                </div>
-              </div>
-            </div>
-
-            {/* Contact Form */}
-            <div className="lg:col-span-2">
-              <div className="backdrop-blur-xl bg-white/10 rounded-3xl p-8 border border-white/20 shadow-2xl">
-                <h2 className="text-2xl font-bold text-white mb-6">お問い合わせフォーム</h2>
-                
-                <form onSubmit={handleSubmit} className="space-y-6">
+              
+              <div className="border-t border-white/20 pt-12">
+                <h2 className="text-3xl font-bold text-white mb-6">お問い合わせフォーム</h2>
+                <div className="space-y-6 text-white">
+                  <form onSubmit={handleSubmit} className="space-y-6">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                      <label className="block text-sm font-medium text-white/80 mb-2">
+                      <label className="block text-sm font-medium text-white mb-2">
                         お名前 <span className="text-red-400">*</span>
                       </label>
                       <input
                         type="text"
                         value={formData.name}
                         onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
-                        className="w-full px-4 py-3 bg-white/10 border border-white/30 rounded-lg text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-emerald-400 backdrop-blur-xl"
+                        className="w-full px-4 py-3 bg-white/10 border border-white/30 rounded-lg text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-emerald-400"
                         placeholder="山田太郎"
                         required
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-white/80 mb-2">
+                      <label className="block text-sm font-medium text-white mb-2">
                         メールアドレス <span className="text-red-400">*</span>
                       </label>
                       <input
                         type="email"
                         value={formData.email}
                         onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
-                        className="w-full px-4 py-3 bg-white/10 border border-white/30 rounded-lg text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-emerald-400 backdrop-blur-xl"
+                        className="w-full px-4 py-3 bg-white/10 border border-white/30 rounded-lg text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-emerald-400"
                         placeholder="your@email.com"
                         required
                       />
@@ -260,39 +238,39 @@ function ContactPage({ onNavigate }: ContactPageProps) {
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                      <label className="block text-sm font-medium text-white/80 mb-2">
+                      <label className="block text-sm font-medium text-white mb-2">
                         会社名
                       </label>
                       <input
                         type="text"
                         value={formData.company}
                         onChange={(e) => setFormData(prev => ({ ...prev, company: e.target.value }))}
-                        className="w-full px-4 py-3 bg-white/10 border border-white/30 rounded-lg text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-emerald-400 backdrop-blur-xl"
+                        className="w-full px-4 py-3 bg-white/10 border border-white/30 rounded-lg text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-emerald-400"
                         placeholder="株式会社サンプル"
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-white/80 mb-2">
+                      <label className="block text-sm font-medium text-white mb-2">
                         電話番号
                       </label>
                       <input
                         type="tel"
                         value={formData.phone}
                         onChange={(e) => setFormData(prev => ({ ...prev, phone: e.target.value }))}
-                        className="w-full px-4 py-3 bg-white/10 border border-white/30 rounded-lg text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-emerald-400 backdrop-blur-xl"
+                        className="w-full px-4 py-3 bg-white/10 border border-white/30 rounded-lg text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-emerald-400"
                         placeholder="03-1234-5678"
                       />
                     </div>
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-white/80 mb-2">
+                    <label className="block text-sm font-medium text-white mb-2">
                       お問い合わせ種別 <span className="text-red-400">*</span>
                     </label>
                     <select
                       value={formData.inquiryType}
                       onChange={(e) => setFormData(prev => ({ ...prev, inquiryType: e.target.value }))}
-                      className="w-full px-4 py-3 bg-white/10 border border-white/30 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-emerald-400 backdrop-blur-xl"
+                      className="w-full px-4 py-3 bg-white/10 border border-white/30 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-emerald-400"
                       required
                     >
                       {inquiryTypes.map(type => (
@@ -304,27 +282,27 @@ function ContactPage({ onNavigate }: ContactPageProps) {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-white/80 mb-2">
+                    <label className="block text-sm font-medium text-white mb-2">
                       件名 <span className="text-red-400">*</span>
                     </label>
                     <input
                       type="text"
                       value={formData.subject}
                       onChange={(e) => setFormData(prev => ({ ...prev, subject: e.target.value }))}
-                      className="w-full px-4 py-3 bg-white/10 border border-white/30 rounded-lg text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-emerald-400 backdrop-blur-xl"
+                      className="w-full px-4 py-3 bg-white/10 border border-white/30 rounded-lg text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-emerald-400"
                       placeholder="お問い合わせの件名"
                       required
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-white/80 mb-2">
+                    <label className="block text-sm font-medium text-white mb-2">
                       お問い合わせ内容 <span className="text-red-400">*</span>
                     </label>
                     <textarea
                       value={formData.message}
                       onChange={(e) => setFormData(prev => ({ ...prev, message: e.target.value }))}
-                      className="w-full px-4 py-3 bg-white/10 border border-white/30 rounded-lg text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-emerald-400 backdrop-blur-xl"
+                      className="w-full px-4 py-3 bg-white/10 border border-white/30 rounded-lg text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-emerald-400"
                       rows={6}
                       placeholder="お問い合わせ内容を詳しくお聞かせください"
                       required
@@ -348,8 +326,20 @@ function ContactPage({ onNavigate }: ContactPageProps) {
                       </>
                     )}
                   </button>
-                </form>
+                  </form>
+                </div>
               </div>
+            </div>
+            
+            {/* 戻るボタン */}
+            <div className="text-center mt-16">
+              <button
+                onClick={() => onNavigate('landing')}
+                className="flex items-center justify-center space-x-2 px-8 py-4 bg-gradient-to-r from-navy-600 to-navy-800 hover:from-navy-700 hover:to-navy-900 text-white rounded-full font-bold shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 mx-auto"
+              >
+                <ArrowLeft className="w-5 h-5" />
+                <span>トップページに戻る</span>
+              </button>
             </div>
           </div>
         </div>
