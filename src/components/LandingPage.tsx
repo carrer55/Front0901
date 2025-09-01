@@ -298,10 +298,6 @@ function LandingPage({ onNavigate }: LandingPageProps) {
             <div className="mt-12 flex flex-wrap justify-center items-center gap-8 text-white/60">
               <div className="flex items-center space-x-2">
                 <CheckCircle className="w-5 h-5 text-emerald-400" />
-                <span>クレジットカード不要</span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <CheckCircle className="w-5 h-5 text-emerald-400" />
                 <span>即日利用開始</span>
               </div>
               <div className="flex items-center space-x-2">
