@@ -338,32 +338,6 @@ function PrivacyPolicy({ onNavigate }: PrivacyPolicyProps) {
                     </div>
                   </div>
                 </div>
-          {/* 全内容を1ページに表示 */}
-          <div className="backdrop-blur-xl bg-white/10 rounded-3xl p-8 border border-white/20 shadow-2xl">
-            <div className="space-y-12">
-              {/* プライバシーポリシー概要 */}
-              <div>
-                <h2 className="text-3xl font-bold text-white mb-6">プライバシーポリシー</h2>
-                <div className="space-y-6 text-white/80">
-                  <p className="text-lg leading-relaxed">
-                    株式会社賢者の精算（以下「当社」）は、お客様の個人情報の保護を重要な責務と考え、
-                    個人情報保護法その他の関連法令を遵守し、適切な取り扱いを行います。
-                  </p>
-                  
-                  <div className="space-y-4">
-                    <h3 className="text-xl font-semibold text-white">基本方針</h3>
-                    <ul className="space-y-2 text-white/70">
-                      <li>• お客様の個人情報は、明確な目的のもとでのみ収集・利用いたします</li>
-                      <li>• 収集した個人情報は適切に管理し、不正アクセス・漏洩を防止します</li>
-                      <li>• 法令に基づく場合を除き、同意なく第三者に提供することはありません</li>
-                      <li>• お客様からの開示・訂正・削除等の要求に適切に対応いたします</li>
-                    </ul>
-                  </div>
-                  
-                  <div>
-                    <p className="text-white/60">最終更新日：2024年7月1日</p>
-                  </div>
-                </div>
               </div>
               
               <div className="border-t border-white/20 pt-12">
