@@ -136,7 +136,7 @@ function LandingPage({ onNavigate }: LandingPageProps) {
         'API連携',
         'チャットサポート'
       ],
-      buttonText: '14日間無料トライアル',
+      buttonText: '7日間無料トライアル',
       buttonStyle: 'bg-gradient-to-r from-navy-600 to-navy-800 hover:from-navy-700 hover:to-navy-900',
       popular: true
     },
@@ -281,13 +281,16 @@ function LandingPage({ onNavigate }: LandingPageProps) {
                 onClick={() => onNavigate('register')}
                 className="group px-8 py-4 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white rounded-full font-bold text-lg shadow-2xl hover:shadow-emerald-500/25 transition-all duration-300 transform hover:scale-105 flex items-center space-x-3"
               >
-                <span>14日間無料トライアル</span>
+                <span>7日間無料トライアル</span>
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </button>
               
-              <button className="group px-8 py-4 bg-white/10 hover:bg-white/20 backdrop-blur-xl border border-white/30 text-white rounded-full font-semibold text-lg transition-all duration-300 flex items-center space-x-3">
-                <Play className="w-5 h-5" />
-                <span>デモを見る</span>
+              <button
+                onClick={() => onNavigate('login')}
+                className="group px-8 py-4 bg-white/10 hover:bg-white/20 backdrop-blur-xl border border-white/30 text-white rounded-full font-semibold text-lg transition-all duration-300 flex items-center space-x-3"
+              >
+                <User className="w-5 h-5" />
+                <span>ログイン</span>
               </button>
             </div>
 
@@ -487,7 +490,7 @@ function LandingPage({ onNavigate }: LandingPageProps) {
               </span>
             </h2>
             <p className="text-xl text-white/80 max-w-3xl mx-auto">
-              企業規模に応じた最適なプランをご用意。すべてのプランで14日間の無料トライアルが可能です
+              企業規模に応じた最適なプランをご用意。すべてのプランで7日間の無料トライアルが可能です
             </p>
           </div>
 
@@ -563,7 +566,7 @@ function LandingPage({ onNavigate }: LandingPageProps) {
             </h2>
             
             <p className="text-xl text-white/80 mb-12 max-w-2xl mx-auto">
-              14日間の無料トライアルで、賢者の精算の威力を実感してください。
+              7日間の無料トライアルで、賢者の精算の威力を実感してください。
               クレジットカードの登録は不要です。
             </p>
 
@@ -576,9 +579,12 @@ function LandingPage({ onNavigate }: LandingPageProps) {
                 <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform" />
               </button>
               
-              <button className="px-10 py-5 bg-white/10 hover:bg-white/20 backdrop-blur-xl border border-white/30 text-white rounded-full font-bold text-xl transition-all duration-300 flex items-center justify-center space-x-3">
-                <span>資料をダウンロード</span>
-                <FileText className="w-6 h-6" />
+              <button
+                onClick={() => onNavigate('login')}
+                className="px-10 py-5 bg-white/10 hover:bg-white/20 backdrop-blur-xl border border-white/30 text-white rounded-full font-bold text-xl transition-all duration-300 flex items-center justify-center space-x-3"
+              >
+                <span>ログイン</span>
+                <User className="w-6 h-6" />
               </button>
             </div>
 
