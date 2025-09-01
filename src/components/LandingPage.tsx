@@ -205,7 +205,7 @@ function LandingPage({ onNavigate }: LandingPageProps) {
           <div className="flex items-center justify-between h-20">
             <div className="flex items-center space-x-4">
               <img 
-                src="/賢者の精算Logo2_Transparent_NoBuffer copy.png" 
+                src="/FullLogo_Transparent_NoBuffer.LPver.png" 
                 alt="賢者の精算ロゴ" 
                 className="h-12 w-auto object-contain"
               />
@@ -569,7 +569,7 @@ function LandingPage({ onNavigate }: LandingPageProps) {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
             <div className="md:col-span-2">
               <img 
-                src="/賢者の精算Logo2_Transparent_NoBuffer copy.png" 
+                src="/FullLogo_Transparent_NoBuffer.LPver.png" 
                 alt="賢者の精算ロゴ" 
                 className="h-16 w-auto object-contain mb-6"
               />
