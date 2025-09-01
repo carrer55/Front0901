@@ -93,103 +93,102 @@ function CompanyInfo({ onNavigate }: CompanyInfoProps) {
             </p>
           </div>
 
-          <div className="backdrop-blur-xl bg-white/10 rounded-3xl p-8 border border-white/20 shadow-2xl">
-            <div className="space-y-12">
-              {/* 会社概要 */}
-              <div className="text-center mb-12">
-                <h2 className="text-4xl font-bold text-white mb-4">{companyData.name}</h2>
-                <p className="text-xl text-white/80 mb-8">{companyData.englishName}</p>
-                
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-                  <div>
-                    <h3 className="text-lg font-semibold text-white mb-2">設立</h3>
-                    <p className="text-white/80">{companyData.established}</p>
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-semibold text-white mb-2">資本金</h3>
-                    <p className="text-white/80">{companyData.capital}</p>
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-semibold text-white mb-2">従業員数</h3>
-                    <p className="text-white/80">{companyData.employees}</p>
-                  </div>
-                </div>
-              </div>
-
-              {/* ミッション・ビジョン */}
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+          {/* シンプルなコンテンツ表示 */}
+          <div className="space-y-12">
+            {/* 会社概要 */}
+            <div className="text-center mb-12">
+              <h2 className="text-4xl font-bold text-white mb-4">{companyData.name}</h2>
+              <p className="text-xl text-white mb-8">{companyData.englishName}</p>
+              
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
                 <div>
-                  <h3 className="text-2xl font-bold text-white mb-4">ミッション</h3>
-                  <p className="text-white/80 leading-relaxed text-lg">{companyData.mission}</p>
+                  <h3 className="text-lg font-semibold text-white mb-2">設立</h3>
+                  <p className="text-white">{companyData.established}</p>
                 </div>
                 <div>
-                  <h3 className="text-2xl font-bold text-white mb-4">ビジョン</h3>
-                  <p className="text-white/80 leading-relaxed text-lg">{companyData.vision}</p>
+                  <h3 className="text-lg font-semibold text-white mb-2">資本金</h3>
+                  <p className="text-white">{companyData.capital}</p>
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold text-white mb-2">従業員数</h3>
+                  <p className="text-white">{companyData.employees}</p>
                 </div>
               </div>
+            </div>
 
-              {/* 企業価値観 */}
+            {/* ミッション・ビジョン */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
               <div>
-                <h3 className="text-2xl font-bold text-white mb-6">企業価値観</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {companyData.values.map((value, index) => (
-                    <div key={index} className="text-white/80 text-lg">
-                      • {value}
-                    </div>
-                  ))}
-                </div>
+                <h3 className="text-2xl font-bold text-white mb-4">ミッション</h3>
+                <p className="text-white leading-relaxed text-lg">{companyData.mission}</p>
               </div>
-
-              {/* 事業内容 */}
               <div>
-                <h3 className="text-2xl font-bold text-white mb-6">事業内容</h3>
+                <h3 className="text-2xl font-bold text-white mb-4">ビジョン</h3>
+                <p className="text-white leading-relaxed text-lg">{companyData.vision}</p>
+              </div>
+            </div>
+
+            {/* 企業価値観 */}
+            <div>
+              <h3 className="text-2xl font-bold text-white mb-6">企業価値観</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {companyData.values.map((value, index) => (
+                  <div key={index} className="text-white text-lg">
+                    • {value}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* 事業内容 */}
+            <div>
+              <h3 className="text-2xl font-bold text-white mb-6">事業内容</h3>
+              <div className="space-y-4">
+                {companyData.business.map((item, index) => (
+                  <div key={index} className="text-white text-lg">
+                    • {item}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* 連絡先情報 */}
+            <div>
+              <h3 className="text-2xl font-bold text-white mb-6">連絡先</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div className="space-y-4">
-                  {companyData.business.map((item, index) => (
-                    <div key={index} className="text-white/80 text-lg">
-                      • {item}
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* 連絡先情報 */}
-              <div>
-                <h3 className="text-2xl font-bold text-white mb-6">連絡先</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                  <div className="space-y-4">
-                    <div>
-                      <h4 className="font-semibold text-white mb-2">所在地</h4>
-                      <p className="text-white/80">{companyData.address}</p>
-                    </div>
-                    <div>
-                      <h4 className="font-semibold text-white mb-2">代表者</h4>
-                      <p className="text-white/80">{companyData.ceo}</p>
-                    </div>
+                  <div>
+                    <h4 className="font-semibold text-white mb-2">所在地</h4>
+                    <p className="text-white">{companyData.address}</p>
                   </div>
-                  <div className="space-y-4">
-                    <div>
-                      <h4 className="font-semibold text-white mb-2">電話番号</h4>
-                      <p className="text-white/80">{companyData.phone}</p>
-                    </div>
-                    <div>
-                      <h4 className="font-semibold text-white mb-2">メールアドレス</h4>
-                      <p className="text-white/80">{companyData.email}</p>
-                    </div>
+                  <div>
+                    <h4 className="font-semibold text-white mb-2">代表者</h4>
+                    <p className="text-white">{companyData.ceo}</p>
+                  </div>
+                </div>
+                <div className="space-y-4">
+                  <div>
+                    <h4 className="font-semibold text-white mb-2">電話番号</h4>
+                    <p className="text-white">{companyData.phone}</p>
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-white mb-2">メールアドレス</h4>
+                    <p className="text-white">{companyData.email}</p>
                   </div>
                 </div>
               </div>
             </div>
-            
-            {/* 戻るボタン */}
-            <div className="text-center mt-12">
-              <button
-                onClick={() => onNavigate('landing')}
-                className="flex items-center justify-center space-x-2 px-8 py-4 bg-gradient-to-r from-navy-600 to-navy-800 hover:from-navy-700 hover:to-navy-900 text-white rounded-full font-bold shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 mx-auto"
-              >
-                <ArrowLeft className="w-5 h-5" />
-                <span>トップページに戻る</span>
-              </button>
-            </div>
+          </div>
+          
+          {/* 戻るボタン */}
+          <div className="text-center mt-16">
+            <button
+              onClick={() => onNavigate('landing')}
+              className="flex items-center justify-center space-x-2 px-8 py-4 bg-gradient-to-r from-navy-600 to-navy-800 hover:from-navy-700 hover:to-navy-900 text-white rounded-full font-bold shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 mx-auto"
+            >
+              <ArrowLeft className="w-5 h-5" />
+              <span>トップページに戻る</span>
+            </button>
           </div>
         </div>
       </div>
