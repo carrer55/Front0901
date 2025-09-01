@@ -483,7 +483,7 @@ function LandingPage({ onNavigate }: LandingPageProps) {
               </span>
             </h2>
             <p className="text-xl text-white/80 max-w-3xl mx-auto">
-              企業規模や利用用途に応じた最適なプランをご用意。すべてのプランで7日間の無料トライアルが可能です
+              企業規模や利用用途に応じた最適なプランをご用意。
             </p>
           </div>
 
