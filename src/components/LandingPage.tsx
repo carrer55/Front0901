@@ -568,30 +568,30 @@ function LandingPage({ onNavigate }: LandingPageProps) {
       {/* Footer */}
       <footer id="contact" className="relative z-10 py-20 px-4 sm:px-6 lg:px-8 border-t border-white/20">
         <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
-            <div className="md:col-span-2">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
+            <div className="lg:col-span-2">
               <div className="flex items-center space-x-3 mb-6">
                 <img 
                   src="/IconOnly_Transparent_NoBuffer.LPver.png" 
                   alt="賢者の精算アイコン" 
-                  className="h-16 w-auto object-contain"
+                  className="h-12 w-auto object-contain"
                 />
-                <span className="text-2xl font-bold text-white">賢者の精算</span>
+                <span className="text-xl lg:text-2xl font-bold text-white">賢者の精算</span>
               </div>
-              <p className="text-white/70 mb-6 max-w-md">
+              <p className="text-white/70 mb-6 max-w-sm lg:max-w-md text-sm lg:text-base">
                 出張精算に特化した革新的なソリューション。
                 AI技術で効率化と節税効果を同時に実現。
               </p>
               <div className="flex space-x-4">
-                <button className="w-10 h-10 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center transition-colors">
+                <button className="w-9 h-9 lg:w-10 lg:h-10 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center transition-colors">
                   <span className="sr-only">X (Twitter)</span>
-                  <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-4 h-4 lg:w-5 lg:h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
                   </svg>
                 </button>
-                <button className="w-10 h-10 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center transition-colors">
+                <button className="w-9 h-9 lg:w-10 lg:h-10 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center transition-colors">
                   <span className="sr-only">Facebook</span>
-                  <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-4 h-4 lg:w-5 lg:h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
                   </svg>
                 </button>
@@ -599,8 +599,8 @@ function LandingPage({ onNavigate }: LandingPageProps) {
             </div>
 
             <div>
-              <h3 className="text-lg font-bold text-white mb-6">製品</h3>
-              <ul className="space-y-3 text-white/70">
+              <h3 className="text-base lg:text-lg font-bold text-white mb-4 lg:mb-6">製品</h3>
+              <ul className="space-y-2 lg:space-y-3 text-sm lg:text-base text-white/70">
                 <li><a href="#features" className="hover:text-white transition-colors">機能一覧</a></li>
                 <li><a href="#pricing" className="hover:text-white transition-colors">料金プラン</a></li>
                 <li><a href="#" className="hover:text-white transition-colors">API ドキュメント</a></li>
@@ -609,30 +609,31 @@ function LandingPage({ onNavigate }: LandingPageProps) {
             </div>
 
             <div>
-              <h3 className="text-lg font-bold text-white mb-6">サポート</h3>
-              <ul className="space-y-3 text-white/70">
+              <h3 className="text-base lg:text-lg font-bold text-white mb-4 lg:mb-6">サポート</h3>
+              <ul className="space-y-2 lg:space-y-3 text-sm lg:text-base text-white/70">
                 <li><a href="#" className="hover:text-white transition-colors">ヘルプセンター</a></li>
                 <li><a href="#" className="hover:text-white transition-colors">導入支援</a></li>
                 <li><a href="#" className="hover:text-white transition-colors">お問い合わせ</a></li>
                 <li><a href="#" className="hover:text-white transition-colors">システム状況</a></li>
               </ul>
             </div>
-
-            <div>
-              <h3 className="text-lg font-bold text-white mb-6">会社情報</h3>
-              <ul className="space-y-3 text-white/70">
-                <li><a href="#" className="hover:text-white transition-colors">会社概要</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">プライバシーポリシー</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">利用規約</a></li>
-              </ul>
-            </div>
           </div>
 
-          <div className="border-t border-white/20 mt-16 pt-8 text-center">
+          <div className="border-t border-white/20 mt-12 lg:mt-16 pt-6 lg:pt-8">
+            <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+              <div className="flex flex-wrap justify-center md:justify-start gap-6 text-sm text-white/60">
+                <a href="#" className="hover:text-white transition-colors">会社概要</a>
+                <a href="#" className="hover:text-white transition-colors">プライバシーポリシー</a>
+                <a href="#" className="hover:text-white transition-colors">利用規約</a>
+                <a href="#" className="hover:text-white transition-colors">セキュリティ</a>
+              </div>
+              <div className="text-center md:text-right">
             <p className="text-white/60">
               © 2025 賢者の精算. All rights reserved. | 
               <span className="ml-2">Powered by AI & Innovation</span>
             </p>
+              </div>
+            </div>
           </div>
         </div>
       </footer>
