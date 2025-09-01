@@ -382,7 +382,7 @@ function LandingPage({ onNavigate }: LandingPageProps) {
             </p>
             
             <button
-              onClick={() => onNavigate('tax-simulation')}
+              onClick={() => onNavigate('landing-tax-simulation')}
               className="group px-12 py-6 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white rounded-full font-bold text-xl shadow-2xl hover:shadow-blue-500/25 transition-all duration-300 transform hover:scale-105 flex items-center space-x-4 mx-auto"
             >
               <span>節税シミュレーション</span>

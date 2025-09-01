@@ -8,7 +8,7 @@ import EmailConfirmed from './auth/EmailConfirmed';
 import Onboarding from './auth/Onboarding';
 import PasswordReset from './auth/PasswordReset';
 import Dashboard from './Dashboard';
-import TaxSimulation from './TaxSimulation';
+import LandingTaxSimulation from './LandingTaxSimulation';
 
 function AuthWrapper() {
   const [currentView, setCurrentView] = useState<string>('landing');
@@ -46,8 +46,8 @@ function AuthWrapper() {
   switch (currentView) {
     case 'landing':
       return <LandingPage onNavigate={navigateToView} />;
-    case 'tax-simulation':
-      return <TaxSimulation onNavigate={navigateToView} />;
+    case 'landing-tax-simulation':
+      return <LandingTaxSimulation onNavigate={navigateToView} />;
     case 'login':
       return <Login onNavigate={navigateToView} onLoginSuccess={handleLoginSuccess} />;
     case 'register':
