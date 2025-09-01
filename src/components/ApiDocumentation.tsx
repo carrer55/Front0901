@@ -256,9 +256,9 @@ function ApiDocumentation({ onNavigate }: ApiDocumentationProps) {
                             </span>
                           </td>
                           <td className="py-2 px-3 text-slate-600">{param.description}</td>
-                    <div className="text-lg font-bold text-white">{testimonials[activeTestimonial].name}</div>
-                    <div className="text-emerald-300 font-medium">{testimonials[activeTestimonial].position}</div>
-                    <div className="text-white/60">{testimonials[activeTestimonial].company}</div>
+                        </tr>
+                      ))}
+                    </tbody>
                   </table>
                 </div>
               </div>
