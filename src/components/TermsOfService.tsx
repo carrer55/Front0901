@@ -310,96 +310,15 @@ function TermsOfService({ onNavigate }: TermsOfServiceProps) {
                       <p>• 損害賠償請求</p>
                       <p>• 法的措置の実施</p>
                     </div>
-          {/* シンプルなコンテンツ表示 */}
-          <div className="space-y-12">
-            {/* 利用規約 */}
-            <div>
-              <h2 className="text-3xl font-bold text-white mb-6">利用規約</h2>
-              <div className="space-y-6 text-white">
-                <p className="text-lg leading-relaxed">
-                  この利用規約（以下「本規約」）は、株式会社賢者の精算（以下「当社」）が提供する
-                  「賢者の精算」サービス（以下「本サービス」）の利用条件を定めるものです。
-                </p>
-                
-                <div className="space-y-4">
-                  <p>• 本サービスをご利用いただく前に、必ず本規約をお読みください</p>
-                  <p>• 本サービスの利用により、本規約に同意したものとみなされます</p>
-                  <p>• 本規約は予告なく変更される場合があります</p>
-                </div>
-                
-                <p className="text-white">最終更新日：2024年7月1日</p>
-              </div>
-            </div>
-            
-            <div className="border-t border-white/20 pt-12">
-              <h2 className="text-3xl font-bold text-white mb-6">定義</h2>
-              <div className="space-y-6 text-white">
-                <p className="text-lg leading-relaxed">
-                  本規約において使用する用語の定義は以下のとおりです。
-                </p>
-                
-                <div className="space-y-6">
-                  <div>
-                    <h3 className="text-xl font-semibold text-white mb-2">1. 本サービス</h3>
-                    <p className="text-white">当社が提供する「賢者の精算」およびその関連サービス</p>
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-semibold text-white mb-2">2. ユーザー</h3>
-                    <p className="text-white">本サービスを利用する個人または法人</p>
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-semibold text-white mb-2">3. アカウント</h3>
-                    <p className="text-white">本サービス利用のために作成される利用者識別情報</p>
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-semibold text-white mb-2">4. コンテンツ</h3>
-                    <p className="text-white">ユーザーが本サービスに投稿・アップロードする一切の情報</p>
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-semibold text-white mb-2">5. 知的財産権</h3>
-                    <p className="text-white">著作権、特許権、商標権その他の知的財産に関する権利</p>
                   </div>
                 </div>
               </div>
             </div>
-            
-            <div className="border-t border-white/20 pt-12">
-              <h2 className="text-3xl font-bold text-white mb-6">禁止事項</h2>
-              <div className="space-y-6 text-white">
-                <p className="text-lg leading-relaxed">
-                  ユーザーは、本サービスの利用にあたり、以下の行為を行ってはなりません。
-                </p>
-                
-                <div className="space-y-3">
-                  <p className="text-white">• 法令または公序良俗に違反する行為</p>
-                  <p className="text-white">• 犯罪行為に関連する行為</p>
-                  <p className="text-white">• 当社、他のユーザー、または第三者の知的財産権を侵害する行為</p>
-                  <p className="text-white">• 当社、他のユーザー、または第三者の名誉、信用を毀損または不当に差別もしくは誹謗中傷する行為</p>
-                  <p className="text-white">• 当社、他のユーザー、または第三者の財産を侵害する行為、または侵害のおそれのある行為</p>
-                  <p className="text-white">• 当社、他のユーザー、または第三者に不利益、損害、不快感を与える行為</p>
-                  <p className="text-white">• 反社会的勢力等への利益供与その他の協力行為</p>
-                  <p className="text-white">• 宗教活動または政治活動</p>
-                  <p className="text-white">• 本サービスのネットワークまたはシステム等に過度な負荷をかける行為</p>
-                  <p className="text-white">• BOT、チート、その他の技術的手段を利用してサービスを不正に操作する行為</p>
-                  <p className="text-white">• 当社が許諾しない方法による本サービスの商業的利用</p>
-                  <p className="text-white">• 面識のない異性との出会いや交際を目的とした行為</p>
-                  <p className="text-white">• 他のユーザーの個人情報の収集、蓄積行為</p>
-                  <p className="text-white">• 当社が定める一定のデータ容量を超えてサーバーに負担をかける行為</p>
-                  <p className="text-white">• その他、当社が不適切と判断する行為</p>
-                </div>
-                
-                <div className="space-y-4">
-                  <h4 className="text-lg font-semibold text-white">違反時の措置</h4>
-                  <p className="text-white">
-                    上記禁止事項に違反した場合、当社は以下の措置を講じる場合があります：
-                  </p>
-                  <div className="space-y-2 text-white">
-                    <p>• 警告の実施</p>
-                    <p>• アカウントの一時停止</p>
-                    <p>• アカウントの永久停止</p>
-                    <p>• 損害賠償請求</p>
-                    <p>• 法的措置の実施</p>
-                  </div>
-                </div>
-              </div>
-            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default TermsOfService;
