@@ -426,7 +426,7 @@ function LandingPage({ onNavigate }: LandingPageProps) {
               </span>
             </h2>
             <p className="text-xl text-white/80 max-w-3xl mx-auto">
-              10,000社以上の企業が賢者の精算で業務効率化を実現しています
+              ご利用いただいているお客様が業務効率化や節税を実現しています。
             </p>
           </div>
 
