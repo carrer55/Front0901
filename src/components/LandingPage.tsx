@@ -46,6 +46,12 @@ function LandingPage({ onNavigate }: LandingPageProps) {
   const features = [
     {
       icon: Zap,
+      title: '簡単操作',
+      description: '複雑な出張申請、精算手続きをAIで自動入力補助。より簡単に、よりシンプルに手続きが可能。',
+      gradient: 'from-cyan-400 to-blue-500'
+    },
+    {
+      icon: FileText,
       title: 'OCR自動読み取り',
       description: '領収書をスマホで撮影するだけで、店舗名・日付・金額を自動で読み取り。手入力の手間を大幅削減。',
       gradient: 'from-yellow-400 to-orange-500'
@@ -57,7 +63,7 @@ function LandingPage({ onNavigate }: LandingPageProps) {
       gradient: 'from-blue-400 to-purple-500'
     },
     {
-      icon: FileText,
+      icon: Users,
       title: '規程自動生成',
       description: '法令に準拠した出張旅費規程をガイドに従って作成。Word・PDF形式での出力も可能。',
       gradient: 'from-green-400 to-teal-500'
@@ -73,12 +79,6 @@ function LandingPage({ onNavigate }: LandingPageProps) {
       title: 'セキュア承認フロー',
       description: '多段階承認ワークフローとリマインド機能で、確実で透明性の高い承認プロセスを実現。',
       gradient: 'from-red-400 to-rose-500'
-    },
-    {
-      icon: BarChart3,
-      title: 'リアルタイム分析',
-      description: '出張費用の傾向分析、部門別レポート、予算管理など、経営判断に役立つ分析機能。',
-      gradient: 'from-indigo-400 to-blue-500'
     }
   ];
 
