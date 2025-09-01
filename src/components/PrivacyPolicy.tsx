@@ -338,6 +338,87 @@ function PrivacyPolicy({ onNavigate }: PrivacyPolicyProps) {
                     </div>
                   </div>
                 </div>
+          {/* 全内容を1ページに表示 */}
+          <div className="backdrop-blur-xl bg-white/10 rounded-3xl p-8 border border-white/20 shadow-2xl">
+            <div className="space-y-12">
+              {/* プライバシーポリシー概要 */}
+              <div>
+                <h2 className="text-3xl font-bold text-white mb-6">プライバシーポリシー</h2>
+                <div className="space-y-6 text-white/80">
+                  <p className="text-lg leading-relaxed">
+                    株式会社賢者の精算（以下「当社」）は、お客様の個人情報の保護を重要な責務と考え、
+                    個人情報保護法その他の関連法令を遵守し、適切な取り扱いを行います。
+                  </p>
+                  
+                  <div className="space-y-4">
+                    <h3 className="text-xl font-semibold text-white">基本方針</h3>
+                    <ul className="space-y-2 text-white/70">
+                      <li>• お客様の個人情報は、明確な目的のもとでのみ収集・利用いたします</li>
+                      <li>• 収集した個人情報は適切に管理し、不正アクセス・漏洩を防止します</li>
+                      <li>• 法令に基づく場合を除き、同意なく第三者に提供することはありません</li>
+                      <li>• お客様からの開示・訂正・削除等の要求に適切に対応いたします</li>
+                    </ul>
+                  </div>
+                  
+                  <div>
+                    <p className="text-white/60">最終更新日：2024年7月1日</p>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="border-t border-white/20 pt-12">
+                <h2 className="text-3xl font-bold text-white mb-6">個人情報の収集</h2>
+                <div className="space-y-6 text-white/80">
+                  <p className="text-lg leading-relaxed">
+                    当社では、サービス提供に必要な範囲で以下の個人情報を収集いたします。
+                  </p>
+                  <div className="space-y-6">
+                    <div>
+                      <h4 className="font-semibold text-white mb-3">収集する情報</h4>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                          <h5 className="font-semibold text-white/90 mb-3">アカウント情報</h5>
+                          <ul className="space-y-1 text-sm text-white/70">
+                            <li>• 氏名</li>
+                            <li>• メールアドレス</li>
+                            <li>• 電話番号</li>
+                            <li>• 会社名・部署名</li>
+                            <li>• 役職</li>
+                          </ul>
+                        </div>
+                        <div>
+                          <h5 className="font-semibold text-white/90 mb-3">利用情報</h5>
+                          <ul className="space-y-1 text-sm text-white/70">
+                            <li>• 申請データ（出張・経費申請の内容）</li>
+                            <li>• 領収書・証憑書類</li>
+                            <li>• システム利用ログ</li>
+                            <li>• IPアドレス・ブラウザ情報</li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <h4 className="font-semibold text-white mb-3">収集方法</h4>
+                      <div className="space-y-4">
+                        <div>
+                          <h5 className="font-semibold text-white/90 mb-2">直接収集</h5>
+                          <p className="text-sm text-white/70">
+                            アカウント登録時、申請作成時、設定変更時など、
+                            お客様が直接入力された情報を収集します。
+                          </p>
+                        </div>
+                        <div>
+                          <h5 className="font-semibold text-white/90 mb-2">自動収集</h5>
+                          <p className="text-sm text-white/70">
+                            サービス利用時のアクセスログ、操作履歴、
+                            技術的情報を自動的に収集します。
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
               
               <div className="border-t border-white/20 pt-12">
@@ -346,8 +427,8 @@ function PrivacyPolicy({ onNavigate }: PrivacyPolicyProps) {
                   <p className="text-lg leading-relaxed">
                     収集した個人情報は、以下の目的でのみ利用いたします。
                   </p>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="bg-white/10 rounded-2xl p-6 border border-white/20">
+                  <div className="space-y-6">
+                    <div>
                       <h4 className="font-semibold text-white mb-3">サービス提供・運営</h4>
                       <ul className="space-y-1 text-sm text-white/70">
                         <li>• アカウント管理・認証</li>
@@ -356,7 +437,7 @@ function PrivacyPolicy({ onNavigate }: PrivacyPolicyProps) {
                         <li>• レポート・統計の生成</li>
                       </ul>
                     </div>
-                    <div className="bg-white/10 rounded-2xl p-6 border border-white/20">
+                    <div>
                       <h4 className="font-semibold text-white mb-3">カスタマーサポート</h4>
                       <ul className="space-y-1 text-sm text-white/70">
                         <li>• お問い合わせ対応</li>
@@ -365,13 +446,81 @@ function PrivacyPolicy({ onNavigate }: PrivacyPolicyProps) {
                         <li>• トラブルシューティング</li>
                       </ul>
                     </div>
+                    <div>
+                      <h4 className="font-semibold text-white mb-3">サービス改善</h4>
+                      <ul className="space-y-1 text-sm text-white/70">
+                        <li>• 機能改善・新機能開発</li>
+                        <li>• ユーザビリティ向上</li>
+                        <li>• システム最適化</li>
+                        <li>• 品質向上</li>
+                      </ul>
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-white mb-3">セキュリティ・コンプライアンス</h4>
+                      <ul className="space-y-1 text-sm text-white/70">
+                        <li>• 不正利用の防止・検知</li>
+                        <li>• セキュリティ監視</li>
+                        <li>• 法令遵守の確認</li>
+                        <li>• 監査対応</li>
+                      </ul>
+                    </div>
                   </div>
                 </div>
               </div>
               
               <div className="border-t border-white/20 pt-12">
-                {renderRights()}
+                <h2 className="text-3xl font-bold text-white mb-6">お客様の権利</h2>
+                <div className="space-y-6 text-white/80">
+                  <p className="text-lg leading-relaxed">
+                    お客様は、ご自身の個人情報について以下の権利を有しています。
+                  </p>
+                  
+                  <div className="space-y-4">
+                    <div>
+                      <h4 className="font-semibold text-white mb-2">開示請求権</h4>
+                      <p className="text-white/70">ご自身の個人情報の利用状況について開示を求める権利</p>
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-white mb-2">訂正・削除権</h4>
+                      <p className="text-white/70">個人情報の訂正・削除を求める権利</p>
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-white mb-2">利用停止権</h4>
+                      <p className="text-white/70">個人情報の利用停止を求める権利</p>
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-white mb-2">データポータビリティ権</h4>
+                      <p className="text-white/70">個人情報の移転を求める権利</p>
+                    </div>
+                  </div>
+                  
+                  <div className="space-y-4">
+                    <h4 className="font-semibold text-white mb-3">権利行使の方法</h4>
+                    <div className="text-white/70">
+                      <p className="mb-4">上記の権利を行使される場合は、以下の連絡先までお問い合わせください：</p>
+                      <div className="space-y-2">
+                        <p><strong className="text-white">メール:</strong> privacy@kenjano-seisan.com</p>
+                        <p><strong className="text-white">電話:</strong> 03-1234-5678（平日 9:00-18:00）</p>
+                        <p><strong className="text-white">郵送:</strong> 〒100-0005 東京都千代田区丸の内1-1-1 丸の内ビル10F</p>
+                      </div>
+                      <p className="text-sm text-white/60 mt-4">
+                        ※ご本人確認のため、身分証明書の提示をお願いする場合があります。
+                      </p>
+                    </div>
+                  </div>
+                </div>
               </div>
+            </div>
+            
+            {/* 戻るボタン */}
+            <div className="text-center mt-12">
+              <button
+                onClick={() => onNavigate('landing')}
+                className="flex items-center justify-center space-x-2 px-8 py-4 bg-gradient-to-r from-navy-600 to-navy-800 hover:from-navy-700 hover:to-navy-900 text-white rounded-full font-bold shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 mx-auto"
+              >
+                <ArrowLeft className="w-5 h-5" />
+                <span>トップページに戻る</span>
+              </button>
             </div>
           </div>
         </div>

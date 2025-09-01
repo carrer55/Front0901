@@ -151,256 +151,238 @@ function SecurityPage({ onNavigate }: SecurityPageProps) {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
           <div className="space-y-2">
             <div className="flex items-center space-x-2">
-              <CheckCircle className="w-4 h-4 text-emerald-600" />
-              <span>個人情報保護法</span>
-            </div>
-            <div className="flex items-center space-x-2">
-              <CheckCircle className="w-4 h-4 text-emerald-600" />
-              <span>電子帳簿保存法</span>
-            </div>
-            <div className="flex items-center space-x-2">
-              <CheckCircle className="w-4 h-4 text-emerald-600" />
-              <span>法人税法</span>
-            </div>
-          </div>
-          <div className="space-y-2">
-            <div className="flex items-center space-x-2">
-              <CheckCircle className="w-4 h-4 text-emerald-600" />
-              <span>所得税法</span>
-            </div>
-            <div className="flex items-center space-x-2">
-              <CheckCircle className="w-4 h-4 text-emerald-600" />
-              <span>労働基準法</span>
-            </div>
-            <div className="flex items-center space-x-2">
-              <CheckCircle className="w-4 h-4 text-emerald-600" />
-              <span>GDPR（EU一般データ保護規則）</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-
-  const renderDataProtection = () => (
-    <div className="space-y-8">
-      <div>
-        <h2 className="text-3xl font-bold text-slate-800 mb-4">データ保護</h2>
-        <p className="text-slate-600 text-lg leading-relaxed mb-6">
-          お客様の重要なデータを多層防御システムで保護しています。
-        </p>
-      </div>
-
-      <div className="space-y-6">
-        <div className="bg-white/30 rounded-lg p-6">
-          <h3 className="text-xl font-semibold text-slate-800 mb-4">データ暗号化</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <h4 className="font-semibold text-slate-700 mb-2">保存時暗号化</h4>
-              <ul className="space-y-1 text-sm text-slate-600">
-                <li>• AES-256による暗号化</li>
-                <li>• 暗号化キーの分離管理</li>
-                <li>• 定期的なキーローテーション</li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-semibold text-slate-700 mb-2">転送時暗号化</h4>
-              <ul className="space-y-1 text-sm text-slate-600">
-                <li>• TLS 1.3による通信暗号化</li>
-                <li>• HSTS（HTTP Strict Transport Security）</li>
-                <li>• 証明書の透明性（CT）対応</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-white/30 rounded-lg p-6">
-          <h3 className="text-xl font-semibold text-slate-800 mb-4">アクセス管理</h3>
-          <div className="space-y-4">
-            <div className="flex items-start space-x-3">
-              <Key className="w-5 h-5 text-navy-600 mt-1" />
+          {/* 全内容を1ページに表示 */}
+          <div className="backdrop-blur-xl bg-white/10 rounded-3xl p-8 border border-white/20 shadow-2xl">
+            <div className="space-y-12">
+              {/* セキュリティ概要 */}
               <div>
-                <h4 className="font-semibold text-slate-700">多要素認証（MFA）</h4>
-                <p className="text-sm text-slate-600">SMS、メール、認証アプリによる二段階認証</p>
-              </div>
-            </div>
-            <div className="flex items-start space-x-3">
-              <Shield className="w-5 h-5 text-navy-600 mt-1" />
-              <div>
-                <h4 className="font-semibold text-slate-700">役割ベースアクセス制御</h4>
-                <p className="text-sm text-slate-600">最小権限の原則に基づく細かな権限設定</p>
-              </div>
-            </div>
-            <div className="flex items-start space-x-3">
-              <Globe className="w-5 h-5 text-navy-600 mt-1" />
-              <div>
-                <h4 className="font-semibold text-slate-700">IP制限・地理的制限</h4>
-                <p className="text-sm text-slate-600">指定されたIPアドレス・地域からのみアクセス可能</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-white/30 rounded-lg p-6">
-          <h3 className="text-xl font-semibold text-slate-800 mb-4">データバックアップ</h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="text-center">
-              <div className="w-16 h-16 bg-gradient-to-br from-blue-600 to-blue-800 rounded-xl flex items-center justify-center mx-auto mb-3">
-                <Server className="w-8 h-8 text-white" />
-              </div>
-              <h4 className="font-semibold text-slate-700 mb-2">自動バックアップ</h4>
-              <p className="text-sm text-slate-600">1時間ごとの自動バックアップ</p>
-            </div>
-            <div className="text-center">
-              <div className="w-16 h-16 bg-gradient-to-br from-emerald-600 to-emerald-800 rounded-xl flex items-center justify-center mx-auto mb-3">
-                <Globe className="w-8 h-8 text-white" />
-              </div>
-              <h4 className="font-semibold text-slate-700 mb-2">地理的分散</h4>
-              <p className="text-sm text-slate-600">複数地域でのデータ複製</p>
-            </div>
-            <div className="text-center">
-              <div className="w-16 h-16 bg-gradient-to-br from-purple-600 to-purple-800 rounded-xl flex items-center justify-center mx-auto mb-3">
-                <CheckCircle className="w-8 h-8 text-white" />
-              </div>
-              <h4 className="font-semibold text-slate-700 mb-2">復旧保証</h4>
-              <p className="text-sm text-slate-600">RTO: 4時間、RPO: 1時間</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-
-  const renderIncidentResponse = () => (
-    <div className="space-y-8">
-      <div>
-        <h2 className="text-3xl font-bold text-slate-800 mb-4">インシデント対応</h2>
-        <p className="text-slate-600 text-lg leading-relaxed mb-6">
-          セキュリティインシデントに対する迅速かつ適切な対応体制を整備しています。
-        </p>
-      </div>
-
-      <div className="bg-white/30 rounded-lg p-6">
-        <h3 className="text-xl font-semibold text-slate-800 mb-6">対応フロー</h3>
-        <div className="space-y-4">
-          {[
-            { step: 1, title: '検知・報告', description: '自動監視システムまたは手動報告による即座の検知', time: '即時' },
-            { step: 2, title: '初期対応', description: '影響範囲の特定と緊急対応措置の実施', time: '15分以内' },
-            { step: 3, title: '詳細調査', description: '根本原因の特定と影響評価の実施', time: '1時間以内' },
-            { step: 4, title: '復旧作業', description: 'システム復旧と正常性確認', time: '4時間以内' },
-            { step: 5, title: '事後対応', description: '再発防止策の策定と実装', time: '24時間以内' }
-          ].map((item) => (
-            <div key={item.step} className="flex items-start space-x-4 p-4 bg-white/20 rounded-lg">
-              <div className="w-8 h-8 bg-navy-600 text-white rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">
-                {item.step}
-              </div>
-              <div className="flex-1">
-                <div className="flex items-center justify-between mb-2">
-                  <h4 className="font-semibold text-slate-800">{item.title}</h4>
-                  <span className="text-xs text-navy-600 bg-navy-100 px-2 py-1 rounded-full">{item.time}</span>
+                <h2 className="text-3xl font-bold text-white mb-6">セキュリティ概要</h2>
+                <div className="space-y-6 text-white/80">
+                  <p className="text-lg leading-relaxed">
+                    賢者の精算は、企業の重要な財務データを扱うシステムとして、
+                    最高レベルのセキュリティ対策を実装しています。
+                  </p>
+                  
+                  <div className="space-y-8">
+                    {securityFeatures.map((feature, index) => {
+                      const Icon = feature.icon;
+                      return (
+                        <div key={index} className="space-y-4">
+                          <div className="flex items-center space-x-3">
+                            <Icon className="w-6 h-6 text-emerald-400" />
+                            <h3 className="text-xl font-semibold text-white">{feature.title}</h3>
+                          </div>
+                          <p className="text-white/70 ml-9">{feature.description}</p>
+                          <ul className="space-y-2 ml-9">
+                            {feature.details.map((detail, detailIndex) => (
+                              <li key={detailIndex} className="flex items-center space-x-2 text-sm text-white/70">
+                                <CheckCircle className="w-4 h-4 text-emerald-400 flex-shrink-0" />
+                                <span>{detail}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      );
+                    })}
+                  </div>
                 </div>
-                <p className="text-sm text-slate-600">{item.description}</p>
+              </div>
+              
+              <div className="border-t border-white/20 pt-12">
+                <h2 className="text-3xl font-bold text-white mb-6">コンプライアンス・認証</h2>
+                <div className="space-y-6 text-white/80">
+                  <p className="text-lg leading-relaxed">
+                    国際的なセキュリティ基準に準拠し、第三者機関による認証を取得しています。
+                  </p>
+                  
+                  <div className="space-y-6">
+                    {certifications.map((cert, index) => {
+                      const Icon = cert.icon;
+                      return (
+                        <div key={index} className="space-y-2">
+                          <div className="flex items-center space-x-3">
+                            <Icon className="w-6 h-6 text-emerald-400" />
+                            <h4 className="text-lg font-semibold text-white">{cert.name}</h4>
+                            <span className="px-2 py-1 rounded-full text-xs font-medium text-emerald-300 bg-emerald-600/30">
+                              {cert.status}
+                            </span>
+                          </div>
+                          <p className="text-white/70 ml-9">{cert.description}</p>
+                        </div>
+                      );
+                    })}
+                  </div>
+                  
+                  <div className="space-y-4">
+                    <h4 className="text-lg font-semibold text-white">法令準拠</h4>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                      <div className="space-y-2">
+                        <div className="flex items-center space-x-2">
+                          <CheckCircle className="w-4 h-4 text-emerald-400" />
+                          <span className="text-white/70">個人情報保護法</span>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <CheckCircle className="w-4 h-4 text-emerald-400" />
+                          <span className="text-white/70">電子帳簿保存法</span>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <CheckCircle className="w-4 h-4 text-emerald-400" />
+                          <span className="text-white/70">法人税法</span>
+                        </div>
+                      </div>
+                      <div className="space-y-2">
+                        <div className="flex items-center space-x-2">
+                          <CheckCircle className="w-4 h-4 text-emerald-400" />
+                          <span className="text-white/70">所得税法</span>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <CheckCircle className="w-4 h-4 text-emerald-400" />
+                          <span className="text-white/70">労働基準法</span>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <CheckCircle className="w-4 h-4 text-emerald-400" />
+                          <span className="text-white/70">GDPR（EU一般データ保護規則）</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="border-t border-white/20 pt-12">
+                <h2 className="text-3xl font-bold text-white mb-6">データ保護</h2>
+                <div className="space-y-6 text-white/80">
+                  <p className="text-lg leading-relaxed">
+                    お客様の重要なデータを多層防御システムで保護しています。
+                  </p>
+                  
+                  <div className="space-y-8">
+                    <div>
+                      <h3 className="text-xl font-semibold text-white mb-4">データ暗号化</h3>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                          <h4 className="font-semibold text-white/90 mb-2">保存時暗号化</h4>
+                          <ul className="space-y-1 text-sm text-white/70">
+                            <li>• AES-256による暗号化</li>
+                            <li>• 暗号化キーの分離管理</li>
+                            <li>• 定期的なキーローテーション</li>
+                          </ul>
+                        </div>
+                        <div>
+                          <h4 className="font-semibold text-white/90 mb-2">転送時暗号化</h4>
+                          <ul className="space-y-1 text-sm text-white/70">
+                            <li>• TLS 1.3による通信暗号化</li>
+                            <li>• HSTS（HTTP Strict Transport Security）</li>
+                            <li>• 証明書の透明性（CT）対応</li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <h3 className="text-xl font-semibold text-white mb-4">アクセス管理</h3>
+                      <div className="space-y-4">
+                        <div className="flex items-start space-x-3">
+                          <Key className="w-5 h-5 text-emerald-400 mt-1" />
+                          <div>
+                            <h4 className="font-semibold text-white/90">多要素認証（MFA）</h4>
+                            <p className="text-sm text-white/70">SMS、メール、認証アプリによる二段階認証</p>
+                          </div>
+                        </div>
+                        <div className="flex items-start space-x-3">
+                          <Shield className="w-5 h-5 text-emerald-400 mt-1" />
+                          <div>
+                            <h4 className="font-semibold text-white/90">役割ベースアクセス制御</h4>
+                            <p className="text-sm text-white/70">最小権限の原則に基づく細かな権限設定</p>
+                          </div>
+                        </div>
+                        <div className="flex items-start space-x-3">
+                          <Globe className="w-5 h-5 text-emerald-400 mt-1" />
+                          <div>
+                            <h4 className="font-semibold text-white/90">IP制限・地理的制限</h4>
+                            <p className="text-sm text-white/70">指定されたIPアドレス・地域からのみアクセス可能</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <h3 className="text-xl font-semibold text-white mb-4">データバックアップ</h3>
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
+                        <div>
+                          <h4 className="font-semibold text-white/90 mb-2">自動バックアップ</h4>
+                          <p className="text-sm text-white/70">1時間ごとの自動バックアップ</p>
+                        </div>
+                        <div>
+                          <h4 className="font-semibold text-white/90 mb-2">地理的分散</h4>
+                          <p className="text-sm text-white/70">複数地域でのデータ複製</p>
+                        </div>
+                        <div>
+                          <h4 className="font-semibold text-white/90 mb-2">復旧保証</h4>
+                          <p className="text-sm text-white/70">RTO: 4時間、RPO: 1時間</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="border-t border-white/20 pt-12">
+                <h2 className="text-3xl font-bold text-white mb-6">インシデント対応</h2>
+                <div className="space-y-6 text-white/80">
+                  <p className="text-lg leading-relaxed">
+                    セキュリティインシデントに対する迅速かつ適切な対応体制を整備しています。
+                  </p>
+                  
+                  <div>
+                    <h3 className="text-xl font-semibold text-white mb-6">対応フロー</h3>
+                    <div className="space-y-4">
+                      {[
+                        { step: 1, title: '検知・報告', description: '自動監視システムまたは手動報告による即座の検知', time: '即時' },
+                        { step: 2, title: '初期対応', description: '影響範囲の特定と緊急対応措置の実施', time: '15分以内' },
+                        { step: 3, title: '詳細調査', description: '根本原因の特定と影響評価の実施', time: '1時間以内' },
+                        { step: 4, title: '復旧作業', description: 'システム復旧と正常性確認', time: '4時間以内' },
+                        { step: 5, title: '事後対応', description: '再発防止策の策定と実装', time: '24時間以内' }
+                      ].map((item) => (
+                        <div key={item.step} className="flex items-start space-x-4">
+                          <div className="w-8 h-8 bg-emerald-600 text-white rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">
+                            {item.step}
+                          </div>
+                          <div className="flex-1">
+                            <div className="flex items-center justify-between mb-2">
+                              <h4 className="font-semibold text-white">{item.title}</h4>
+                              <span className="text-xs text-emerald-300 bg-emerald-600/30 px-2 py-1 rounded-full">{item.time}</span>
+                            </div>
+                            <p className="text-sm text-white/70">{item.description}</p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  
+                  <div className="space-y-4">
+                    <h4 className="font-semibold text-white">緊急連絡先</h4>
+                    <div className="space-y-2 text-sm text-white/70">
+                      <p><strong className="text-white">セキュリティインシデント報告:</strong> security@kenjano-seisan.com</p>
+                      <p><strong className="text-white">緊急時電話番号:</strong> 03-1234-5678（24時間対応）</p>
+                      <p><strong className="text-white">脆弱性報告:</strong> vulnerability@kenjano-seisan.com</p>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
-          ))}
-        </div>
-      </div>
-
-      <div className="bg-amber-50/50 rounded-lg p-6 border border-amber-200/50">
-        <div className="flex items-start space-x-3">
-          <AlertTriangle className="w-6 h-6 text-amber-600 flex-shrink-0 mt-1" />
-          <div>
-            <h3 className="font-semibold text-amber-800 mb-2">緊急連絡先</h3>
-            <div className="space-y-2 text-sm text-amber-700">
-              <p><strong>セキュリティインシデント報告:</strong> security@kenjano-seisan.com</p>
-              <p><strong>緊急時電話番号:</strong> 03-1234-5678（24時間対応）</p>
-              <p><strong>脆弱性報告:</strong> vulnerability@kenjano-seisan.com</p>
+            
+            {/* 戻るボタン */}
+            <div className="text-center mt-12">
+              <button
+                onClick={() => onNavigate('landing')}
+                className="flex items-center justify-center space-x-2 px-8 py-4 bg-gradient-to-r from-navy-600 to-navy-800 hover:from-navy-700 hover:to-navy-900 text-white rounded-full font-bold shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 mx-auto"
+              >
+                <ArrowLeft className="w-5 h-5" />
+                <span>トップページに戻る</span>
+              </button>
             </div>
           </div>
-        </div>
-      </div>
-    </div>
-  );
-
-  const renderPrivacy = () => (
-    <div className="space-y-8">
-      <div>
-        <h2 className="text-3xl font-bold text-slate-800 mb-4">プライバシー保護</h2>
-        <p className="text-slate-600 text-lg leading-relaxed mb-6">
-          お客様の個人情報・企業情報の保護を最優先に取り組んでいます。
-        </p>
-      </div>
-
-      <div className="space-y-6">
-        <div className="bg-white/30 rounded-lg p-6">
-          <h3 className="text-xl font-semibold text-slate-800 mb-4">データ収集・利用</h3>
-          <div className="space-y-4">
-            <div>
-              <h4 className="font-semibold text-slate-700 mb-2">収集する情報</h4>
-              <ul className="space-y-1 text-sm text-slate-600">
-                <li>• アカウント情報（氏名、メールアドレス、会社情報）</li>
-                <li>• 申請データ（出張申請、経費申請の内容）</li>
-                <li>• 利用ログ（アクセス時間、操作履歴）</li>
-                <li>• 技術情報（IPアドレス、ブラウザ情報）</li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-semibold text-slate-700 mb-2">利用目的</h4>
-              <ul className="space-y-1 text-sm text-slate-600">
-                <li>• サービスの提供・運営</li>
-                <li>• カスタマーサポート</li>
-                <li>• サービス改善・機能開発</li>
-                <li>• セキュリティ監視</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-white/30 rounded-lg p-6">
-          <h3 className="text-xl font-semibold text-slate-800 mb-4">データの保管・削除</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <h4 className="font-semibold text-slate-700 mb-2">保管期間</h4>
-              <ul className="space-y-1 text-sm text-slate-600">
-                <li>• 申請データ: 7年間（法定保存期間）</li>
-                <li>• アクセスログ: 1年間</li>
-                <li>• バックアップデータ: 3年間</li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-semibold text-slate-700 mb-2">削除ポリシー</h4>
-              <ul className="space-y-1 text-sm text-slate-600">
-                <li>• 契約終了後30日以内に削除</li>
-                <li>• お客様からの削除要求に対応</li>
-                <li>• 完全削除の証明書発行</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-white/30 rounded-lg p-6">
-          <h3 className="text-xl font-semibold text-slate-800 mb-4">第三者提供</h3>
-          <div className="bg-emerald-50/50 rounded-lg p-4">
-            <div className="flex items-center space-x-2 mb-2">
-              <CheckCircle className="w-5 h-5 text-emerald-600" />
-              <span className="font-semibold text-emerald-800">原則として第三者提供は行いません</span>
-            </div>
-            <p className="text-sm text-emerald-700">
-              法令に基づく場合や、お客様の明示的な同意がある場合を除き、
-              個人情報・企業情報を第三者に提供することはありません。
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-
-  const sections = [
-    { id: 'overview', label: 'セキュリティ概要', icon: Shield },
-    { id: 'compliance', label: 'コンプライアンス', icon: CheckCircle },
-    { id: 'data-protection', label: 'データ保護', icon: Lock },
-    { id: 'incident-response', label: 'インシデント対応', icon: AlertTriangle }
-  ];
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-navy-900 to-indigo-900 relative overflow-hidden">
