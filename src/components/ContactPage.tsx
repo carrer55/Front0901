@@ -183,29 +183,6 @@ function ContactPage({ onNavigate }: ContactPageProps) {
               <div className="border-t border-white/20 pt-12">
                 <h2 className="text-3xl font-bold text-white mb-6">連絡先情報</h2>
                 <div className="space-y-6 text-white">
-                  <div>
-                    <h3 className="text-xl font-semibold text-white mb-2">電話でのお問い合わせ</h3>
-                    <p className="text-white mb-2">03-1234-5678</p>
-                    <p className="text-white">受付時間：平日 9:00-18:00</p>
-                  </div>
-                  
-                  <div>
-                    <h3 className="text-xl font-semibold text-white mb-2">メールでのお問い合わせ</h3>
-                    <p className="text-white mb-2">info@kenjano-seisan.com</p>
-                    <p className="text-white">24時間以内にご返信いたします</p>
-                  </div>
-                  
-                  <div>
-                    <h3 className="text-xl font-semibold text-white mb-2">所在地</h3>
-                    <p className="text-white">〒100-0005</p>
-                    <p className="text-white">東京都千代田区丸の内1-1-1 丸の内ビル10F</p>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="border-t border-white/20 pt-12">
-                <h2 className="text-3xl font-bold text-white mb-6">お問い合わせフォーム</h2>
-                <div className="space-y-6 text-white">
                   <form onSubmit={handleSubmit} className="space-y-6">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
@@ -323,10 +300,11 @@ function ContactPage({ onNavigate }: ContactPageProps) {
                       <>
                         <Send className="w-5 h-5" />
                         <span>送信する</span>
-                      </>
+              <h2 className="text-3xl font-bold text-white mb-6">お問い合わせ概要</h2>
                     )}
                   </button>
-                  </form>
+                  ご質問やご相談がございましたら、下記のフォームよりお気軽にお問い合わせください。
+                  2営業日以内にご返信させていただきます。
                 </div>
               </div>
             </div>
