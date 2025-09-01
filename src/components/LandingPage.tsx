@@ -374,26 +374,22 @@ function LandingPage({ onNavigate }: LandingPageProps) {
           <div className="text-center mb-20">
             <h2 className="text-4xl md:text-6xl font-bold text-white mb-6">
               <span className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-                実際の画面を体験
+                節税シミュレーションを体験
               </span>
             </h2>
             <p className="text-xl text-white/80 max-w-3xl mx-auto mb-12">
-              直感的なインターフェースと強力な機能を、今すぐお試しください
+              直感的なインターフェースで節税効果を今すぐお試しください
             </p>
             
             <button
-              onClick={() => onNavigate('login')}
+              onClick={() => onNavigate('tax-simulation')}
               className="group px-12 py-6 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white rounded-full font-bold text-xl shadow-2xl hover:shadow-blue-500/25 transition-all duration-300 transform hover:scale-105 flex items-center space-x-4 mx-auto"
             >
-              <span>デモアカウントでログイン</span>
+              <span>節税シミュレーション</span>
               <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </div>
             </button>
-            
-            <p className="text-white/60 text-sm mt-4">
-              デモアカウント: <code className="bg-white/10 px-2 py-1 rounded">demo</code> / <code className="bg-white/10 px-2 py-1 rounded">pass9981</code>
-            </p>
           </div>
 
           {/* Screenshot/Demo Area */}
